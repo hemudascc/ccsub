@@ -1,0 +1,28 @@
+
+.button {
+  background-color: #00b359; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 23px;
+  font-weight: bold;
+  width: 90%;
+  border-radius: 12px;
+}
+
+.button1 {
+  background-color: #000000; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 23px;
+  font-weight: bold;
+  width: 30%;
+  border-radius: 12px;
+}

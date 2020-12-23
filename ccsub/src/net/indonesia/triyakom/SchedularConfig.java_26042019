@@ -1,0 +1,412 @@
+package net.indonesia.triyakom;
+
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+
+import net.common.service.IDaoService;
+
+import net.persist.bean.SubscriberReg;
+
+
+public class SchedularConfig {
+	@Autowired
+	private IDaoService daoService;
+	
+	
+	
+	@Autowired
+	private JMSIndonesiaService jmsIndonesiaService;
+	@Autowired
+	private TriyakomOperatorService triyakomOperatorService;
+	private static final Logger logger = Logger.getLogger(SchedularConfig.class);
+	
+
+	//@Scheduled(cron="*/60 * * * * ?")
+	//@Scheduled(cron="0 30 9 2 * ?")
+	@Scheduled(cron="0 35 17 * * ?")
+	//@Scheduled(cron="0 0 9 * * ?")	
+    public void xlRenewalCharging()
+    {
+		
+		
+     //   System.out.println("Method executed at every 60 seconds. Current time is :: "+ new Date());
+        List<SubscriberReg>list= daoService.findSubscriberDetailsByStatusAndValidityAndOpId(100, "");
+        
+      logger.debug("xlRenewalCharging:::"+list);
+         
+       for(SubscriberReg  reg:list){
+    	   
+    	   String pattern = "yyyy-MM-dd";
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+           Date date1 = null;
+		try {
+			date1 = simpleDateFormat.parse(reg.getValidityTo().toString());
+		
+           Date now=new Date();
+           Date today = null;
+		
+			 
+			today = simpleDateFormat.parse(simpleDateFormat.format(now));
+		
+           if (date1.compareTo(today) < 0||date1.compareTo(today) == 0) {
+        	  
+        	 
+        	
+        		
+        		MTMessage mtMessage=null;
+        		if(reg.getParam1()!=null&&reg.getCurrentActiveType().equalsIgnoreCase("RENEW")){
+        		mtMessage=daoService.findMTMessageById(Integer.parseInt(reg.getParam1()));
+        		//logger.info("indonesiaSmsReceived:::::::::: "+mtMessage);
+        		triyakomOperatorService.handleSubscriptionMTRenewalPushMessage(mtMessage);
+        		}
+           }}
+        	catch(Exception ee)
+        	{
+        	logger.error("IM3RenewalCharging::exception ee:"+ee);	
+        	}
+        	}
+        	  }
+        
+
+	@Scheduled(cron="0 22 17 * * ?")
+	//@Scheduled(cron="0 0 9 * * ?")	
+    public void IM3RenewalCharging()
+    {
+		
+		
+     //   System.out.println("Method executed at every 60 seconds. Current time is :: "+ new Date());
+        List<SubscriberReg>list= daoService.findSubscriberDetailsByStatusAndValidityAndOpId(101, "");
+        logger.debug("IM3RenewalCharging::::"+list);
+     
+         
+       for(SubscriberReg  reg:list){
+    	   
+    	   String pattern = "yyyy-MM-dd";
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+           Date date1 = null;
+		try {
+			date1 = simpleDateFormat.parse(reg.getValidityTo().toString());
+		
+           Date now=new Date();
+           Date today = null;
+		
+           if (date1.compareTo(today) < 0||date1.compareTo(today) == 0) {
+        	  
+        	 
+        	
+        		
+        		MTMessage mtMessage=null;
+        		if(reg.getParam1()!=null&&reg.getCurrentActiveType().equalsIgnoreCase("RENEW")){
+        		mtMessage=daoService.findMTMessageById(Integer.parseInt(reg.getParam1()));
+        		//logger.info("indonesiaSmsReceived:::::::::: "+mtMessage);
+        		triyakomOperatorService.handleSubscriptionMTRenewalPushMessage(mtMessage);
+        		}
+        	}}
+        	catch(Exception ee)
+        	{
+        	logger.error("IM3RenewalCharging::exception ee:"+ee);	
+        	}
+        	
+        	 }	
+               }
+        
+	@Scheduled(cron="0 24 17 * * ?")
+	public void indoSatRenewalCharging()
+    {
+		
+		
+     //   System.out.println("Method executed at every 60 seconds. Current time is :: "+ new Date());
+        List<SubscriberReg>list= daoService.findSubscriberDetailsByStatusAndValidityAndOpId(102, "");
+        
+     logger.debug("indoSatRenewalCharging::"+list);
+         
+       for(SubscriberReg  reg:list){
+    	   
+    	   String pattern = "yyyy-MM-dd";
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+           Date date1 = null;
+           Date today = null;
+		try {
+			date1 = simpleDateFormat.parse(reg.getValidityTo().toString());
+		
+           Date now=new Date();
+          
+		
+			 
+			today = simpleDateFormat.parse(simpleDateFormat.format(now));
+		
+           if (date1.compareTo(today) < 0||date1.compareTo(today) == 0) {
+        	  
+        	 
+        	
+        		
+        		MTMessage mtMessage=null;
+        		if(reg.getParam1()!=null&&reg.getCurrentActiveType().equalsIgnoreCase("RENEW")){
+        		mtMessage=daoService.findMTMessageById(Integer.parseInt(reg.getParam1()));
+        		//logger.info("indonesiaSmsReceived:::::::::: "+mtMessage);
+        		triyakomOperatorService.handleSubscriptionMTRenewalPushMessage(mtMessage);
+        		}
+           }}
+        	catch(Exception ee)
+        	{
+        		logger.error("Indosat RenewalCharging:::"+ee);
+        	}
+        	}
+        	
+     
+        	
+           	
+        
+        
+       }
+	
+    
+	@Scheduled(cron="0 26 17 * * ?")
+	//@Scheduled(cron="0 0 9 * * ?")	
+    public void smartFrenRenewalCharging()
+    {
+		
+		
+     //   System.out.println("Method executed at every 60 seconds. Current time is :: "+ new Date());
+        List<SubscriberReg>list= daoService.findSubscriberDetailsByStatusAndValidityAndOpId(22, "");
+        logger.debug("smartFrenRenewalCharging:::"+list);
+     
+         
+       for(SubscriberReg  reg:list){
+    	   
+    	   String pattern = "yyyy-MM-dd";
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+           Date date1 = null;
+		try {
+			date1 = simpleDateFormat.parse(reg.getValidityTo().toString());
+		
+           Date now=new Date();
+           Date today = null;
+		
+			 
+			today = simpleDateFormat.parse(simpleDateFormat.format(now));
+		
+           if (date1.compareTo(today) < 0||date1.compareTo(today) == 0) {
+        	  
+        	 
+        
+        		
+        		MTMessage mtMessage=null;
+        		if(reg.getParam1()!=null&&reg.getCurrentActiveType().equalsIgnoreCase("RENEW")){
+        		mtMessage=daoService.findMTMessageById(Integer.parseInt(reg.getParam1()));
+        		//logger.info("indonesiaSmsReceived:::::::::: "+mtMessage);
+        		triyakomOperatorService.handleSubscriptionMTRenewalPushMessage(mtMessage);
+        		}
+           }}
+        	catch(Exception ee)
+        	{
+        	logger.error("smartFrenRenewalCharging::exception ee:"+ee);	
+        	}
+        	
+        	
+     
+        	
+           }	
+        
+        
+       }
+	
+	
+	@Scheduled(cron="0 5 8  * * ?")
+	//@Scheduled(cron="0 0 9 * * ?")	
+    public void xlActCharging()
+    {
+		
+		
+     //   System.out.println("Method executed at every 60 seconds. Current time is :: "+ new Date());
+        List<SubscriberReg>list= daoService.findSubscriberDetailsByStatusAndValidityAndOpId(100, "");
+        logger.debug("xlActCharging:::"+list);
+     
+         
+       for(SubscriberReg  reg:list){
+    	   
+    	   String pattern = "yyyy-MM-dd";
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+           Date date1 = null;
+		try {
+			date1 = simpleDateFormat.parse(reg.getValidityTo().toString());
+		
+           Date now=new Date();
+           Date today = null;
+		
+			today = simpleDateFormat.parse(simpleDateFormat.format(now));
+		
+           if (date1.compareTo(today) < 0||date1.compareTo(today) == 0) {
+        	  
+        	 
+        	
+        		
+        		MTMessage mtMessage=null;
+        		if(reg.getParam1()!=null&&reg.getCurrentActiveType().equalsIgnoreCase("ACT")){
+        			mtMessage=daoService.findMTMessageById(Integer.parseInt(reg.getParam1()));
+        		//	logger.info("indonesiaSmsReceived:::::::::: "+mtMessage);
+        			mtMessage.setRequestType("GRACE_BILLING");
+        			jmsIndonesiaService.saveMTMessage(mtMessage);
+        		}
+           }}
+        	catch(Exception ee)
+        	{
+        	logger.error("xlActCharging::exception ee:"+ee);	
+        	}
+        	}
+        	
+     
+        	
+           }	
+        
+        
+       
+        
+
+	@Scheduled(cron="0 15 8  * * ?")
+	//@Scheduled(cron="0 0 9 * * ?")	
+    public void IM3ActCharging()
+    {
+		
+		
+     //   System.out.println("Method executed at every 60 seconds. Current time is :: "+ new Date());
+        List<SubscriberReg>list= daoService.findSubscriberDetailsByStatusAndValidityAndOpId(101, "");
+       logger.debug("IM3ActCharging:::"+list);   
+     
+         
+       for(SubscriberReg  reg:list){
+    	   
+    	   String pattern = "yyyy-MM-dd";
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+           Date date1 = null;
+		try {
+			date1 = simpleDateFormat.parse(reg.getValidityTo().toString());
+		
+           Date now=new Date();
+           Date today = null;
+			 
+			today = simpleDateFormat.parse(simpleDateFormat.format(now));
+		
+           if (date1.compareTo(today) < 0||date1.compareTo(today) == 0) {
+        	  
+        	 
+        	
+        		
+        		MTMessage mtMessage=null;
+        		if(reg.getParam1()!=null&&reg.getCurrentActiveType().equalsIgnoreCase("ACT")){
+        			mtMessage=daoService.findMTMessageById(Integer.parseInt(reg.getParam1()));
+        		//	logger.info("indonesiaSmsReceived:::::::::: "+mtMessage);
+        			jmsIndonesiaService.saveMTMessage(mtMessage);
+        		}
+           }	}
+        	catch(Exception ee)
+        	{
+        	logger.error("IM3ActCharging::exception ee:"+ee);	
+        	}
+        	}
+        	 	
+               }
+        
+	@Scheduled(cron="0 25 8  * * ?")
+	public void indoSatActCharging()
+    {
+		
+		
+     //   System.out.println("Method executed at every 60 seconds. Current time is :: "+ new Date());
+        List<SubscriberReg>list= daoService.findSubscriberDetailsByStatusAndValidityAndOpId(102, "");
+        logger.debug("indoSatActCharging:::"+list);
+     
+         
+       for(SubscriberReg  reg:list){
+    	   
+    	   String pattern = "yyyy-MM-dd";
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+           Date date1 = null;
+		try {
+			date1 = simpleDateFormat.parse(reg.getValidityTo().toString());
+		
+           Date now=new Date();
+           Date today = null;
+			 
+			today = simpleDateFormat.parse(simpleDateFormat.format(now));
+		
+           if (date1.compareTo(today) < 0||date1.compareTo(today) == 0) {
+        	  
+        		
+        		MTMessage mtMessage=null;
+        		if(reg.getParam1()!=null&&reg.getCurrentActiveType().equalsIgnoreCase("ACT")){
+        			mtMessage=daoService.findMTMessageById(Integer.parseInt(reg.getParam1()));
+        			//logger.info("indonesiaSmsReceived:::::::::: "+mtMessage);
+        			jmsIndonesiaService.saveMTMessage(mtMessage);
+        		}
+           }	}
+        	catch(Exception ee)
+        	{
+        	logger.error("exception ee:"+ee);	
+        	}
+        	     	
+     
+        	
+           }	
+        
+        
+       }
+	
+    
+	@Scheduled(cron="0 29 8  * * ?")
+	//@Scheduled(cron="0 0 9 * * ?")	
+    public void smartFrenActCharging()
+    {
+		
+		
+     //   System.out.println("Method executed at every 60 seconds. Current time is :: "+ new Date());
+        List<SubscriberReg>list= daoService.findSubscriberDetailsByStatusAndValidityAndOpId(22, "");
+        logger.debug("smartFrenActCharging::"+list);
+     
+         
+       for(SubscriberReg  reg:list){
+    	   
+    	   String pattern = "yyyy-MM-dd";
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+           Date date1 = null;
+		try {
+			date1 = simpleDateFormat.parse(reg.getValidityTo().toString());
+		
+           Date now=new Date();
+           Date today = null;
+		
+			today = simpleDateFormat.parse(simpleDateFormat.format(now));
+		
+           if (date1.compareTo(today) < 0||date1.compareTo(today) == 0) {
+        	  
+        	 
+        	
+        		
+        		MTMessage mtMessage=null;
+        		if(reg.getParam1()!=null&&reg.getCurrentActiveType().equalsIgnoreCase("ACT")){
+        			mtMessage=daoService.findMTMessageById(Integer.parseInt(reg.getParam1()));
+        			//logger.info("indonesiaSmsReceived:::::::::: "+mtMessage);
+        			jmsIndonesiaService.saveMTMessage(mtMessage);
+        		}
+           }	}
+        	catch(Exception ee)
+        	{
+        	logger.error("smartFrenActCharging::exception ee:"+ee);	
+        	}
+        	}
+        	
+     
+        	
+           	
+        
+        
+       }
+
+}

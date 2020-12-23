@@ -1,0 +1,7 @@
+$(document).ready(()=>{
+    $('.page_wrap__content__form__phone').mask('0800000000')
+})
+// $('.page_wrap__content__question__answers__item').click(()=>{
+//     $('.page_wrap__content__question').hide();
+//     $('.page_wrap__content__form').css('display','flex');
+// })

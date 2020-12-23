@@ -1,0 +1,216 @@
+	body{
+		width:100%;
+		margin:auto;
+		background:#ff6600;
+	/*	background-image:url(images/bg.png);*/
+    	background-repeat: no-repeat;
+    	font-family: 'Montserrat', sans-serif;
+    	background-size: cover;
+	}
+	#main{
+		width:100%;
+		max-width:600px;
+		height:auto;
+		/*border:1px solid #fff;
+		background:#fff;*/
+		margin:auto;
+		/*margin-top:20px;*/
+	}
+	header{
+		width:90%;
+		margin:auto;
+		text-align:center;
+		margin-top: 10px;
+		background: #fff;
+		padding: 10px;
+	}
+	header img{
+		max-width:100%;
+	}
+	.banner{
+    	font-family: 'Montserrat', sans-serif;
+    	color: #fafafa;
+    	font-size: 10px;
+		/*height:650px;*/
+	}
+	.banner img{
+		display: block;
+    max-width: 100%;
+    height: auto;
+	}
+	.banner p{
+		font-size:16px;
+		color:#fff;
+	}
+	#textbox{
+		width: 100%;
+    margin: auto;
+    text-align: center;
+    height: auto;
+    z-index: 100;
+    position: relative;
+    padding-bottom: 20px;
+    color: #fff;
+    top: -70px;
+		background: rgba(228,101,73,0);
+background: -moz-linear-gradient(top, rgba(228,101,73,0) 0%, rgba(163,91,97,1) 28%, rgba(21,68,148,1) 89%);
+background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(228,101,73,0)), color-stop(28%, rgba(163,91,97,1)), color-stop(89%, rgba(21,68,148,1)));
+background: -webkit-linear-gradient(top, rgba(228,101,73,0) 0%, rgba(163,91,97,1) 28%, rgba(21,68,148,1) 89%);
+background: -o-linear-gradient(top, rgba(228,101,73,0) 0%, rgba(163,91,97,1) 28%, rgba(21,68,148,1) 89%);
+background: -ms-linear-gradient(top, rgba(228,101,73,0) 0%, rgba(163,91,97,1) 28%, rgba(21,68,148,1) 89%);
+background: linear-gradient(to bottom, rgba(228,101,73,0) 0%, rgba(163,91,97,1) 28%, rgba(21,68,148,1) 89%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e46549', endColorstr='#154494', GradientType=0 );
+	}
+	.text{
+		font-size: 20px;
+    	color: #fff;
+    	text-align: center;
+    	padding: 10px;
+    	margin: auto;
+    	text-transform: uppercase;
+    	font-weight: bold;
+		
+	}
+
+	.sub-bttn{
+		padding-top: 10px;
+		padding-bottom: 10px;
+   		width: 100%;
+    	margin: auto;
+    	border-radius: 30px;
+	}
+	
+	.sub-bttn img{
+		max-width:100%;
+	}
+	#textbox p{
+		font-size:12px;
+		color:#fff;
+		text-align:justify;
+		line-height: 1.5em;
+	}
+	.details{
+		width:90%;
+		margin:auto;
+		font-size:12px;
+		color:#fff;
+		text-align:left !important;
+		line-height: 1.5em;
+	}
+	a{
+		color:#fff;
+		text-decoration:underline;
+		font-weight:bold;
+	}
+	h4{
+		color:#fff;
+	}
+	#main p {
+   		color:#fff;
+    	text-align: center;
+		font-size: 12px;
+	}
+	#terms{
+		width: 90%;
+    	margin: auto;
+    	background:#ff6a4f;
+    	padding: 10px;
+	}
+		.formStyle {
+   width: 150px;
+    height: 24px;
+    border: 2px solid #e2a201;
+    border-radius: 22px;
+    padding-left: 12px;
+    font-size: 14px;
+    margin-top: 0px;
+}
+.subscribe{
+	width:100%;
+    margin: auto;
+}
+h3{
+	margin: auto;
+	margin-bottom: 5px;
+	font-size:12px;
+	text-align: center;
+	color:#fff;
+
+}
+form {
+    width: 60%;
+    height: auto;
+    margin: auto;
+    text-align: center;
+}
+.submitbox{
+	width: 80%;
+    margin: auto;
+	margin-top: 20px;
+}
+h4{
+	margin: auto;
+	font-size:12px;
+}
+.bold{
+	font-size:14px;
+	text-decoration:underline;
+}
+.price{
+	font-size:40px;
+	text-decoration:underline;
+}
+#terms p{
+	    text-align: justify;
+}
+.disclaimer{
+	text-align:justify !important;
+}
+h1{
+	font-size:20px;
+	font-weight:bold;
+	text-align:center;
+	color:#fff;
+	font-family:Arial, Helvetica, sans-serif;
+	margin: 10px 0 10px 0;
+	text-decoration:underline;
+}
+h2{
+	font-size:16px;
+	font-weight:bold;
+	text-align:center;
+	color:#fff;
+	font-family:Arial, Helvetica, sans-serif;
+	margin: 10px 0 10px 0;
+}
+footer{
+	text-align:center;
+	font-size:12px;
+	color:#fff;
+	padding-bottom: 40px;
+	padding-top:20px;
+}
+.formButton {
+    background-color: #0791b1;
+    display: inline-block;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 10px;
+    width: 125px;
+    height: 25px;
+    padding-top: 5px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.formButton:hover {
+	color:#ffffff;
+	text-decoration:underline;
+}
+.formButton:active {
+	position:relative;
+	top:3px;
+}
+
+  
+

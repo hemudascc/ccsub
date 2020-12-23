@@ -1,0 +1,117 @@
+/*  Style.css */
+/*
+Author: XpeedStudio
+Author URI: http://themeforest.net/user/XpeedStudio/portfolio
+*/
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+html,
+body {
+    background-color: #ffffff;
+    font-size: 13px;
+    color: #565656;
+    width: 100%;
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+}
+
+img {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    user-drag: none;
+	margin-top:15px;
+}
+a,
+a:hover,
+a:active,
+a:focus {
+    text-decoration: none;
+    outline: none;
+}
+a,
+button,
+a span {
+    -webkit-transition: 0.2s ease-in-out;
+    -o-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out;
+}
+/*==========================================
+PRE LOADER 
+==========================================*/
+
+/*
+Section
+*/
+.section{
+    padding-top:50px;
+    padding-bottom:50px;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo{
+	
+	padding: 0px 0px 0px 100px;;
+}
+
+.title{
+	
+	color:#fff;
+	font-size:20px;
+}
+
+
+.footer {
+	margin-top:100px;
+	padding-top: 40px;
+    padding-bottom:40px;
+	position: relative;
+    overflow: hidden;
+}
+
+.ok{
+	
+	
+    text-align: center;
+	
+}
+.banner{
+	height:50px; 
+	background-color:red;
+    	font-weight: bold;
+	padding-top: 8px;
+    	text-align: center;
+    	
+}
+
+h4{
+	
+	text-align:center;
+	margin-top:30px;
+    padding: 0px 10px 0px 10px;
+    font-weight: bold;
+}
+
+@media screen and (min-device-width: 481px) and (max-device-width: 768px) { 
+
+.ok{
+    
+    min-width:50%;
+    max-width: 80%;
+    
+}
+    
+}
+
+@media only screen and (max-width: 310px) {
+
+  .ok {width:200px!important; padding:0;}  
+     
+    }

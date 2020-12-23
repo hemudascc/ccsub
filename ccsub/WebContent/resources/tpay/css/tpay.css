@@ -1,0 +1,92 @@
+@charset "ISO-8859-1";
+html, 
+body {
+    height: 100%;
+}
+body{
+	background-image: linear-gradient(45deg, #262223, #2c2221);
+}
+.disclaimer
+{    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding: 0px 0px 0px 10px;
+}
+
+.img-div{
+	padding-top: 10px;
+}
+.center-div{
+	text-align:center;color: white;
+}
+.sub-btn{
+	height: 45px;
+	background-color: #d2973f;
+	width: 200px;
+	color: #672021;
+	border: 1px solid #fff;
+}
+.img-banner{
+	height: 280px;
+	width: 300px;
+	border: 1px solid #d2973f;
+}
+ul{
+	color: wheat;
+}
+
+.modal-header {
+    background-color: #472323;
+    font-weight: bold;
+    color: #ef5938;
+    text-align: center;
+}
+
+.modal-body {
+    background-color: #563731;
+    color: wheat;
+}
+
+h4.modal-title {
+    font-weight: bold;
+}
+
+.popup-button {
+    color: wheat;
+    background: #3d5f37;
+    border: 1px solid;
+}
+
+.popup-button-group {
+    display: flex;
+}
+@media only screen and (max-width: 320px) {
+ ul {
+    list-style-position: inside;
+    padding: 0% 0% 0% 2%;
+   }
+}
+
+@media only screen and (max-width: 320px) {
+ ul {
+    list-style-position: inside;
+    padding: 0% 0% 0% 2%;
+   }
+}
+
+@media screen and (max-width: 425px) and (min-width: 321px) {
+ul {
+    list-style-position: inside;
+    padding: 0% 0% 0% 10%;
+   }
+}
+@media screen and (max-width: 768px) and (min-width: 426px) {
+ul{
+  padding: 0% 0% 0% 18%;
+}
+}
+@media only screen and (min-width: 769px) {
+ul{
+  padding: 0% 0% 0% 30%;
+}
+}
