@@ -100,8 +100,8 @@ public class Mt2UAEServiceConfig {
 	@Column(name="unsub_msg_template")
 	private String unsubMsgTemplate;
 	
-	@Column(name="cg_callback_url")
-	private String cgCallBackUrl;
+	@Column(name="cg_url")
+	private String cgUrl;
 	
 	@Column(name="msisdn_prefix")
 	private String msisdnPrefix;
@@ -340,12 +340,12 @@ public class Mt2UAEServiceConfig {
 		this.cancelUrl = cancelUrl;
 	}
 
-	public String getCgCallBackUrl() {
-		return cgCallBackUrl;
+	public String getCgUrl() {
+		return cgUrl;
 	}
 
-	public void setCgCallBackUrl(String cgCallBackUrl) {
-		this.cgCallBackUrl = cgCallBackUrl;
+	public void setCgUrl(String cgUrl) {
+		this.cgUrl = cgUrl;
 	}
 
 	public String getShortCode() {

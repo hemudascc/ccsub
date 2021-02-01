@@ -211,6 +211,10 @@ public class ActelNewApiService {
 			actelApiTrans.setMsisdn(msisdn);
 			actelApiTrans.setMode(mode);
 			
+			if(ActelConstant.blockMsisdn.contains(actelApiTrans.getMsisdn())) {
+				actelApiTrans.setRequest("Blocked Msisdn"); 
+				 return actelApiTrans;
+			}
 			 if(!ActelConstant.isValidMsisdn(actelApiTrans.getMsisdn(),
 					 actelNewServiceConfig.getMsisdnPrefix(),actelNewServiceConfig.getMsisdnLength())){
 				 actelApiTrans.setRequest("Not valid msisdn"); 
@@ -307,7 +311,7 @@ public ActelApiTrans validateOTP(ActelNewServiceConfig actelNewServiceConfig,Str
 		    	 actelApiTrans.setSuccess(true);
 		    	 redisCacheService.putObjectCacheValueByEvictionMinute(
 		    			 ActelConstant.ACTEL_OTP_VALIDATION_CACHE+msisdn
-		    			 , token, 60*10);
+		    			 , token, 60*23);
 		     }
 		}
 		

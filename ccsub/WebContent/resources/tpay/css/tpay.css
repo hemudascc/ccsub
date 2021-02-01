@@ -25,6 +25,11 @@ body{
 	width: 200px;
 	color: #672021;
 	border: 1px solid #fff;
+	margin: 15px auto;
+}
+.text-content {
+    color: wheat;
+    padding: 25px;
 }
 .img-banner{
 	height: 280px;
@@ -52,7 +57,7 @@ h4.modal-title {
 }
 
 .popup-button {
-    color: wheat;
+    color: wheat !important;
     background: #3d5f37;
     border: 1px solid;
 }

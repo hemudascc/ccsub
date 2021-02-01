@@ -106,11 +106,12 @@ public class JMSMt2ZainIraqNotificationListener implements MessageListener {
 				if(liveReport.getAction()!=null){
 					liveReportFactoryService.process(liveReport);
 				}
-				if(msg!=null){
-					msg=Mt2ZainIraqConstant.prepareMessage(msg, mt2ZainIraqServiceConfig,liveReport.getParam1());
-					mt2ZainIraqServiceApi.sendContentSms(mt2ZainIraqNotification.getMsisdn(),
-							msg, "", mt2ZainIraqNotification.getAction());
-				} 
+				/*
+				 * if(msg!=null){ msg=Mt2ZainIraqConstant.prepareMessage(msg,
+				 * mt2ZainIraqServiceConfig,liveReport.getParam1());
+				 * mt2ZainIraqServiceApi.sendContentSms(mt2ZainIraqNotification.getMsisdn(),
+				 * msg, "", mt2ZainIraqNotification.getAction()); }
+				 */
 			} catch (Exception ex) {
 				logger.error(" fianlly liveReport:: " + liveReport+ ", : mt2ZainIraqNotification:: "+ mt2ZainIraqNotification);
 				logger.error("onMessage::::::::::finally " ,ex);

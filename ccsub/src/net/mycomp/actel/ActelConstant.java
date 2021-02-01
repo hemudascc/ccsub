@@ -6,9 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -53,7 +55,7 @@ public interface ActelConstant {
 	
 	public static AtomicInteger actlelApiTransId=new AtomicInteger(0);
 	
-	
+	public static Set<String> blockMsisdn = new HashSet<String>();
 	
 	
 	public static Map<String,String> parseXml(String str) {

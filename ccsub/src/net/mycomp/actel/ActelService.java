@@ -5,21 +5,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import net.common.service.IDaoService;
-import net.indonesia.triyakom.TriyakomConstant;
-import net.jpa.repository.JPAActelNewServiceConfig;
-import net.jpa.repository.JPAActelServiceConfig;
-import net.jpa.repository.JPASubscriberReg;
-import net.mycomp.mobimind.MobimindConstant;
-import net.mycomp.mobimind.MobimindServiceConfig;
-import net.persist.bean.IOtp;
-import net.persist.bean.SubscriberReg;
-import net.process.bean.AdNetworkRequestBean;
-import net.process.bean.DeactivationResponse;
-import net.process.request.AbstractOperatorService;
-import net.util.MConstants;
-import net.util.MUtility;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +12,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import net.common.service.IDaoService;
+import net.jpa.repository.JPAActelBlockList;
+import net.jpa.repository.JPAActelNewServiceConfig;
+import net.jpa.repository.JPAActelServiceConfig;
+import net.jpa.repository.JPASubscriberReg;
+import net.persist.bean.SubscriberReg;
+import net.process.bean.AdNetworkRequestBean;
+import net.process.bean.DeactivationResponse;
+import net.process.request.AbstractOperatorService;
+import net.util.MConstants;
 
 @Service("actelService")
 public class ActelService extends AbstractOperatorService{
@@ -40,6 +36,8 @@ public class ActelService extends AbstractOperatorService{
 	
 	@Autowired
 	private JPAActelNewServiceConfig jpaActelNewServiceConfig;
+	@Autowired
+	private JPAActelBlockList jpaActelBlockList;
 	
 	@Autowired
 	private IDaoService daoService;
@@ -83,7 +81,14 @@ public class ActelService extends AbstractOperatorService{
 	ActelConstant.mapServiceIdToActelNewServiceConfig.clear();
 	ActelConstant.mapServiceIdToActelNewServiceConfig.putAll(listActelNewServiceConfig.stream().
 			collect(Collectors.toMap(p -> p.getServiceId(), p -> p)));
-	
+
+	try {
+		logger.info("loading block list.....");
+		ActelConstant.blockMsisdn.clear();
+		ActelConstant.blockMsisdn.addAll(jpaActelBlockList.findAll().stream().map(l->l.getMsisdn()).collect(Collectors.toSet()));	
+	} catch (Exception e) {
+		logger.error("error loading actel blocklist" +e);
+	}
 	}
 	
 	

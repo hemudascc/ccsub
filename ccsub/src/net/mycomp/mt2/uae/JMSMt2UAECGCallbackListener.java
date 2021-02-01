@@ -1,8 +1,6 @@
 package net.mycomp.mt2.uae;
 
 
-import java.util.Objects;
-
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -11,7 +9,6 @@ import net.common.service.IDaoService;
 import net.common.service.LiveReportFactoryService;
 
 import net.jpa.repository.JPASubscriberReg;
-import net.mycomp.mt2.zain.iraq.Mt2ZainIraqConstant;
 import net.persist.bean.LiveReport;
 import net.process.bean.CGToken;
 
@@ -55,9 +52,6 @@ public class JMSMt2UAECGCallbackListener implements MessageListener {
 					.getObject();
 			
 			logger.info("mt2UAECGCallback::::: "+mt2UAECGCallback);
-			String token=Objects.toString(redisCacheService.getObjectCacheValue(
-					Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_UNIQUEID_CACHE_PREFIX
-					+mt2UAECGCallback.getUniqeId()));
 			
 			
 		} catch (Exception ex) {

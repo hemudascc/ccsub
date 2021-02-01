@@ -7,18 +7,17 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import net.common.service.IDaoService;
 import net.common.service.LiveReportFactoryService;
 import net.common.service.RedisCacheService;
 import net.common.service.SubscriberRegService;
-import net.jpa.repository.JPAMCGZAOBSWindow;
 import net.persist.bean.LiveReport;
 import net.process.bean.CGToken;
 import net.util.MConstants;
 import net.util.MUtility;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class JMSMobimindNotificationListener implements MessageListener {
@@ -89,7 +88,7 @@ public class JMSMobimindNotificationListener implements MessageListener {
 			double priceAmount=MUtility.toDouble(mobimindNotification.getPrice(),-1);
 			
 			if(mobimindNotification.getAction().equalsIgnoreCase(MobimindConstant.RECYCLED_SUBCRIBER)){				
-				 liveReport.setAction("");				
+				 liveReport.setAction("GRACE_MM");//GRACE_MM Changes done on request of sushil(2021-01-27)	
 				 liveReport.setGraceConversionCount(1);//ConversionCount(1);
 				
 			}else if(mobimindNotification.getAction().equalsIgnoreCase(MConstants.ACT)){			

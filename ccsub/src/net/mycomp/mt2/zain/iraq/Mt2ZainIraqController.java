@@ -240,15 +240,15 @@ public class Mt2ZainIraqController {
 					mt2ZainIraqServiceApiTrans.setSource(source);
 				}
 				
-//				String cgUrl=mt2ZainIraqServiceConfig.getSubUrl()
-//						  .replaceAll("<serviceid>", mt2ZainIraqServiceConfig.getZainIraqServiceId())
-//						  .replaceAll("<spid>", mt2ZainIraqServiceConfig.getSpid())
-//						  .replaceAll("<shortcode>", mt2ZainIraqServiceConfig.getShortCode())
-//						  .replaceAll("<uniqid>", uniqid);
-//				redisCacheService.putObjectCacheValueByEvictionDay(
-//						Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_UNIQUEID_CACHE_PREFIX+uniqid
-//						, token,10);
-//				modelAndView.addObject("cgUrl",cgUrl);
+				String cgUrl=mt2ZainIraqServiceConfig.getSubUrl()
+						  .replaceAll("<serviceid>", mt2ZainIraqServiceConfig.getZainIraqServiceId())
+						  .replaceAll("<spid>", mt2ZainIraqServiceConfig.getSpid())
+						  .replaceAll("<shortcode>", mt2ZainIraqServiceConfig.getShortCode())
+						  .replaceAll("<uniqid>", uniqid);
+				redisCacheService.putObjectCacheValueByEvictionDay(
+						Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_UNIQUEID_CACHE_PREFIX+uniqid
+						, token,10);
+				modelAndView.addObject("cgUrl",cgUrl);
 				
 				modelAndView.addObject("token",token);				
 				modelAndView.setViewName("mt2zainiraq/lp");
@@ -263,72 +263,57 @@ public class Mt2ZainIraqController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("tocg")
-	public ModelAndView toCg(HttpServletRequest request,ModelAndView modelAndView
-			){		
-		MT2ZainIraqCGTrans mt2ZainIraqCGTrans =	new MT2ZainIraqCGTrans(true);
-		try{
-			
-			mt2ZainIraqCGTrans.setQueryStr(request.getQueryString());
-			mt2ZainIraqCGTrans.setUniqueId(request.getParameter("uniqid"));
-			String token=request.getParameter("token");
-			if(token==null){
-				token=Objects.toString(redisCacheService.getObjectCacheValue(
-						Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_SOURCE_CACHE_PREFIX
-						+request.getRemoteAddr()));
-			}
-			
-			if(Mt2ZainIraqConstant.findMt2ZainIraqOperatorByIp(
-					request.getRemoteAddr())==null&&!token.equalsIgnoreCase("testingziraq")){
-					logger.info("toCG:: ipp address not match "+request.getRemoteAddr()
-							+" , token: "+token+", redirect to: "+"https://port16.govisibl.com/dlv/c.php?cca=136850&ccz=4398&token="+token);		
-//				modelAndView.setView(new RedirectView
-//						("https://port16.govisibl.com/dlv/c.php?cca=136850&ccz=4398&token="+token));	
-		//		mt2ZainIraqCGTrans.setCgUrl("https://port16.govisibl.com/dlv/c.php?cca=136850&ccz=4398&token="+token);
-				mt2ZainIraqCGTrans.setCgUrl("http://play-mob2.com/ccsub/cnt/mt2zainiraq/wifi/error");
-				modelAndView.setViewName("http://play-mob2.com/ccsub/cnt/mt2zainiraq/wifi/error");
-				return modelAndView;				
-			}
-			
-			CGToken cgToken=null;
-			if(token!=null){
-				 cgToken=new CGToken(token);
-			}else{
-			//http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid=194&token=zain
-			 cgToken=new CGToken(System.currentTimeMillis(), -1, 194); 
-			}
-		mt2ZainIraqCGTrans.setToken(token);			
-		Enumeration<String> en = request.getHeaderNames();
-		StringBuilder headersStr = new StringBuilder();
-		Map<String, String> headerMap = new HashMap<String, String>();
-		while (en.hasMoreElements()) {
-			String key = en.nextElement();
-			headersStr.append(key + "=" + request.getHeader(key) + " ,");
-			headerMap.put(key, request.getHeader(key));
-		}
-		mt2ZainIraqCGTrans.setIp(request.getRemoteAddr());
-		mt2ZainIraqCGTrans.setxForwardedFor(headerMap.get("x-forwarded-for"));
-		Mt2ZainIraqServiceConfig mt2ZainIraqServiceConfig=Mt2ZainIraqConstant
-				.mapServiceIdToMt2ZainIrqServiceConfig
-				.get(83);
-		
-		String cgUrl=mt2ZainIraqServiceConfig.getSubUrl()
-				  .replaceAll("<serviceid>", mt2ZainIraqServiceConfig.getZainIraqServiceId())
-				  .replaceAll("<spid>", mt2ZainIraqServiceConfig.getSpid())
-				  .replaceAll("<shortcode>", mt2ZainIraqServiceConfig.getShortCode())
-				  .replaceAll("<uniqid>", mt2ZainIraqCGTrans.getUniqueId());
-		mt2ZainIraqCGTrans.setCgUrl(cgUrl);
-		redisCacheService.putObjectCacheValueByEvictionDay(
-				Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_UNIQUEID_CACHE_PREFIX+mt2ZainIraqCGTrans.getUniqueId()
-				, token,10);
-		modelAndView.addObject("cgUrl", cgUrl);
-		modelAndView.setViewName("mt2zainiraq/cg");
-		
-		}catch(Exception ex){
-			logger.error("exception :: ",ex);
-		}finally{
-			jmsService.saveObject(mt2ZainIraqCGTrans);
-		}
-		return modelAndView;
-	}	
+	/*
+	 * @RequestMapping("tocg") public ModelAndView toCg(HttpServletRequest
+	 * request,ModelAndView modelAndView ){ MT2ZainIraqCGTrans mt2ZainIraqCGTrans =
+	 * new MT2ZainIraqCGTrans(true); try{
+	 * 
+	 * mt2ZainIraqCGTrans.setQueryStr(request.getQueryString());
+	 * mt2ZainIraqCGTrans.setUniqueId(request.getParameter("uniqid")); String
+	 * token=request.getParameter("token"); if(token==null){
+	 * token=Objects.toString(redisCacheService.getObjectCacheValue(
+	 * Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_SOURCE_CACHE_PREFIX
+	 * +request.getRemoteAddr())); }
+	 * 
+	 * if(Mt2ZainIraqConstant.findMt2ZainIraqOperatorByIp(
+	 * request.getRemoteAddr())==null&&!token.equalsIgnoreCase("testingziraq")){
+	 * logger.info("toCG:: ipp address not match "+request.getRemoteAddr()
+	 * +" , token: "+token+", redirect to: "
+	 * +"https://port16.govisibl.com/dlv/c.php?cca=136850&ccz=4398&token="+token);
+	 * // modelAndView.setView(new RedirectView //
+	 * ("https://port16.govisibl.com/dlv/c.php?cca=136850&ccz=4398&token="+token));
+	 * // mt2ZainIraqCGTrans.setCgUrl(
+	 * "https://port16.govisibl.com/dlv/c.php?cca=136850&ccz=4398&token="+token);
+	 * mt2ZainIraqCGTrans.setCgUrl(
+	 * "http://play-mob2.com/ccsub/cnt/mt2zainiraq/wifi/error");
+	 * modelAndView.setViewName(
+	 * "http://play-mob2.com/ccsub/cnt/mt2zainiraq/wifi/error"); return
+	 * modelAndView; }
+	 * 
+	 * CGToken cgToken=null; if(token!=null){ cgToken=new CGToken(token); }else{
+	 * //http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid=194&token=zain
+	 * cgToken=new CGToken(System.currentTimeMillis(), -1, 194); }
+	 * mt2ZainIraqCGTrans.setToken(token); Enumeration<String> en =
+	 * request.getHeaderNames(); StringBuilder headersStr = new StringBuilder();
+	 * Map<String, String> headerMap = new HashMap<String, String>(); while
+	 * (en.hasMoreElements()) { String key = en.nextElement(); headersStr.append(key
+	 * + "=" + request.getHeader(key) + " ,"); headerMap.put(key,
+	 * request.getHeader(key)); } mt2ZainIraqCGTrans.setIp(request.getRemoteAddr());
+	 * mt2ZainIraqCGTrans.setxForwardedFor(headerMap.get("x-forwarded-for"));
+	 * Mt2ZainIraqServiceConfig mt2ZainIraqServiceConfig=Mt2ZainIraqConstant
+	 * .mapServiceIdToMt2ZainIrqServiceConfig .get(83);
+	 * 
+	 * String cgUrl=mt2ZainIraqServiceConfig.getSubUrl() .replaceAll("<serviceid>",
+	 * mt2ZainIraqServiceConfig.getZainIraqServiceId()) .replaceAll("<spid>",
+	 * mt2ZainIraqServiceConfig.getSpid()) .replaceAll("<shortcode>",
+	 * mt2ZainIraqServiceConfig.getShortCode()) .replaceAll("<uniqid>",
+	 * mt2ZainIraqCGTrans.getUniqueId()); mt2ZainIraqCGTrans.setCgUrl(cgUrl);
+	 * redisCacheService.putObjectCacheValueByEvictionDay(
+	 * Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_UNIQUEID_CACHE_PREFIX+mt2ZainIraqCGTrans.
+	 * getUniqueId() , token,10); modelAndView.addObject("cgUrl", cgUrl);
+	 * modelAndView.setViewName("mt2zainiraq/cg");
+	 * 
+	 * }catch(Exception ex){ logger.error("exception :: ",ex); }finally{
+	 * jmsService.saveObject(mt2ZainIraqCGTrans); } return modelAndView; }
+	 */
 }

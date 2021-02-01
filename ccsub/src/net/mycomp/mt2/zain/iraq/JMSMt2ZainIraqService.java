@@ -15,7 +15,7 @@ import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 import net.common.service.IDaoService;
-import net.mycomp.mt2.uae.Mt2UAEDeliveryNotification;
+import net.mycomp.mt2.uae.Mt2UAEDeliveryNotificationSdp;
 
 @Service("jmsZainIraqService")
 public class JMSMt2ZainIraqService {

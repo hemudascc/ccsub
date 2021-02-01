@@ -24,6 +24,7 @@ public interface MobivateConstant {
 	
 	 public static AtomicInteger smsTransAtomicInteger=new AtomicInteger(0);
 	 public static final String CG_CALLBACK_PREFIX="MOBVIATE_CG_CALLBACK_PREFIX";
+	 public static final String TOKEN_MSISDN_CHACHE_PREFIX="MOBIVATE_TOKEN_MSISDN_CHACHE_PREFIX";
 	 
 		public final  List<String> unsubKeywordList=Arrays.asList("STOP","END","CANCEL","UNSUBSCRIBE");
 		public final  List<String> subKeywordList=Arrays.asList("START");

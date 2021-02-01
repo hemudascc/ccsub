@@ -18,8 +18,7 @@ import net.util.MConstants;
 
 public interface Mt2UAEConstant {
 
-	 static final Logger logger = Logger
-			.getLogger(Mt2UAEConstant.class.getName());
+	 static final Logger logger = Logger.getLogger(Mt2UAEConstant.class.getName());
 	
 	 public static Random random = new Random();
 	
@@ -31,8 +30,9 @@ public interface Mt2UAEConstant {
 	 public static final String SEND_SMS="SendSMS";
 	 public final String MT2_UAE_OTP_PREFIX="MT2_UAE_OTP_PREFIX";
 	 
-	 
 	 public final String MT2_UAE_SUB_CAHCHE_PREFIX="MT2_UAE_SUB_CAHCHE_PREFIX";
+	 public final String MT2_UAE_MSISDN_TOKEN_CAHCHE_PREFIX="MT2_UAE_MSISDN_TOKEN_CAHCHE_PREFIX";
+	 public static final String MT2_UAE_TOKEN_TRACKINGID_PREFIX="MT2_UAE_TOKEN_TRACKINGID_PREFIX";
 	 
 	 public final String MT2_UAE_SEND_OTP_COUNTER_PREFIX="MT2_UAE_SEND_OTP_COUNTER_PREFIX";
 	 public final String MT2_UAE_OTP_VALIDATION_COUNTER_PREFIX="MT2_UAE_OTP_VALIDATION_COUNTER_PREFIX";
@@ -47,8 +47,6 @@ public interface Mt2UAEConstant {
 	
 	public static Map<String,Mt2UAEServiceConfig> mapMt2OperatorIdMt2UAEServiceConfig
 	=new HashMap<String,Mt2UAEServiceConfig>();
-	
-	public static String CG_REDIRECT_URL="http://mt-2.co/SecureD_Redirect/N_Redirect.aspx?serviceid=4&trxid=#trxid#&uid=#uid#";
 	
 	public static String getFormatUTCDate(Timestamp ts){
 		ZonedDateTime now = ZonedDateTime.of(ts.toLocalDateTime(), ZoneOffset.UTC);		

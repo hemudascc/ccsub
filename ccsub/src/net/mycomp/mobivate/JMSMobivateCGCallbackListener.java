@@ -5,7 +5,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import net.common.service.IDaoService;
-
+import net.common.service.RedisCacheService;
 import net.jpa.repository.JPASubscriberReg;
 import net.persist.bean.SubscriberReg;
 import net.persist.bean.VWServiceCampaignDetail;
@@ -33,7 +33,8 @@ public class JMSMobivateCGCallbackListener implements MessageListener {
 	@Autowired
 	private MobivateApiService mobivateApiService;
 	
-	
+	@Autowired
+	private RedisCacheService  redisCacheService;
 	
 	@Override
 	public void onMessage(Message m) {
@@ -48,7 +49,7 @@ public class JMSMobivateCGCallbackListener implements MessageListener {
 					.getObject();
 			
 			logger.info("mobivateCGCallback::::: "+mobivateCGCallback);
-			
+			redisCacheService.putObjectCacheValueByEvictionMinute(MobivateConstant.TOKEN_MSISDN_CHACHE_PREFIX+mobivateCGCallback.getUserId(), mobivateCGCallback.getToken(), 1);
 			 cgToken=new CGToken(mobivateCGCallback.getToken());
 			mobivateCGCallback.setCampaignId(cgToken.getCampaignId());
 			VWServiceCampaignDetail vwServiceCampaignDetail=
@@ -60,7 +61,7 @@ public class JMSMobivateCGCallbackListener implements MessageListener {
 			
 			SubscriberReg subscriberReg=jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(mobivateCGCallback.getUserId(), 
 					vwServiceCampaignDetail.getProductId());
-			
+			 
 			if(mobivateServiceConfig.getCcOpId()==MConstants.MOBIVATE_SOUTH_AFRICA_CELLC_OPERATOR_ID){
 			if(mobivateCGCallback.getCgStatus().equalsIgnoreCase(MobivateConstant.SUCCESS)){
 				String msg=mobivateServiceConfig.getWelcomeMessageTemplate();				

@@ -28,10 +28,13 @@ public class OnMobileController {
 	public ModelAndView callback(HttpServletRequest request,ModelAndView modelAndView){
 	    logger.info("callback query string  "+request.getQueryString());
 	    OnMobileCGCallback onMobileCGCallback=new OnMobileCGCallback(true);
+	    
 	   try{
-		   onMobileCGCallback.setCpnum(request.getParameter("cpnum"));
-		   onMobileCGCallback.setQueryStr(request.getQueryString());
-		   CGToken cgToken=new CGToken(onMobileCGCallback.getCpnum());
+		   onMobileCGCallback.setMsisdn(OnMobileConstant.decrypt(request.getParameter("u")));
+		   onMobileCGCallback.setOnMobileStatus(request.getParameter("status"));
+		   
+		   
+		   CGToken cgToken=new CGToken(onMobileCGCallback.getToken());
 		   VWServiceCampaignDetail vwServiceCampaignDetail=MData
 				   .mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 		   OnMobileServiceConfig onMobileServiceConfig=

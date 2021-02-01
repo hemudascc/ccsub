@@ -83,16 +83,11 @@ function changeLang(lang){
 				<div style="text-align:center;font-size:15px;">				
 				• Kido Kingdom is a subscription service which you would receive Game content	
 				</div>
-				
 				<div style="text-align:center;font-size:15px;" >
-				 • Subscription would be renewed at ${actelServiceConfig.priceDesc} 10/${actelServiceConfig.validityDesc}, automatically until you unsubscribe
-				
-				</div>
-				
+				 • Subscription would be renewed automatically until you unsubscribe: for Ooredoo users at ${actelServiceConfig.priceDesc} 10/${actelServiceConfig.validityDesc}			
+				</div>	
 				<div style="text-align:center;font-size:15px;">
-				
-				
-				 • You can unsubscribe from this service anytime, by sending ${actelServiceConfig.unsubKey} to ${actelServiceConfig.shortCode}.
+				 • You can unsubscribe from this service anytime, by sending ${actelServiceConfig.unsubKey} to ${actelServiceConfig.shortCode} for Ooredoo users.
 				</div>
 				<div style="text-align:center;font-size:15px;">
 				• To make use of this service, you must be more than 18 years old or have received permission from your parents or person who is authorized to pay your bill	

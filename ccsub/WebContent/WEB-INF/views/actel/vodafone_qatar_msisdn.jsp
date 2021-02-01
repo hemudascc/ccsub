@@ -82,25 +82,37 @@ function changeLang(lang){
 				</div>
 
 				<div style="text-align:center;font-size:15px;">				
-				• Kido Kingdom is a subscription service which you would receive Game content	
+				• If you are a new customer, you will have the service free for one day then you will be charged as per selected pack. – (This point varies upon each product. For those has free trial this will be added as the first point in T&C else not.)	
 				</div>
 				
 				<div style="text-align:center;font-size:15px;" >
-				• Subscription would be renewed at QAR 10.0/Weekly, automatically until you unsubscribe
-				
+				• Your subscription will be automatically renewed until you cancel or unsubscribe.
+				</div>
+				<div style="text-align:center;font-size:15px;">				
+				• You can unsubscribe any time through the site by clicking on “Profile” then “Unsubscribe” – (This point varies upon each product. There are services which doesn’t have the option to allow cancellation from the portal and for those this point will be removed from the T&C)
+				</div>
+				<div style="text-align:center;font-size:15px;">
+				• You can also unsubscribe through SMS.	
+				</div>
+				<div style="text-align:center;font-size:15px;">
+				• Vodafone Customer: STOP AKK to 97710
+				</div>
+				<div style="text-align:center;font-size:15px;">
+				• You must be more than 18 years old to use this service.
 				</div>
 				
 				<div style="text-align:center;font-size:15px;">
+				• If you are less than 18 years old, you MUST receive permission from the authorized person who pay your bill.
+				</div>
 				
+				<div style="text-align:center;font-size:15px;">
+				• Standard data browsing casts will be applied.
+				</div>
 				
-				• You can unsubscribe from this service anytime, by sending Unsub KK to 92071 for Ooredoo users. Vodafone users can send STOP AKK to 97710
-				</div>
 				<div style="text-align:center;font-size:15px;">
-				• To make use of this service, you must be more than 18 years old or have received permission from your parents or person who is authorized to pay your bill	
+				• For support, please contact us at care@collectcent.com
 				</div>
-				<div style="text-align:center;font-size:15px;">
-				• Additional data charges may apply
-				</div>
+				
 				</c:if>
 				
 					<c:if test="${l==1}">
@@ -109,23 +121,34 @@ function changeLang(lang){
 				</div>
 					
 				<div style="text-align:center;font-weight:bold;font-size:15px;" dir="rtl">
-			    • Kido Kingdom هي خدمة اشتراك تتلقى محتوى اللعبة
+			    • إذا كنت عميلاً جديدًا ، فستحصل على الخدمة مجانًا ليوم واحد ، ثم ستتم محاسبتك وفقًا للحزمة المحددة. - (تختلف هذه النقطة حسب كل منتج. بالنسبة لأولئك الذين لديهم نسخة تجريبية مجانية ، ستتم إضافة هذه كنقطة أولى في T&C وإلا فلن.)
 				</div>
 
 				<div style="text-align:center;font-size:15px;" dir="rtl">
-				• سيتم تجديد الاشتراك بمبلغ 10.0 ريال قطري / أسبوعيًا ، تلقائيًا حتى تقوم بإلغاء الاشتراك
+				• سيتم تجديد اشتراكك تلقائيًا حتى تقوم بإلغاء أو إلغاء الاشتراك.
 				</div>
 				<div style="text-align:center;font-size:15px;" dir="rtl">
 					
-				• يمكنك إلغاء الاشتراك في هذه الخدمة في أي وقت بإرسال Unsub KK إلى 92071 لمستخدمي Ooredoo. يمكن لمستخدمي Vodafone إرسال STOP AKK إلى 97710
+				• يمكنك إلغاء الاشتراك في أي وقت من خلال الموقع بالنقر فوق "الملف الشخصي" ثم "إلغاء الاشتراك" - (تختلف هذه النقطة حسب كل منتج. هناك خدمات ليس لديها خيار السماح بالإلغاء من البوابة ولهؤلاء ستكون هذه النقطة تمت إزالته من T&C)
 				</div>
 				<div style="text-align:center;font-size:15px;" dir="rtl">
-				• للاستفادة من هذه الخدمة ، يجب أن يكون عمرك أكثر من 18 عامًا أو حصلت على إذن من والديك أو الشخص المخول بدفع فاتورتك
+				• يمكنك أيضًا إلغاء الاشتراك من خلال الرسائل القصيرة.
 				</div>
 				<div style="text-align:center;font-size:15px;" dir="rtl">
-				• قد يتم تطبيق رسوم بيانات إضافية
+				• عميل فودافون: STOP AKK to 97710
 				</div>
-				
+				<div style="text-align:center;font-size:15px;" dir="rtl">
+				• يجب أن يكون عمرك أكثر من 18 عامًا لاستخدام هذه الخدمة.
+				</div>
+				<div style="text-align:center;font-size:15px;" dir="rtl">
+				• إذا كان عمرك أقل من 18 عامًا ، فيجب أن تتلقى إذنًا من الشخص المخول الذي يدفع فاتورتك.
+				</div>
+				<div style="text-align:center;font-size:15px;" dir="rtl">
+				• سيتم تطبيق بيانات تصفح البيانات القياسية.
+				</div>
+				<div style="text-align:center;font-size:15px;" dir="rtl">
+				• عميل فودافونللحصول على الدعم ، يرجى الاتصال بنا على care@collectcent.com
+				</div>
 				</c:if>
 			</div>
 			</section>

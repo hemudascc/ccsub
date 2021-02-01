@@ -76,11 +76,7 @@ public class OnMobileService extends AbstractOperatorService {
 	public boolean processBilling(ModelAndView modelAndView,
 			AdNetworkRequestBean adNetworkRequestBean) {
 		try{
-		
-		 
-			modelAndView.setViewName("onmobile/landingpage");
-			
-			
+			modelAndView.setViewName("onmobile/landingpage");	
 		}catch(Exception ex){
 			logger.error("Exception    ",ex);
 		}

@@ -13,6 +13,10 @@ import javax.persistence.Column;
 @Table(name = "tb_ooredo_kuwait_cg_trans")
 public class OoredooKuwaitCGTrans implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
 	private Integer id;

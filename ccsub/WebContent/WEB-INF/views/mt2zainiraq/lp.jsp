@@ -63,11 +63,11 @@
 <script type="text/javascript">
 
 
-function formSubmit(){
+/* function formSubmit(){
 	//alert("submit");
 	window.location.href='${cgUrl}';
 	return false;
-}
+} */
 
 
 function exit(){
@@ -101,8 +101,7 @@ ${source}
 			 height="200" width="300"></img></p>
 			    <div class="imgtextcentered" dir="rtl"><h2>240 د.ع للرسالة المستلمة يوميا</h2></div>
 			 </div>
-			 <form id="otpform" method="get" action="${pageContext.request.contextPath}/cnt/mt2zainiraq/tocg"
-			 >
+			 <%-- <form id="otpform" method="get" action="${pageContext.request.contextPath}/cnt/mt2zainiraq/tocg"> --%>
 				
 				<p style="text-align:center;font-size:14px;"><strong> Kido Kingdom </strong><br/>				
 						   
@@ -117,8 +116,9 @@ ${source}
 					<input type="hidden" id="uniqid" name="uniqid" value="${uniqid}"/>
 					<input type="hidden" id="token" name="token" value="${token}"/>
 					
-				<input type="submit"  class="button" style="font-size: 15px;" value="Subscribe" 
-				 /><br/><br/>
+				<a class="button" style="font-size: 15px;" href="${cgUrl}" referrerpolicy="unsafe-url">Subscribe</a>
+				
+				<br/><br/>
 			
 			 
 			 </div>
@@ -133,7 +133,7 @@ ${source}
 			   from your parents or person who is authorized to pay your bill.
 			      </p>
 			    
-			 </form>
+			 <!-- </form> -->
 			</div> 
 			
 			</section>

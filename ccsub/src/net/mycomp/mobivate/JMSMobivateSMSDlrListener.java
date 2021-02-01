@@ -1,23 +1,26 @@
 package net.mycomp.mobivate;
 
 
-import java.sql.Timestamp;
+import java.util.Objects;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import net.common.service.IDaoService;
 import net.common.service.LiveReportFactoryService;
+import net.common.service.RedisCacheService;
 import net.common.service.SubscriberRegService;
 import net.jpa.repository.JPAMobivateSMSTrans;
 import net.persist.bean.LiveReport;
+import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.CGToken;
 import net.util.MConstants;
+import net.util.MData;
 import net.util.MUtility;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class JMSMobivateSMSDlrListener implements MessageListener {
 
@@ -36,6 +39,9 @@ public class JMSMobivateSMSDlrListener implements MessageListener {
 			@Autowired
 			private LiveReportFactoryService liveReportFactoryService;
 			
+			@Autowired
+			private RedisCacheService  redisCacheService;
+			
 			@Override
 			public void onMessage(Message m) {
 				
@@ -43,7 +49,9 @@ public class JMSMobivateSMSDlrListener implements MessageListener {
 				
 				boolean update=false;
 				long time=System.currentTimeMillis();
-				LiveReport liveReport=null; 
+				LiveReport liveReport=null;
+				CGToken cgToken=null;
+				VWServiceCampaignDetail vwServiceCampaignDetail=null;
 				try{
 					ObjectMessage objectMessage = (ObjectMessage) m;
 					mobivateSMSDlr = (MobivateSMSDlr) objectMessage
@@ -55,12 +63,20 @@ public class JMSMobivateSMSDlrListener implements MessageListener {
 							jpaMobivateSMSTrans.findNumeroMobivateSMSTransById(MUtility.toInt(
 									mobivateSMSDlr.getDlrReference(),0));
 					
-					CGToken cgToken=new CGToken(mobivateSMSTrans.getToken());
+					if(Objects.isNull(mobivateSMSTrans)){
+						cgToken = new CGToken(mobivateSMSDlr.getDlrReference());
+					}else {
+						cgToken=new CGToken(Objects.toString(redisCacheService.getObjectCacheValue(MobivateConstant.TOKEN_MSISDN_CHACHE_PREFIX+mobivateSMSDlr.getMsisdn())));
+					}
+					if(cgToken.getCampaignId()>0) {
+						cgToken = new CGToken("-1c-1c228"); 
+					}
+					vwServiceCampaignDetail = 
+							MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 					
 					MobivateServiceConfig mobivateServiceConfig=
 							MobivateConstant.mapServiceIdToMobivateServiceConfig.
-							get(mobivateSMSTrans.getServiceId());
-					
+							get(vwServiceCampaignDetail.getServiceId());
 					
 					liveReport=new LiveReport(
 							mobivateServiceConfig.getCcOpId(), 

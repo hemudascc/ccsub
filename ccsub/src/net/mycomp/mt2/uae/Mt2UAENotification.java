@@ -3,11 +3,11 @@ package net.mycomp.mt2.uae;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.Column;
 
 @Entity
 @Table(name = "tb_mt2_uae_notification")
@@ -16,228 +16,206 @@ public class Mt2UAENotification implements Serializable{
 	//?Username=&Password=&SubscriptionRef=&MSISDN=&OperatorID=
 	//&ServiceTag=&Amount=&CurrencyCode=&CurrencyISOCode=&CurrencySymbol=&CurrencyDescription=&
 	//NextRenewalDate=&ChargeStatus=&SubscriptionStatus=&channel=&ServiceId=&operatorId=
-	
-	//Sub , Get request : PartnerURL?
-	//Id=<id from MT2 SDP>
-	//&Data=S,<serviceid>,<subscriberReferenceID>
-	//&MSISDN=<msisdn>
-	//&ShortCode=<shortcode>
-	//&Date=20201021
-	//&Operator= Zain Iraq
-	//&ValidityDays=<days>
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	//Unsub ,Get request : PartnerURL?Id=<id from MT2 SDP>&Data=U, <serviceid>
-	//&MSISDN=<msisdn>&ShortCode=<shortcode>&Date=20201021&Operator= Zain Iraq
-	public Mt2UAENotification(){}
-	
-	public Mt2UAENotification(Boolean status) {
-		this.status = status;
-	}
-	
 	@Id
 	@GeneratedValue
-	@Column(name="id")
 	private Integer id;
 	
-	@Column(name="action")
-	private String action;
+	@Column(name = "my_action")
+	private String myAction;	
 	
-	@Column(name="mt2_id")
-	private String mt2id;
-	
-	@Column(name="data")
-	private String data;
-	
-	@Column(name="msisdn")
-	private String msisdn;
-	
-	@Column(name="short_code")
-	private String shortCode;
-	
-	@Column(name="operator")
-	private String operator;
-	
-	@Column(name="validity_days")
-	private String validityDays;
-	
-	@Column(name="mt2_service_id")
-	private String mt2ServiceId;
-	
-	@Column(name="subscriber_reference_id")
-	private String subscriberReferenceID;
-	
-	@Column(name="token")
-	private String token;
-	
-	@Column(name = "create_time")
-	private Timestamp createTime;
-	
-	@Column(name="date")
-	private String date;
+	private String userName;	
+	private String password;	
+	@Column(name = "subscription_ref")
+	private String subscriptionRef;	
+	private String msisdn;	
+	@Column(name = "operator_id")
+	private String operatorID;	
+	@Column(name = "service_tag")
+	private String serviceTag;	
+	private String amount;	
+	@Column(name = "currency_code")
+	private String currencyCode;	
+	@Column(name = "currency_iso_code")
+	private String currencyISOCode;	
+	@Column(name = "currency_symbol")
+	private String currencySymbol;	
+	@Column(name = "currency_description")
+	private String currencyDescription;	
+	@Column(name = "next_renewal_date")
+	private String nextRenewalDate;	
+	@Column(name = "charge_status")
+	private String chargeStatus;	
+	@Column(name = "subscription_status")
+	private String subscriptionStatus;	
+	private String channel;	
+	@Column(name = "service_id")
+	private String serviceId;	
+	@Column(name="trx_id")
+	private String trxid;
 	
 	@Column(name="send_to_adnetwork")
-	private boolean sendToAdnetwork;
+	private Boolean sendToAdnetwork;
 	
-	@Column(name="query_string")
-	private String queryString;
+	@Column(name = "query_str")
+	private String queryStr;	
+	@Column(name = "token")
+	private String token;	
 	
-	@Column(name="mt2_status")
-	private String mtStatus;
-	
-	@Column(name="status")
+	@Column(name = "crete_time")
+	private Timestamp createTime;	
 	private Boolean status;
-
+	
+	public Mt2UAENotification(){}
+	public Mt2UAENotification(boolean status){
+		this.status=status;
+		this.sendToAdnetwork=false;
+		this.createTime=new Timestamp(System.currentTimeMillis());
+	}
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public String getAction() {
-		return action;
+	public String getUserName() {
+		return userName;
 	}
-
-	public void setAction(String action) {
-		this.action = action;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-
-	public String getMt2id() {
-		return mt2id;
+	public String getPassword() {
+		return password;
 	}
-
-	public void setMt2id(String mt2id) {
-		this.mt2id = mt2id;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-
-	public String getData() {
-		return data;
+	public String getSubscriptionRef() {
+		return subscriptionRef;
 	}
-
-	public void setData(String data) {
-		this.data = data;
+	public void setSubscriptionRef(String subscriptionRef) {
+		this.subscriptionRef = subscriptionRef;
 	}
-
 	public String getMsisdn() {
 		return msisdn;
 	}
-
 	public void setMsisdn(String msisdn) {
 		this.msisdn = msisdn;
 	}
-
-	public String getShortCode() {
-		return shortCode;
+	public String getOperatorID() {
+		return operatorID;
 	}
-
-	public void setShortCode(String shortCode) {
-		this.shortCode = shortCode;
+	public void setOperatorID(String operatorID) {
+		this.operatorID = operatorID;
 	}
-
-	public String getOperator() {
-		return operator;
+	public String getServiceTag() {
+		return serviceTag;
 	}
-
-	public void setOperator(String operator) {
-		this.operator = operator;
+	public void setServiceTag(String serviceTag) {
+		this.serviceTag = serviceTag;
 	}
-
-	public String getValidityDays() {
-		return validityDays;
+	public String getAmount() {
+		return amount;
 	}
-
-	public void setValidityDays(String validityDays) {
-		this.validityDays = validityDays;
+	public void setAmount(String amount) {
+		this.amount = amount;
 	}
-
-	public String getMt2ServiceId() {
-		return mt2ServiceId;
+	public String getCurrencyCode() {
+		return currencyCode;
 	}
-
-	public void setMt2ServiceId(String mt2ServiceId) {
-		this.mt2ServiceId = mt2ServiceId;
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
 	}
-
-	public String getToken() {
-		return token;
+	public String getCurrencyISOCode() {
+		return currencyISOCode;
 	}
-
-	public void setToken(String token) {
-		this.token = token;
+	public void setCurrencyISOCode(String currencyISOCode) {
+		this.currencyISOCode = currencyISOCode;
 	}
-
+	public String getCurrencySymbol() {
+		return currencySymbol;
+	}
+	public void setCurrencySymbol(String currencySymbol) {
+		this.currencySymbol = currencySymbol;
+	}
+	public String getCurrencyDescription() {
+		return currencyDescription;
+	}
+	public void setCurrencyDescription(String currencyDescription) {
+		this.currencyDescription = currencyDescription;
+	}
+	public String getNextRenewalDate() {
+		return nextRenewalDate;
+	}
+	public void setNextRenewalDate(String nextRenewalDate) {
+		this.nextRenewalDate = nextRenewalDate;
+	}
+	
+	public String getSubscriptionStatus() {
+		return subscriptionStatus;
+	}
+	public void setSubscriptionStatus(String subscriptionStatus) {
+		this.subscriptionStatus = subscriptionStatus;
+	}
+	public String getChannel() {
+		return channel;
+	}
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
+	public String getServiceId() {
+		return serviceId;
+	}
+	public void setServiceId(String serviceId) {
+		this.serviceId = serviceId;
+	}
+	
+	public String getQueryStr() {
+		return queryStr;
+	}
+	public void setQueryStr(String queryStr) {
+		this.queryStr = queryStr;
+	}
 	public Timestamp getCreateTime() {
 		return createTime;
 	}
-
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
-
-	public String getDate() {
-		return date;
+	
+	public String getChargeStatus() {
+		return chargeStatus;
 	}
-
-	public void setDate(String date) {
-		this.date = date;
+	public void setChargeStatus(String chargeStatus) {
+		this.chargeStatus = chargeStatus;
 	}
-
 	public Boolean getStatus() {
 		return status;
 	}
-	
-	public boolean isSendToAdnetwork() {
-		return sendToAdnetwork;
-	}
-
-	public void setSendToAdnetwork(boolean sendToAdnetwork) {
-		this.sendToAdnetwork = sendToAdnetwork;
-	}
-
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
-
-	public String getSubscriberReferenceID() {
-		return subscriberReferenceID;
+	public String getMyAction() {
+		return myAction;
 	}
-
-	public void setSubscriberReferenceID(String subscriberReferenceID) {
-		this.subscriberReferenceID = subscriberReferenceID;
+	public void setMyAction(String myAction) {
+		this.myAction = myAction;
 	}
-
-	public String getQueryString() {
-		return queryString;
+	public String getToken() {
+		return token;
 	}
-
-	public void setQueryString(String queryString) {
-		this.queryString = queryString;
+	public void setToken(String token) {
+		this.token = token;
 	}
-
-	public String getMtStatus() {
-		return mtStatus;
+	public String getTrxid() {
+		return trxid;
 	}
-
-	public void setMtStatus(String mtStatus) {
-		this.mtStatus = mtStatus;
+	public void setTrxid(String trxid) {
+		this.trxid = trxid;
 	}
-
-	@Override
-	public String toString() {
-		return "Mt2UAENotification [id=" + id + ", action=" + action + ", mt2id=" + mt2id + ", data=" + data
-				+ ", msisdn=" + msisdn + ", shortCode=" + shortCode + ", operator=" + operator + ", validityDays="
-				+ validityDays + ", mt2ServiceId=" + mt2ServiceId + ", subscriberReferenceID=" + subscriberReferenceID
-				+ ", token=" + token + ", createTime=" + createTime + ", date=" + date + ", sendToAdnetwork="
-				+ sendToAdnetwork + ", queryString=" + queryString + ", mtStatus=" + mtStatus + ", status=" + status
-				+ "]";
+	public Boolean getSendToAdnetwork() {
+		return sendToAdnetwork;
 	}
-	
-	
-
+	public void setSendToAdnetwork(Boolean sendToAdnetwork) {
+		this.sendToAdnetwork = sendToAdnetwork;
+	}
 }

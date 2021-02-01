@@ -107,6 +107,8 @@ public interface MConstants {
 	    public static final int ACTEL_OOREDOO_QATAR_OPERATOR_ID= 114;
 	    public static final int ACTEL_VODAFONE_QATAR_OPERATOR_ID= 115;
 	    public static final int TPAY_EGYPT_ETISALAT_OPERATOR_ID= 116;
+	    public static final int TPAY_EGYPT_VODAFONE_OPERATOR_ID= 117;
+	    public static final int TPAY_EGYPT_ORANGE_OPERATOR_ID= 118;
 	    
 	    
 	public static final String CMPID="cmpid";
