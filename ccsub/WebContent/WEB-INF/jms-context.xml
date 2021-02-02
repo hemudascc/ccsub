@@ -1123,6 +1123,58 @@
 		class="net.mycomp.tpay.JMSTpayNotificationListener" />
 	 tpay end -->
    <!-- OnMobile Start -->
+   <!-- mk_hongkong Start -->
+	<bean id="hongkongMOMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/hongkongMOMessageQueue" />
+		<qualifier value="hongkongMOMessageJMSTemplate" />
+	</bean>
+	<bean id="hongkongMOMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/hongkongMOMessageQueue?consumer.prefetchSize=10" />
+	</bean>
+	<bean id="hongkongMOMessageListener"
+		class="net.mycomp.mcarokiosk.hongkong.JMSHongkongMOMessageListener" />
+
+	<bean id="hongkongDNJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/hongkongDNQueue" />
+		<qualifier value="hongkongDNJMSTemplate" />
+	</bean>
+	<bean id="hongkongDNDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/hongkongDNQueue?consumer.prefetchSize=10" />
+	</bean>
+	<bean id="hongkongDNListener"
+		class="net.mycomp.mcarokiosk.hongkong.JMSHongkongDNListener" />
+
+	<bean id="hongkongMTMessageJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/hongkongMTMessageQueue" />
+		<qualifier value="hongkongMTMessageJMSTemplate" />
+	</bean>
+	<bean id="hongkongMTMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/hongkongMTMessageQueue?consumer.prefetchSize=10" />
+	</bean>
+	<bean id="hongkongMTMessageListener"
+		class="net.mycomp.mcarokiosk.hongkong.JMSHongkongMTMessageListener" />
+
+
+	<!-- mk_hongkong End -->
+
    
    <bean id="onMobileCGCallbackJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
@@ -1371,7 +1423,18 @@
 			ref="mcgRenewalMessageListener" method="onMessage" />
 		<jms:listener destination="cc/mcgMOMessageQueue"
 			ref="mcgMOMessageListener" method="onMessage" />
-			
+			<!-- mk_hongkong start -->
+	 	<jms:listener destination="cc/hongkongMOMessageQueue"
+			ref="hongkongMOMessageListener" method="onMessage" />
+
+		<jms:listener destination="cc/hongkongDNQueue"
+			ref="hongkongDNListener" method="onMessage" />
+
+
+		<jms:listener destination="cc/hongkongMTMessageQueue"
+			ref="hongkongMTMessageListener" method="onMessage" />
+
+	<!-- mk_hongkong end-->	
 	</jms:listener-container>
 
 </beans>

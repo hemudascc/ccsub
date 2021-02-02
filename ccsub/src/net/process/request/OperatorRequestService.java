@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.bizao.BizaoService;
-import net.common.service.WasteOperatorService;
 import net.indonesia.triyakom.TriyakomService;
 import net.mycom.nxt.vas.NxtVasService;
 import net.mycomp.actel.ActelService;
@@ -18,6 +17,7 @@ import net.mycomp.du.DUService;
 import net.mycomp.etisalat.EtisalatService;
 import net.mycomp.intarget.IntargetService;
 import net.mycomp.ksa.KsaService;
+import net.mycomp.mcarokiosk.hongkong.MKHongkongService;
 import net.mycomp.mcarokiosk.malaysia.MKMalaysiaService;
 import net.mycomp.messagecloud.MessageCloudService;
 import net.mycomp.messagecloud.gateway.MCGService;
@@ -29,6 +29,7 @@ import net.mycomp.mt2.uae.Mt2UAEService;
 import net.mycomp.mt2.zain.iraq.Mt2ZainIraqService;
 import net.mycomp.onmobile.OnMobileService;
 import net.mycomp.oredoo.kuwait.OredoKuwaitService;
+import net.mycomp.tpay.TpayService;
 import net.mycomp.veoo.VeooService;
 import net.mycomp.wintel.bangladesh.WintelBDService;
 import net.mycomp.worldplay.WorldplayService;
@@ -144,16 +145,13 @@ public class OperatorRequestService implements IOperatorService{
 	@Autowired
 	@Qualifier("ooredooOmanService")
 	private OoredooOmanService ooredooOmanService;
-	
-	/*
-	 * @Autowired
-	 * 
-	 * @Qualifier("tpayService") private TpayService tpayService;
-	 */
-	
 	@Autowired
-	private WasteOperatorService wasteOperatorService;
-	
+	@Qualifier("tpayService") 
+	private TpayService tpayService;
+	@Autowired
+	@Qualifier("mkHongkongService")
+	private MKHongkongService mkHongkongService;
+	 
 	private IOperatorService findProcessRequest(int opId){
 		
 		IOperatorService ioperatorService=null;
@@ -311,10 +309,18 @@ public class OperatorRequestService implements IOperatorService{
 			break;
 		}
 		case MConstants.TPAY_EGYPT_WE_OPERATOR_ID:
-			/*
-			 * case MConstants.TPAY_EGYPT_ETISALAT_OPERATOR_ID: { ioperatorService =
-			 * tpayService; break; }
-			 */
+		case MConstants.TPAY_EGYPT_ETISALAT_OPERATOR_ID:
+		case MConstants.TPAY_EGYPT_VODAFONE_OPERATOR_ID:
+		case MConstants.TPAY_EGYPT_ORANGE_OPERATOR_ID:
+		{
+			ioperatorService = tpayService;
+			break;
+		}
+		case MConstants.MK_HONGKONG_HUTCHISON_OPERATOR_ID:
+		case MConstants.MK_HONGKONG_SMARTONE_OPERATOR_ID:{
+			ioperatorService=mkHongkongService;
+			break;
+		}	 
 		default:	{
 			ioperatorService=defaultOperatorService	;
 		}

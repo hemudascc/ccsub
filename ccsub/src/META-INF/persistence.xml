@@ -165,6 +165,12 @@
 		<class>net.mycomp.tpay.TpayServiceConfig</class>
 		<class>net.mycomp.tpay.TpayRequest</class>
 		<class>net.mycomp.tpay.TpayNotification</class>
+		<!-- mk_hongkong start -->
+		<class>net.mycomp.mcarokiosk.hongkong.MKHongkongConfig</class>
+		<class>net.mycomp.mcarokiosk.hongkong.HongkongMOMessage</class>
+		<class>net.mycomp.mcarokiosk.hongkong.HongkongMTMessage</class>
+		<class>net.mycomp.mcarokiosk.hongkong.HongkongDeliveryNotification</class>
+		<!-- mk_hongkong end -->
 		    <exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<validation-mode>NONE</validation-mode>
 		<properties>

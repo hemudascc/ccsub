@@ -49,8 +49,9 @@
 		classpath:properties/mobimind_service.properties,
 		classpath:properties/mt2_ksa.properties,
 		classpath:properties/mt2_zainiraq.properties,
-			classpath:properties/mobivate.properties,
-		classpath:properties/db.properties" />
+		classpath:properties/mobivate.properties,
+		classpath:properties/db.properties,
+		classpath:properties/mk_hongkong.properties" />
 	
 <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
