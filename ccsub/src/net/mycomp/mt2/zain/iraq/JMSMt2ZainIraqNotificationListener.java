@@ -85,8 +85,8 @@ public class JMSMt2ZainIraqNotificationListener implements MessageListener {
 			
 			if(mt2ZainIraqNotification.getAction().equals(MConstants.ACT)) {
 				
-				liveReport.setAction(MConstants.ACT); 
-				liveReport.setConversionCount(1);
+				liveReport.setAction(MConstants.GRACE); 
+				liveReport.setGraceConversionCount(1);
 				liveReport.setAmount(0d);
 				liveReport.setParam1(mt2ZainIraqNotification.getSubscriberReferenceID());
 				liveReport.setNoOfDays(mt2ZainIraqServiceConfig.getValidity()); 

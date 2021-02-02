@@ -94,7 +94,8 @@ public class JMSMt2ZainIraqDLRListener implements MessageListener {
 			if(mt2ZainIraqDeliveryNotification.getStatus().equals("Success") 
 					&& MConstants.ACT.equals(status)) {
 				  //act 
-					 liveReport.setAction(MConstants.ACT);				
+					 liveReport.setAction(MConstants.ACT);	
+					 liveReport.setConversionCount(1);
 					 liveReport.setAmount(MUtility.toDouble(mt2ZainIraqDeliveryNotification.getPrice(), 0));
 					 liveReport.setNoOfDays(MUtility.toInt(mt2ZainIraqDeliveryNotification.getValidaityDays(), 0));
 					// msg=mt2ZainIraqServiceConfig.getSubMsgTemplate();
@@ -123,11 +124,12 @@ public class JMSMt2ZainIraqDLRListener implements MessageListener {
 				if(liveReport.getAction()!=null){
 					liveReportFactoryService.process(liveReport);
 				}
-				if(msg!=null){
-					msg=Mt2ZainIraqConstant.prepareMessage(msg, mt2ZainIraqServiceConfig,liveReport.getParam1());
-					mt2ZainIraqServiceApi.sendContentSms(mt2ZainIraqDeliveryNotification.getMSISDN(),
-							msg, "", mt2ZainIraqDeliveryNotification.getAction());
-				} 
+				/*
+				 * if(msg!=null){ msg=Mt2ZainIraqConstant.prepareMessage(msg,
+				 * mt2ZainIraqServiceConfig,liveReport.getParam1());
+				 * mt2ZainIraqServiceApi.sendContentSms(mt2ZainIraqDeliveryNotification.
+				 * getMSISDN(), msg, "", mt2ZainIraqDeliveryNotification.getAction()); }
+				 */
 				
 			} catch (Exception ex) {
 				logger.error(" fianlly liveReport:: " + liveReport
