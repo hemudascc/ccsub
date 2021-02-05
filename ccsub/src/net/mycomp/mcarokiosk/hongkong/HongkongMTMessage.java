@@ -58,7 +58,7 @@ public class HongkongMTMessage implements Serializable {
 
 	@Column(name = "linkid")
 	private String linkId;
-
+  
 	@Column(name = "mt_action_type")
 	private String mtActionType;
 

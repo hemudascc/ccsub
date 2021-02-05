@@ -116,7 +116,6 @@ public class MKHongkongService  extends AbstractOperatorService {
 			}
 		return false;
 	}
-	
 	@Override
 	public boolean processBilling(ModelAndView modelAndView,
 			AdNetworkRequestBean adNetworkRequestBean) {
@@ -127,9 +126,11 @@ public class MKHongkongService  extends AbstractOperatorService {
 		MKHongkongCGToken mkHongkongCGToken=new MKHongkongCGToken(
 				adNetworkRequestBean.adnetworkToken.getTokenId(),
 				adNetworkRequestBean.vwserviceCampaignDetail.getCampaignId());
-		
+		logger.info("AdNetworkId: "+adNetworkRequestBean.getAdNetworkId());
 		modelAndView.addObject("token",mkHongkongCGToken.getCGToken());
-		modelAndView.addObject("mkHongkongConfig",mkHongkongConfig);				
+		modelAndView.addObject("mkHongkongConfig",mkHongkongConfig);	
+		modelAndView.addObject("adNetworkId", adNetworkRequestBean.getAdNetworkId());
+		modelAndView.addObject("opid",adNetworkRequestBean.getOpId());	
 		modelAndView.setViewName(mkHongkongConfig.getLpPages());
 		
 		}catch(Exception ex){
@@ -150,8 +151,17 @@ public class MKHongkongService  extends AbstractOperatorService {
 	
 	@Override
 	public boolean checkSub(Integer productId,Integer opid,String msisdn) {
-		
-	
+
+		List<SubscriberReg> list=jpaSubscriberReg.findSubscriberRegByMsisdn(msisdn);
+		logger.info("checkSub:::::::::: list of subscriberreg "+list);
+		SubscriberReg subscriberReg=null;
+		if(list!=null&&list.size()>0){
+			subscriberReg=list.get(0);
+		}
+		logger.info("checkSub:::::::::: subscriberReg: "+subscriberReg);
+		if(subscriberReg!=null&&subscriberReg.getStatus()==MConstants.SUBSCRIBED){
+			return true;
+		}		
 		return false;
 	}
 	

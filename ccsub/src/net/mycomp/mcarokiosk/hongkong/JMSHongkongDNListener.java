@@ -131,7 +131,7 @@ public class JMSHongkongDNListener implements MessageListener {
 				if(liveReport.getAction()!=null){
 					hongkongDeliveryNotification.setAction(liveReport.getAction());
 					liveReportFactoryService.process(liveReport);
-				}
+				}  
 				
 			}catch(Exception ex){
 				logger.error("onMessage:::::::::::::::::"  + " , Exception  " , ex);

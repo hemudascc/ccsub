@@ -44,7 +44,7 @@ public class HongkongSmatoneMacroKioskService extends  AbstractMacroKioskMTMessa
 		
 		
 		//MT Billing Messagge
-		String text = (hongkongMOMessage.getIsFreeMt())?selectedMKHongkongConfig.getMtWelcomeMessageTemplate():selectedMKHongkongConfig.getMtBillingMessageTemplate()+hongkongMOMessage.getMsisdn();
+		String text = (hongkongMOMessage.getIsFreeMt())?selectedMKHongkongConfig.getMtWelcomeMessageTemplate():selectedMKHongkongConfig.getMtBillingMessageTemplate()+hongkongMOMessage.getMsisdn()+"&idcmp="+hongkongMOMessage.getCampaignId();
 		logger.info("text::::::   "+text+"handleSubscriptionhongkongMOMessage:: ::::::selectedMKHongkongConfig::  "+selectedMKHongkongConfig);
 			String  msg=MKHongkongConstant.convertToHexString(
 				MKHongkongConstant.convertToDateTimeFormat())+text;		
@@ -55,7 +55,7 @@ public class HongkongSmatoneMacroKioskService extends  AbstractMacroKioskMTMessa
 		 logger.info("handleSubscriptionhongkongMOMessage:: create MT message::::::mtMessage "+mtMessage);
 		 HTTPResponse response=smsService.sendMTSMS(mtUrl, mtMessage);
 		 redisCacheService.putObjectCacheValueByEvictionMinute(MKHongkongConstant.MT_MESSAGE_CAHCHE_PREFIX
-				 +mtMessage.getMsgId(),
+				 +mtMessage.getMsgId(),  
 				 mtMessage.getId(), 10*60);
 		 
 		logger.info("handleSubscriptionhongkongMOMessage:: sendMTSMS::::::response "+response);
@@ -74,20 +74,7 @@ public class HongkongSmatoneMacroKioskService extends  AbstractMacroKioskMTMessa
 				.equalsIgnoreCase(MKHongkongConstant.MT_BIILABLE_MESSAGE)){	
 			if(hongkongDeliveryNotification!=null&&hongkongDeliveryNotification.getStatus()!=null&&
 					(hongkongDeliveryNotification.getStatus().equalsIgnoreCase("1"))){
-				  Long dnCounter=redisCacheService.getAndIcrementIntValue(
-				    		MKHongkongConstant.HONGKONG_DN_CAHCHE_PREFIX+
-				    		hongkongDeliveryNotification.getMtid(), 1,240);				    
-					if(dnCounter!=null){
-						hongkongDeliveryNotification.setDnCounter(dnCounter.intValue());
-					}
-					
-				if(hongkongDeliveryNotification.getDnCounter()!=2){
-					hongkongDeliveryNotification.setAction("CONFIRMATION");
-				}
-				
-				if(hongkongDeliveryNotification.getDnCounter()==2){	
-				    hongkongDeliveryNotification.setCharged(true);	
-				}
+				  hongkongDeliveryNotification.setCharged(true);	
 			}
 		
 			if(hongkongDeliveryNotification!=null&&hongkongDeliveryNotification.getStatus()!=null){

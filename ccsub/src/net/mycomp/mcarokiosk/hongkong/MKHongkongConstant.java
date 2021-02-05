@@ -50,6 +50,7 @@ public interface MKHongkongConstant {
 	 public final String MT_MESSAGE_CAHCHE_PREFIX="HONGKONG_MT_MESSAGE_CAHCHE_PREFIX";		
 	 public final String MO_MESSAGE_CAHCHE_PREFIX="HONGKONG_MO_MESSAGE_CAHCHE_PREFIX";		
 	 public final String HONGKONG_RETRY_BILLING_PREFIX="HONGKONG_RETRY_BILLING_PREFIX";
+	 public final String HONGKONG_AD_NETWORK_CAHCHE_PREFIX="HONGKONG_AD_NETWORK_CAHCHE_PREFIX";	
 		
 	public static final DateFormat yyyyMMddHHmmssAccessToken=new SimpleDateFormat("yyyyMMddHHmmss");
 	

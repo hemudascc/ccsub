@@ -36,7 +36,9 @@ $(document).ready(function() {
 	    <label class="enter-mob-label">Enter your mobile number to download</label>
         <input type="text" placeholder="Mobile number" id = "msisdn" name="msisdn" class="form-control mobile-input">
         <input type="hidden" name="token" value="${token}" >
-        <select id="telcoid" name="opid" class="form-control operator-input">
+        <input type="hidden" name="adNetworkId" value="${adNetworkId}" >
+        <input type="hidden" name="opid" value="${opid}" >
+        <select id="telcoid" name="telcoid" class="form-control operator-input">
             <option hidden>Select Operator</option>
             <option value="1">HUTCHISON</option>
             <option value="4">Smartone</option>

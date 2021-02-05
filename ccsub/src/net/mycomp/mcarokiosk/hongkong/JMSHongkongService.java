@@ -88,7 +88,7 @@ public class JMSHongkongService {
 					Message message=session.createObjectMessage(hongkongDeliveryNotification);
 					return message;
 				}
-			});	        
+			});	          
 			}catch(Exception ex){
 				logger.error("saveMalaysiaDeliveryNotification::::::::::::: ",ex);
 				boolean save=daoService.saveObject(hongkongDeliveryNotification);			

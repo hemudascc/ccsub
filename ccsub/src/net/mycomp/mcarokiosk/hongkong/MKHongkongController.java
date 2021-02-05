@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.common.service.RedisCacheService;
+import net.persist.bean.VWServiceCampaignDetail;
+import net.process.bean.AdNetworkRequestBean;
+import net.process.request.OperatorRequestService;
 import net.util.MConstants;
+import net.util.MData;
 import net.util.MUtility;
 
 @Controller
@@ -40,14 +45,21 @@ public class MKHongkongController {
 	@Autowired
 	private JMSHongkongService jmsHongkongService;
 	
+	@Autowired
+	private RedisCacheService redisCacheService;
+	
+	@Autowired
+	private OperatorRequestService operatorRequestService;
 	
 	@RequestMapping("mo")
 	@ResponseBody
 	public String mo(HttpServletRequest request,ModelAndView modelAndView) {
 		logger.info("mo:::::::::: "+request.getQueryString());
 		HongkongMOMessage hongkongMOMessage=null;
+		VWServiceCampaignDetail vwServiceCampaignDetail=null;
 		try{
 		logger.info("mo:::::::::::::::::::::::::::::::: "+request.getQueryString());		
+//		redisCacheService.getValueString(msisdn)
 		hongkongMOMessage=new HongkongMOMessage(true);		
 		hongkongMOMessage.setMsisdn(request.getParameter("from"));		
 		hongkongMOMessage.setTime(request.getParameter("time"));
@@ -57,13 +69,30 @@ public class MKHongkongController {
 		hongkongMOMessage.setMsgid(request.getParameter("msgid"));
 		hongkongMOMessage.setTelcoid(MUtility.toInt(request.getParameter("telcoid"),0));
 		hongkongMOMessage.setPlatform(request.getParameter("platform"));
-		hongkongMOMessage.setRefId(request.getParameter("refid"));
+		String refId =(String)redisCacheService.getObjectCacheValue(MKHongkongConstant.MO_MESSAGE_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn());
+		String adNetworkId =(String)redisCacheService.getObjectCacheValue(MKHongkongConstant.HONGKONG_AD_NETWORK_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn());
+		
+		hongkongMOMessage.setRefId(refId);
+		
+		logger.info("RefId :::::::::::::::::::::::::::::: "+refId+" adNetworkId: "+adNetworkId);
 		hongkongMOMessage.setQueryStr(request.getQueryString());
 		hongkongMOMessage.setCreateTime(new Timestamp(System.currentTimeMillis()));
-		hongkongMOMessage.setOpId(HongkongOperatorTelcoidMap.getOperatorId(hongkongMOMessage.getTelcoid()));
+		logger.info("CmpIdId :::::::::::::::::::::::::::::: "+new MKHongkongCGToken(hongkongMOMessage.getRefId()).getCampaignId());
+		vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail
+				.get(new MKHongkongCGToken(hongkongMOMessage.getRefId()).getCampaignId());
+		logger.info("adNetworkRequestBean.vwserviceCampaignDetail :::::::::::::::::::::::::::::: "+vwServiceCampaignDetail);
+		if(vwServiceCampaignDetail==null){
+			vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail
+						.entrySet().stream().filter(map ->
+						map.getValue().getServiceId()==MConstants.WASTE_SERVICE_ID&&
+						map.getValue().getAdNetworkId()==Integer.parseInt(adNetworkId))
+						.findFirst().get().getValue();
+			}
+		logger.info("vwServiceCampaignDetail.getOpId(): "+vwServiceCampaignDetail.getOpId());
+		hongkongMOMessage.setOpId(vwServiceCampaignDetail.getOpId());  
 		hongkongMOMessage.setText(request.getParameter("text"));
 		if(hongkongMOMessage.getText()!=null&&hongkongMOMessage.getText().
-				toUpperCase().contains("STOP")){
+				toUpperCase().contains("OFF")){
 			hongkongMOMessage.setKeyword(hongkongMOMessage.getText().split(" ")[1]);
 		}else{
 			hongkongMOMessage.setKeyword(hongkongMOMessage.getText());
@@ -122,10 +151,16 @@ public class MKHongkongController {
 
 	@RequestMapping("lp-2")
 	public ModelAndView freeMt(ModelAndView modelAndView,HttpServletRequest  request){		
-		String telcoid=request.getParameter("opid");
+		String opid=request.getParameter("opid");
 		String msisdn=request.getParameter("msisdn");
 		String token = request.getParameter("token");
-		logger.info("telcoid : "+telcoid+"  msisdn: "+msisdn+"  token: "+token);
+		String telcoid = request.getParameter("telcoid");
+		String adNetworkId = request.getParameter("adNetworkId");
+		redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.MO_MESSAGE_CAHCHE_PREFIX+msisdn,
+				token, 1);
+		redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.HONGKONG_AD_NETWORK_CAHCHE_PREFIX+msisdn,
+				adNetworkId, 1);
+		logger.info("opid: "+opid+"  telcoid : "+telcoid+"  msisdn: "+msisdn+"  token: "+token+"  adNetworkId: "+adNetworkId);
 		HongkongMOMessage hongkongMOMessage = new HongkongMOMessage();
 		try {	
 		String tokenStr[] = token.split(MConstants.TOKEN_SEPERATOR);
@@ -133,9 +168,9 @@ public class MKHongkongController {
 		hongkongMOMessage.setCampaignId(Integer.parseInt(tokenStr[1]));
 		hongkongMOMessage.setMsisdn((msisdn.startsWith(countryCode))?msisdn:countryCode+msisdn);
 		hongkongMOMessage.setToken(token);
-		hongkongMOMessage.setTelcoid(MUtility.toInt(request.getParameter("opid"),0));
+		hongkongMOMessage.setTelcoid(MUtility.toInt(telcoid,0));
 		hongkongMOMessage.setText(welcomeText);
-		hongkongMOMessage.setOpId(HongkongOperatorTelcoidMap.getOperatorId(hongkongMOMessage.getTelcoid()));
+		hongkongMOMessage.setOpId(Integer.parseInt(opid));
 		hongkongMOMessage.setIsFreeMt(true);
 		}catch(Exception ex){
 			logger.error("exception",ex);
@@ -147,19 +182,5 @@ public class MKHongkongController {
 		
 		return modelAndView;	
 	}  
-	
-//	@RequestMapping(value={"/checkstatus"},method={RequestMethod.GET,RequestMethod.POST})
-//	public CheckStatusResponse checkStatus(@RequestParam(required = false) String msisdn) {
-//		CheckStatusResponse status = null;
-//		logger.info("msisdn===> " + msisdn);
-//		try {
-//			jmsHongkongService.checkStatus(msisdn);
-//			
-//
-//		} catch (Exception e) {
-//			logger.error(""+e);
-//			return status;
-//		}
-//
-//	}
+
 }

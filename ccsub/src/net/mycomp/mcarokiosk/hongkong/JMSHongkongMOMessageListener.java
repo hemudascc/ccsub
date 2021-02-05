@@ -80,7 +80,7 @@ public class JMSHongkongMOMessageListener implements MessageListener {
 						.mapServiceIdToMKHongkongConfig.get(vwServiceCampaignDetail.getServiceId());
 				logger.info("onMessage::mkHongkongConfig:::::: "+mkHongkongConfig);
 				
-				liveReport=new LiveReport(hongkongMOMessage.getTelcoid(),
+				liveReport=new LiveReport(hongkongMOMessage.getOpId(),
 						hongkongMOMessage.getCreateTime(), 0,  
 						mkHongkongConfig.getServiceId(),0);
 			}
@@ -107,7 +107,7 @@ public class JMSHongkongMOMessageListener implements MessageListener {
 	    	}
 	    	logger.info("onMessage::555:::::: "+hongkongMOMessage);
 	    	
-	    	if(hongkongMOMessage.getText().toUpperCase().contains("STOP")){
+	    	if(hongkongMOMessage.getText().toUpperCase().contains("OFF")){
 	    		
 	    		logger.info("onMessage::666:::::: "+hongkongMOMessage);
 				liveReport.setAction(MConstants.DCT);	

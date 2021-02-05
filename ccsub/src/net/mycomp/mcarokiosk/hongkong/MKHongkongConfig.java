@@ -20,8 +20,8 @@ public class MKHongkongConfig {
 	@Column(name = "service_id")
 	private Integer serviceId;
 	@Column(name = "product_id")
-	private Integer productId;
-	@Column(name = "operator_name")
+	private Integer productId; 
+	@Column(name = "operator_name")  
 	private String operatorName;
 	@Column(name = "op_service_name")
 	private String opServiceName;

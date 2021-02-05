@@ -38,7 +38,7 @@ public class HutchisonMacroKioskService  extends  AbstractMacroKioskMTMessage{
 		}		
 		
 		      //MT Billing Messagge
-	    		String text = (hongkongMOMessage.getIsFreeMt())?selectedMKHongkongConfig.getMtWelcomeMessageTemplate():selectedMKHongkongConfig.getMtBillingMessageTemplate()+hongkongMOMessage.getMsisdn();
+	    		String text = (hongkongMOMessage.getIsFreeMt())?selectedMKHongkongConfig.getMtWelcomeMessageTemplate():selectedMKHongkongConfig.getMtBillingMessageTemplate()+hongkongMOMessage.getMsisdn()+"&idcmp="+hongkongMOMessage.getCampaignId();
 				logger.info("text::::::   "+text+"handleSubscriptionhongkongMOMessage:: ::::::selectedMKHongkongConfig::  "+selectedMKHongkongConfig);
 				String msg=MKHongkongConstant.convertToHexString(
 						MKHongkongConstant.convertToDateTimeFormat())+text;		
