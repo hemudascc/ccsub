@@ -134,10 +134,15 @@ public class JMSTpayNotificationListener implements MessageListener{
 				if(subscriberRegs.size()>0) {subToday= LocalDate.now().equals(LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(subscriberRegs.get(0).getSubDate())));}
 				if(newUser && subToday) {
 					if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode())) {
-						redisCacheService.removeObjectCacheValue(TpayConstant.ACTIVE_CACHE_PREFIX+tpayNotification.getSubscriptionContractId());
 						tpayNotification.setAction(MConstants.ACT);
+						redisCacheService.removeObjectCacheValue(TpayConstant.ACTIVE_CACHE_PREFIX+tpayNotification.getSubscriptionContractId());
 					}else {
-						tpayNotification.setAction(MConstants.GRACE);
+						if(Objects.toString(redisCacheService.getCacheValue(TpayConstant.GRACE_CACHE_PREFIX+tpayNotification.getSubscriptionContractId())).isEmpty()) {
+							tpayNotification.setAction(MConstants.GRACE);
+							redisCacheService.putObjectCacheValueByEvictionDay(TpayConstant.GRACE_CACHE_PREFIX+tpayNotification.getSubscriptionContractId(), "1", 1);
+						}else {
+							tpayNotification.setAction("NONE");
+						}
 					}
 				}else {
 					if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode())) {

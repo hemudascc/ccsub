@@ -31,10 +31,11 @@ public interface TpayConstant {
 	public static final String SMS_URL = "https://live.tpay.me/api/TPay.svc/json/SendFreeMTMessage";
 	public static final String CANCEL_SUBSCRIPTION_CONTARCT_URL = "https://live.tpay.me/api/TPaySubscription.svc/json/CancelSubscriptionContractRequest";
 	public static final String WELCOME_MESSAGE_SMS_ENG = "Thanks for subscribing to GamePad to enjoy visit http://mob.ccd2c.com/gamepad/tp/home?msisdn=<msisdn>&lang=<lang>. You will be charged for <price> Egyptian Pound/<billing_sequence> to unsubscribe send <unsub_keyword> to <shortcode> for free. For queries, contact on tech.d2c@collectcent.com";
-	public static final String WELCOME_MESSAGE_SMS_ARB = new String("شكرًا لك على الاشتراك في GamePad ، للاستمتاع بزيارة http://mob.ccd2c.com/gamepad/tp/home?msisdn=<msisdn>&lang=<lang>. سيتم تحصيل <price> جنية مصري يوميا لإلغاء الاشتراك ، أرسل <unsub_keyword> إلى <shortcode> مجانا. للاستفسارات ، اتصل على tech.d2c@collectcent.com".getBytes(),StandardCharsets.UTF_8);
+	public static final String WELCOME_MESSAGE_SMS_ARB = new String("شكرًا لاشتراكك في GamePad للاستمتاع بزيارة http://mob.ccd2c.com/gamepad/tp/home؟msisdn=<msisdn>&lang= <lang>. سيتم محاسبتك على <price> جنيه مصري / <billing_sequence> لإلغاء الاشتراك ، أرسل <unsub_keyword> إلى <shortcode> مجانًا. للاستفسارات ، اتصل على tech.d2c@collectcent.com".getBytes(),StandardCharsets.UTF_8);
 	public static final String CONTENT_MESSAGE_SMS_ENG = "Please access the content using http://mob.ccd2c.com/gamepad/tp/home?msisdn=<msisdn>&lang=<lang> URL. For queries, contact on tech.d2c@collectcent.com";
-	public static final String CONTENT_MESSAGE_SMS_ARB = "يرجى الوصول إلى المحتوى باستخدام http://mob.ccd2c.com/gamepad/tp/home?msisdn=<msisdn>&lang=<lang> URL. للاستفسارات ، اتصل على tech.d2c@collectcent.com";
+	public static final String CONTENT_MESSAGE_SMS_ARB = "يرجى الوصول إلى المحتوى باستخدام http://mob.ccd2c.com/gamepad/tp/home؟msisdn=<msisdn>&lang= <lang> URL. للاستفسارات ، اتصل على tech.d2c@collectcent.com";
 	public static final String ACTIVE_CACHE_PREFIX = "TPAY_ACTIVE_CACHE_PREFIX";
+	public static final String GRACE_CACHE_PREFIX = "TPAY_GRACE_CACHE_PREFIX";
 	
 	static String getMsisdnByOperatorCode(String operatorCode) {
 		switch(operatorCode) {
