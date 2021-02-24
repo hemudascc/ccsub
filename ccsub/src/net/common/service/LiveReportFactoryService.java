@@ -3,6 +3,7 @@ package net.common.service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Objects;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,14 @@ import net.util.ReportGenerateException;
 
 @Service("liveReportFactoryService")
 public class LiveReportFactoryService {
-	
+
 	private static final Logger logger = Logger.getLogger(LiveReportFactoryService.class);
 	@Autowired
 	private IpCheckService ipCheckService;
 
 	@Autowired
 	private IDaoService daoService;
-	
+
 	@Autowired
 	private RedisCacheService redisCacheService;
 
@@ -40,147 +41,147 @@ public class LiveReportFactoryService {
 	private SubscriberRegService subscriberRegService;
 	@Autowired
 	private JPAAdnetworkToken jpaAdnetworkToken;
-	
+
 	@Autowired
 	private CommonService commonService;
 
 	public LiveReport process(LiveReport liveReport) throws Exception {
-	
+
 		AdnetworkToken adnetworkToken = null;
 		SubscriberReg subscriberReg = null;
-		
-		
+
+
 		if(liveReport.getAction()==null){
 			logger.warn("Live Report action not set,not process report generate");
 			return liveReport;
 		}
-		
+
 		net.persist.bean.Service subService=MData.mapServiceIdToService.get(liveReport.getServiceId());
 		if(subService!=null){
 			liveReport.setProductId(subService.getProductId());//Add product id feature 
 		}
-		
-		
+
+
 		logger.debug("process:::::::::::::LiveReportFactoryService::::::::::::::::::::::::: "+liveReport);
 		try{
-		if (liveReport.getAction().equalsIgnoreCase(MConstants.ACT)) {
-			logger.debug("process:::::::::::::LiveReportFactoryServiceact:::::::::::::::::::::::::");
-			if (!liveReport.isDuplicateRequest()) {
-				logger.debug("process:::::::::::::LiveReportFactoryService not dumplicate:::::::::::::::::::::::::");
-//				adnetworkToken = adnetworkCallbackService.sendAdnetworkCallBack(liveReport.getAction(),
-//						liveReport.getMsisdn(), liveReport.getTokenId(), liveReport.getOperatorId(),
-//						liveReport.getAmount());
-				adnetworkToken = adnetworkCallbackService.sendAdnetworkCallBack(liveReport);
-				
-				logger.debug("process:::::::::::::LiveReportFactoryService :::::::::::::::::::::::::"+adnetworkToken);
-			
-				if(liveReport.getLcId()==null){
-					liveReport.setLcId("0");
-				}				
+			if (liveReport.getAction().equalsIgnoreCase(MConstants.ACT)) {
+				logger.debug("process:::::::::::::LiveReportFactoryServiceact:::::::::::::::::::::::::");
+				if (!liveReport.isDuplicateRequest()) {
+					logger.debug("process:::::::::::::LiveReportFactoryService not dumplicate:::::::::::::::::::::::::");
+					//				adnetworkToken = adnetworkCallbackService.sendAdnetworkCallBack(liveReport.getAction(),
+					//						liveReport.getMsisdn(), liveReport.getTokenId(), liveReport.getOperatorId(),
+					//						liveReport.getAmount());
+					adnetworkToken = adnetworkCallbackService.sendAdnetworkCallBack(liveReport);
+
+					logger.debug("process:::::::::::::LiveReportFactoryService :::::::::::::::::::::::::"+adnetworkToken);
+
+					if(liveReport.getLcId()==null){
+						liveReport.setLcId("0");
+					}				
+					subscriberReg = subscriberRegService.findOrCreateSubscriberByAct(liveReport.getMsisdn(),
+							adnetworkToken,
+							liveReport);
+					liveReport.setSubId(subscriberReg.getSubscriberId());
+					liveReport.setLastActivationTime(new Timestamp(System.currentTimeMillis()));
+					//				daoService.createChurnData(AdnetworkChurnDataFactory.createAdnetworkChurnDataForActivation(
+					//						liveReport,adnetworkToken));
+
+					Integer adnetworkId=MConstants.DEFAULT_ADNETWORK_ID;
+					if(adnetworkToken!=null){
+						adnetworkId=adnetworkToken.getAdnetworkId();
+					}
+					if(liveReport.isAddToCapping()){
+						redisCacheService.putConversionCapping(adnetworkId,
+								liveReport.getOperatorId(),liveReport.getProductId(),liveReport.getReportDate());
+					}
+					logger.debug("process:::::::::::::LiveReportFactoryService :::::::::::::::::::::::::"+subscriberReg);
+				}	
+				//liveReport.setConversionCount(1);
+				setLiveReportVariable(adnetworkToken, liveReport);
+
+			} else if (liveReport.getAction().equalsIgnoreCase(MConstants.GRACE)) {
+
 				subscriberReg = subscriberRegService.findOrCreateSubscriberByAct(liveReport.getMsisdn(),
 						adnetworkToken,
 						liveReport);
-				liveReport.setSubId(subscriberReg.getSubscriberId());
-				liveReport.setLastActivationTime(new Timestamp(System.currentTimeMillis()));
-//				daoService.createChurnData(AdnetworkChurnDataFactory.createAdnetworkChurnDataForActivation(
-//						liveReport,adnetworkToken));
-				
-				Integer adnetworkId=MConstants.DEFAULT_ADNETWORK_ID;
-				if(adnetworkToken!=null){
-					adnetworkId=adnetworkToken.getAdnetworkId();
+
+				if (!liveReport.isDuplicateRequest()) {
+					//				adnetworkToken = adnetworkCallbackService.sendAdnetworkCallBack(liveReport.getAction(),
+					//						liveReport.getMsisdn(), liveReport.getTokenId(), liveReport.getOperatorId(),liveReport.getAmount());
+					adnetworkToken = adnetworkCallbackService.sendAdnetworkCallBack(liveReport);
 				}
 				if(liveReport.isAddToCapping()){
-				redisCacheService.putConversionCapping(adnetworkId,
-						liveReport.getOperatorId(),liveReport.getProductId(),liveReport.getReportDate());
-				}
-				logger.debug("process:::::::::::::LiveReportFactoryService :::::::::::::::::::::::::"+subscriberReg);
-			}	
-			//liveReport.setConversionCount(1);
-			setLiveReportVariable(adnetworkToken, liveReport);
-			
-		} else if (liveReport.getAction().equalsIgnoreCase(MConstants.GRACE)) {
-			
-			subscriberReg = subscriberRegService.findOrCreateSubscriberByAct(liveReport.getMsisdn(),
-					adnetworkToken,
-					liveReport);
-			
-			if (!liveReport.isDuplicateRequest()) {
-//				adnetworkToken = adnetworkCallbackService.sendAdnetworkCallBack(liveReport.getAction(),
-//						liveReport.getMsisdn(), liveReport.getTokenId(), liveReport.getOperatorId(),liveReport.getAmount());
-				adnetworkToken = adnetworkCallbackService.sendAdnetworkCallBack(liveReport);
-			}
-			if(liveReport.isAddToCapping()){
-				int adnetworkId=MConstants.DEFAULT_ADNETWORK_ID;				 
-				if(liveReport.getAdnetworkCampaignId()>0){
-					VWServiceCampaignDetail vwServiceCampaignDetail= MData.mapCamapignIdToVWServiceCampaignDetail.get(liveReport.getAdnetworkCampaignId());
-					if(vwServiceCampaignDetail!=null){
-					adnetworkId=vwServiceCampaignDetail.getAdNetworkId();
+					int adnetworkId=MConstants.DEFAULT_ADNETWORK_ID;				 
+					if(liveReport.getAdnetworkCampaignId()>0){
+						VWServiceCampaignDetail vwServiceCampaignDetail= MData.mapCamapignIdToVWServiceCampaignDetail.get(liveReport.getAdnetworkCampaignId());
+						if(vwServiceCampaignDetail!=null){
+							adnetworkId=vwServiceCampaignDetail.getAdNetworkId();
+						}
 					}
+					redisCacheService.putConversionCapping(adnetworkId,
+							liveReport.getOperatorId(),liveReport.getProductId(),liveReport.getReportDate());				
 				}
-				redisCacheService.putConversionCapping(adnetworkId,
-						liveReport.getOperatorId(),liveReport.getProductId(),liveReport.getReportDate());				
-			}
-			
 
-			//liveReport.setGraceConversionCount(1);
-			setLiveReportVariable(adnetworkToken, liveReport);
-		} else if (liveReport.getAction().equalsIgnoreCase(MConstants.RENEW)) {
-			logger.debug("process:::::::::::::LiveReportFactoryService :::::::::::::::::::::::::renew");
-			if (!liveReport.isDuplicateRequest()) {
-				//SubscriberReg subscriberRegRenewal = daoService.searchSubscriber(liveReport.getMsisdn());			
-				subscriberReg = subscriberRegService.updateRenewal(liveReport.getMsisdn(), liveReport);
-				if (subscriberReg != null && subscriberReg.getStatus() == 1) {
-					liveReport.setSubId(subscriberReg.getSubscriberId());
-					adnetworkToken = daoService.findAdnetworkTokenById(subscriberReg.getTokenId());
-				}			
-			}
-			//liveReport.setRenewalCount(1);
-		} else if (liveReport.getAction().equalsIgnoreCase(MConstants.DCT)) {
-			boolean success = false;
-			logger.debug(":::::::::::::LiveReportFactoryServiceDCT:::::::::::::::::::::::::");
-			if (!liveReport.isDuplicateRequest()) {
-				logger.debug(":::::::::::::LiveReportFactoryServiceDCT duplicate:::::::::::::::::::::::::"+liveReport.getAction());
-				subscriberReg = subscriberRegService.updateDeactivation(liveReport.getMsisdn(),
-						liveReport.getProductId());
-				
-				if (subscriberReg != null) {
-					adnetworkToken = daoService.findAdnetworkTokenById(subscriberReg.getTokenId());
-					liveReport.setChurnDctCount(subscriberReg.isChurn() ? 1 : 0);
-					if (subscriberReg.isChurn()) {
-						success = adnetworkCallbackService.sendChurnDCTAdnetworkCallBack(liveReport.getOperatorId(),
-								adnetworkToken);	
-						
-						daoService.createChurnData(AdnetworkChurnDataFactory.createAdnetworkChurnDataForChurnDeactivation(
-								liveReport,
-								 adnetworkToken));
-					}
-					if (success) {
-						liveReport.setDctSendCount(1);
+
+				//liveReport.setGraceConversionCount(1);
+				setLiveReportVariable(adnetworkToken, liveReport);
+			} else if (liveReport.getAction().equalsIgnoreCase(MConstants.RENEW)) {
+				logger.debug("process:::::::::::::LiveReportFactoryService :::::::::::::::::::::::::renew");
+				if (!liveReport.isDuplicateRequest()) {
+					//SubscriberReg subscriberRegRenewal = daoService.searchSubscriber(liveReport.getMsisdn());			
+					subscriberReg = subscriberRegService.updateRenewal(liveReport.getMsisdn(), liveReport);
+					if (subscriberReg != null && subscriberReg.getStatus() == 1) {
+						liveReport.setSubId(subscriberReg.getSubscriberId());
+						adnetworkToken = daoService.findAdnetworkTokenById(subscriberReg.getTokenId());
+					}			
+				}
+				//liveReport.setRenewalCount(1);
+			} else if (liveReport.getAction().equalsIgnoreCase(MConstants.DCT)) {
+				boolean success = false;
+				logger.debug(":::::::::::::LiveReportFactoryServiceDCT:::::::::::::::::::::::::");
+				if (!liveReport.isDuplicateRequest()) {
+					logger.debug(":::::::::::::LiveReportFactoryServiceDCT duplicate:::::::::::::::::::::::::"+liveReport.getAction());
+					subscriberReg = subscriberRegService.updateDeactivation(liveReport.getMsisdn(),
+							liveReport.getProductId());
+
+					if (subscriberReg != null) {
+						adnetworkToken = daoService.findAdnetworkTokenById(subscriberReg.getTokenId());
+						liveReport.setChurnDctCount(subscriberReg.isChurn() ? 1 : 0);
+						if (subscriberReg.isChurn()) {
+							success = adnetworkCallbackService.sendChurnDCTAdnetworkCallBack(liveReport.getOperatorId(),
+									adnetworkToken);	
+
+							daoService.createChurnData(AdnetworkChurnDataFactory.createAdnetworkChurnDataForChurnDeactivation(
+									liveReport,
+									adnetworkToken));
+						}
+						if (success) {
+							liveReport.setDctSendCount(1);
+						}
 					}
 				}
+				//liveReport.setDctCount(1);
+				setLiveReportVariable(adnetworkToken, liveReport);
 			}
-			//liveReport.setDctCount(1);
-			setLiveReportVariable(adnetworkToken, liveReport);
-		}
 
-		int campaignId = MConstants.DEFAULT_ADNETWORK_CAMPAIGN_ID;
-		if (adnetworkToken != null) {
-			campaignId = adnetworkToken.getCampaignId();
-			liveReport.setToken(adnetworkToken.getToken());	
-			liveReport.setCircleId(adnetworkToken.getCircleId()!=null?adnetworkToken.getCircleId():0);
-			if(liveReport.getAction().equalsIgnoreCase(MConstants.ACT)){
-//			commonService.putChargeAndCappingValueInCache(liveReport.getMsisdn(),
-//					 liveReport.getOperatorId(),campaignId,liveReport.getCircleId());
+			int campaignId = MConstants.DEFAULT_ADNETWORK_CAMPAIGN_ID;
+			if (adnetworkToken != null) {
+				campaignId = adnetworkToken.getCampaignId();
+				liveReport.setToken(adnetworkToken.getToken());	
+				liveReport.setCircleId(adnetworkToken.getCircleId()!=null?adnetworkToken.getCircleId():0);
+				if(liveReport.getAction().equalsIgnoreCase(MConstants.ACT)){
+					//			commonService.putChargeAndCappingValueInCache(liveReport.getMsisdn(),
+					//					 liveReport.getOperatorId(),campaignId,liveReport.getCircleId());
+				}
 			}
+			if(liveReport.getAdnetworkCampaignId()<=0){
+				liveReport.setAdnetworkCampaignId(campaignId);	
+			}
+			liveReport.setDuplicateValues();
+			daoService.generateLiveReport(liveReport);
+		}catch(Exception ex){
+			throw new ReportGenerateException(liveReport,ex.getMessage());
 		}
-		if(liveReport.getAdnetworkCampaignId()<=0){
-		liveReport.setAdnetworkCampaignId(campaignId);	
-		}
-		liveReport.setDuplicateValues();
-		daoService.generateLiveReport(liveReport);
-	}catch(Exception ex){
-		throw new ReportGenerateException(liveReport,ex.getMessage());
-	}
 		createCallbackDump(liveReport);
 		return liveReport;
 	}
@@ -199,8 +200,8 @@ public class LiveReportFactoryService {
 			// liveReport.setPubId(adnetworkToken.getPubId());
 			liveReport.setSendConversionCount(
 					liveReport.getConversionCount() > 0 && adnetworkToken.getConversionSendToAdntework() ? 1 : 0);
-//			liveReport.setGraceSendConversionCount(
-//					liveReport.getGraceConversionCount() > 0 && adnetworkToken.getConversionSendToAdntework() ? 1 : 0);
+			//			liveReport.setGraceSendConversionCount(
+			//					liveReport.getGraceConversionCount() > 0 && adnetworkToken.getConversionSendToAdntework() ? 1 : 0);
 		}
 	}
 
@@ -230,35 +231,35 @@ public class LiveReportFactoryService {
 		//liveReport.setActionHours(Integer.parseInt(smf.format(date).toString()));
 		// liveReport.setPubId(adnetworkToken.getPubId());
 		setClickCountType(liveReport, adnetworkToken.getAction());
-		
+
 		daoService.generateLiveReport(liveReport);
 		return liveReport;
 
 	}
-	
+
 	public LiveReport createLiveReportForManualConversion(Integer campaignId,Integer opId,
 			AdnetworkToken adnetworkToken,String cronType) {
-		
+
 		LiveReport liveReport = new LiveReport(opId, 
 				new Timestamp(System.currentTimeMillis()), campaignId,0,0);
 		liveReport.setType(adnetworkToken.getType());
-		
-			
+
+
 		if(cronType==MConstants.MANUAL_CRON){
-		liveReport.setSendConversionCount(1);
-		liveReport.setSendManualConversionCount(1);	
+			liveReport.setSendConversionCount(1);
+			liveReport.setSendManualConversionCount(1);	
 		}
 		else if(cronType==MConstants.AUTOSENT_CRON) {
 			liveReport.setSendAutoConversionCount(1);
 		}
-		
+
 		liveReport.setCircleId(adnetworkToken.getCircleId());
 		liveReport.setType(adnetworkToken.getType());
 		daoService.generateLiveReport(liveReport);
 		return liveReport;
 	}
 
-	
+
 	public LiveReport createLiveReportForAutoConversion(Integer campaignId,Integer opId,
 			AdnetworkToken adnetworkToken) {
 		LiveReport liveReport = new LiveReport(opId, new Timestamp(System.currentTimeMillis()), campaignId,0,0);
@@ -276,7 +277,7 @@ public class LiveReportFactoryService {
 		if(action==null){
 			return ;
 		}
-		
+
 		switch (action) {
 		case MConstants.REDIRECT_TO_WASTE_URL:					
 		case MConstants.REDIRECT_TO_WASTE_URL_COMAPIGN_BLOCK:
@@ -287,8 +288,8 @@ public class LiveReportFactoryService {
 		case MConstants.REDIRECT_TO_WASTE_URL_PUB_ID_BLOCK:	
 			liveReport.setReverseClickCount(1);
 			break;
-//			liveReport.setBlockClickCount(1);
-//			break;
+			//			liveReport.setBlockClickCount(1);
+			//			break;
 		case MConstants.PIN_SEND:	
 			liveReport.setPinSendCount(1);//ReverseClickCount(1);
 			break;
@@ -318,32 +319,33 @@ public class LiveReportFactoryService {
 			break;
 		}
 	}
-	
+
 	private void createCallbackDump(LiveReport liveReport){
 		CallbackDump callbackDump=null;
 		try{
-			
-	    callbackDump=new CallbackDump(true,liveReport.getReportDate());
-		callbackDump.setMsisdn(liveReport.getMsisdn());
-		callbackDump.setAction(liveReport.getAction());
-		callbackDump.setAmount(liveReport.getAmount());
-		callbackDump.setOperatorId(liveReport.getOperatorId());
-		callbackDump.setServiceId(liveReport.getServiceId());
-		callbackDump.setProductId(liveReport.getProductId());
-		callbackDump.setCampaignId(liveReport.getAdnetworkCampaignId());
-		callbackDump.setToken(liveReport.getToken());
-		callbackDump.setTokenId(liveReport.getTokenId());
-		callbackDump.setSendToAdnetwork(liveReport.getSendConversionCount()>0?true:false);
-		AdnetworkToken adnetworkToken=jpaAdnetworkToken.findEnableAdnetworkToken(liveReport.getTokenId());
-		callbackDump.setClickId(adnetworkToken.getToken());
-		
+
+			callbackDump=new CallbackDump(true,liveReport.getReportDate());
+			callbackDump.setMsisdn(liveReport.getMsisdn());
+			callbackDump.setAction(liveReport.getAction());
+			callbackDump.setAmount(liveReport.getAmount());
+			callbackDump.setOperatorId(liveReport.getOperatorId());
+			callbackDump.setServiceId(liveReport.getServiceId());
+			callbackDump.setProductId(liveReport.getProductId());
+			callbackDump.setCampaignId(liveReport.getAdnetworkCampaignId());
+			callbackDump.setToken(liveReport.getToken());
+			callbackDump.setTokenId(liveReport.getTokenId());
+			callbackDump.setSendToAdnetwork(liveReport.getSendConversionCount()>0?true:false);
+			AdnetworkToken adnetworkToken=jpaAdnetworkToken.findEnableAdnetworkToken(liveReport.getTokenId());
+			if(Objects.nonNull(adnetworkToken)) {
+				callbackDump.setClickId(adnetworkToken.getToken());
+			}
 		}catch(Exception ex){
 			logger.error("createCallbackDump ",ex);
 		}finally{
 			daoService.saveObject(callbackDump);
 		}
-		
-		
+
+
 	}
 
 }

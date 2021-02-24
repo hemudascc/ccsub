@@ -13,6 +13,8 @@ import javax.jms.ObjectMessage;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.sun.swing.internal.plaf.synth.resources.synth;
+
 import net.common.service.IDaoService;
 import net.common.service.LiveReportFactoryService;
 import net.common.service.RedisCacheService;
@@ -53,6 +55,10 @@ public class JMSTpayNotificationListener implements MessageListener{
 			findAction(tpayNotification);
 			cgToken= new CGToken(tpayNotification.getToken());
 			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+			if(vwServiceCampaignDetail==null) {
+				cgToken= new CGToken(getToken(tpayNotification));
+				vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+			}
 			tpayServiceConfig = TpayConstant.mapServiceIdToTpayServiceConfig.get(vwServiceCampaignDetail.getServiceId());
 			liveReport=new LiveReport(tpayServiceConfig.getOperatorId(),
 					new Timestamp(System.currentTimeMillis())
@@ -116,40 +122,29 @@ public class JMSTpayNotificationListener implements MessageListener{
 		}
 	}
 
-	private TpayNotification findAction(TpayNotification tpayNotification) {
-		
+	private synchronized TpayNotification findAction(TpayNotification tpayNotification) {
 		List<SubscriberReg> subscriberRegs = jpaSubscriberReg.findSubscriberRegByParam1(tpayNotification.getSubscriptionContractId());
-		boolean subToday=false;
-		if("SubscriptionContractStatusChanged".equals(tpayNotification.getTpayAction())) {
-			if("Active".equals(tpayNotification.getNotificationStatus())) {
-				tpayNotification.setAction(MConstants.SUBSCRIBED_DESC);
-			}else if("Canceled".equals(tpayNotification.getNotificationStatus()) || "Suspended".equals(tpayNotification.getNotificationStatus()) || "Purged".equals(tpayNotification.getNotificationStatus())) {
+		boolean subToday= LocalDate.now().equals(LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(subscriberRegs.get(0).getSubDate())));
+		if("SubscriptionContractStatusChanged".equals((tpayNotification.getTpayAction()))){
+			if("Canceled".equals(tpayNotification.getNotificationStatus()) || "Suspended".equals(tpayNotification.getNotificationStatus()) || "Purged".equals(tpayNotification.getNotificationStatus())) {
 				tpayNotification.setAction(MConstants.DCT);
 			}else {
 				tpayNotification.setAction("NONE");
 			}
-		}else if("SubscriptionChargingNotification".equals(tpayNotification.getTpayAction())) {
-			if("RecurringPayment".equalsIgnoreCase(tpayNotification.getBillingAction()) || "RetrailPayment".equalsIgnoreCase(tpayNotification.getBillingAction())) {
-				boolean newUser = !Objects.toString(redisCacheService.getCacheValue(TpayConstant.ACTIVE_CACHE_PREFIX+tpayNotification.getSubscriptionContractId())).isEmpty();
-				if(subscriberRegs.size()>0) {subToday= LocalDate.now().equals(LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(subscriberRegs.get(0).getSubDate())));}
-				if(newUser && subToday) {
-					if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode())) {
-						tpayNotification.setAction(MConstants.ACT);
-						redisCacheService.removeObjectCacheValue(TpayConstant.ACTIVE_CACHE_PREFIX+tpayNotification.getSubscriptionContractId());
-					}else {
-						if(Objects.toString(redisCacheService.getCacheValue(TpayConstant.GRACE_CACHE_PREFIX+tpayNotification.getSubscriptionContractId())).isEmpty()) {
-							tpayNotification.setAction(MConstants.GRACE);
-							redisCacheService.putObjectCacheValueByEvictionDay(TpayConstant.GRACE_CACHE_PREFIX+tpayNotification.getSubscriptionContractId(), "1", 1);
-						}else {
-							tpayNotification.setAction("NONE");
-						}
-					}
+		}else {
+			if("RecurringPayment".equalsIgnoreCase(tpayNotification.getBillingAction())) {
+				if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode())) {
+					tpayNotification.setAction(MConstants.ACT);
 				}else {
-					if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode())) {
-						tpayNotification.setAction(MConstants.RENEW);
-					}else {
-						tpayNotification.setAction("NONE");
-					}
+					tpayNotification.setAction(MConstants.GRACE);
+				}
+			}else if("RetrailPayment".equalsIgnoreCase(tpayNotification.getBillingAction())){
+				if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode()) && subToday) {
+					tpayNotification.setAction(MConstants.ACT);
+				}else if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode()) && !subToday){
+					tpayNotification.setAction(MConstants.RENEW);
+				}else {
+					tpayNotification.setAction("NONE");
 				}
 			}else {
 				if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode())) {
@@ -158,14 +153,16 @@ public class JMSTpayNotificationListener implements MessageListener{
 					tpayNotification.setAction("NONE");
 				}
 			}
-		}else {
-			tpayNotification.setAction("NONE");
 		}
 		
 		if(Objects.nonNull(subscriberRegs) && subscriberRegs.size()>0) {
 			tpayNotification.setToken(Objects.toString(subscriberRegs.get(0).getParam3()));
 		}
-		if(Objects.isNull(tpayNotification.getToken())) {
+		return tpayNotification;
+	}
+	
+	private synchronized String getToken(TpayNotification tpayNotification) {
+		
 			if("GamePadWEEG".equals(tpayNotification.getProductId())){
 				tpayNotification.setToken("-1c-1c249");
 			}else if("GamePadEtisalatEG".equals(tpayNotification.getProductId())) {
@@ -175,9 +172,6 @@ public class JMSTpayNotificationListener implements MessageListener{
 			}else {
 				tpayNotification.setToken("-1c-1c283");
 			}
-		}
-
-		
-		return tpayNotification;
-	} 
+			return tpayNotification.getToken();
+	}
 }

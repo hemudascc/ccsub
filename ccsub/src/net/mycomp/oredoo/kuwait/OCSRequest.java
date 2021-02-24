@@ -75,7 +75,6 @@ public class OCSRequest implements Serializable{
 	
 	public OCSRequest(){
 		chargeAmount=-1;
-		planId="-1";
 		asyncFlag="Y";
 		renewalFlag="-1";
 		bundleType="N";
@@ -85,14 +84,15 @@ public class OCSRequest implements Serializable{
 		optionalParameter1="circleName#-1";
 		optionalParameter2="serviceProviderId#-1";
 		optionalParameter3="subService#-1";
-		optionalParameter4="balanceFlag#-1";
+		optionalParameter4="languageId#en";
 		optionalParameter5="channelCode#-1";
 		optionalParameter6="genereID#-1";
 		optionalParameter7="categoryId#-1";
 		optionalParameter8="toneCategory#-1";
-		optionalParameter9="languageId#en";
+		optionalParameter9="rbtFeature#-1";
 		optionalParameter10="contentId#-1";
 		optionalParameter11="msgText#-1";
+		optionalParameter12="categoryId#-1";
 	}
 	
 public String toString() {

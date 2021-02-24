@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import net.common.service.IDaoService;
 import net.common.service.LiveReportFactoryService;
 import net.common.service.RedisCacheService;
-import net.jpa.repository.JPASubscriberReg;
 import net.persist.bean.LiveReport;
 import net.persist.bean.Service;
 import net.persist.bean.SubscriberReg;
@@ -37,14 +36,14 @@ public class JMSMt2ZainIraqDLRListener implements MessageListener {
     @Autowired
     private RedisCacheService redisCacheService;
     
-	@Autowired
-	private JPASubscriberReg jpaSubscriberReg; 
 	
 	@Autowired
 	private LiveReportFactoryService liveReportFactoryService;
+
+
+
+	private String string;
 	
-	@Autowired
-	private Mt2ZainIraqServiceApi mt2ZainIraqServiceApi;
 
 	@Override
 	public void onMessage(Message m) {
@@ -53,7 +52,6 @@ public class JMSMt2ZainIraqDLRListener implements MessageListener {
 		boolean update = false;
 		long time = System.currentTimeMillis();
 		CGToken cgToken=new CGToken("");
-		String msg=null;
 		Mt2ZainIraqServiceConfig mt2ZainIraqServiceConfig=null;
 		List<SubscriberReg> subscriberRegs=null;
 		String token=null;
@@ -65,16 +63,12 @@ public class JMSMt2ZainIraqDLRListener implements MessageListener {
 			
 			logger.info("mt2ZainIraqDeliveryNotification::::: "+mt2ZainIraqDeliveryNotification);
 			
-			subscriberRegs = jpaSubscriberReg.findSubscriberRegByMsisdn(mt2ZainIraqDeliveryNotification.getMSISDN());
-				
-			if(subscriberRegs!=null) {
-				token=subscriberRegs.get(0).getToken();
-			}
-			if(token!=null && !token.isEmpty()){
-				 cgToken=new CGToken(token);
+			token = Objects.toString(redisCacheService.getObjectCacheValue(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_MSISDN_TOKEN_CACHE_PREFIX+mt2ZainIraqDeliveryNotification.getMsisdn()));
+			logger.info("token::::::::"+token);
+			if(!token.equals("null")){
+					 cgToken=new CGToken(token);
 			}else{
-			//http://192.241.253.234/ccsub/cnt/cmp?adid=2&cmpid=221&token=zain
-			 cgToken=new CGToken(System.currentTimeMillis(), -1, 221); 
+				 cgToken=new CGToken(System.currentTimeMillis(), -1, 221); 
 			}	
 			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 			serviceId = vwServiceCampaignDetail.getServiceId();	
@@ -87,29 +81,27 @@ public class JMSMt2ZainIraqDLRListener implements MessageListener {
 				 ,cgToken.getCampaignId(),mt2ZainIraqServiceConfig.getServiceId(),mt2ZainIraqServiceConfig.getProductId()); 
 				liveReport.setTokenId(cgToken.getTokenId());
 				liveReport.setToken(cgToken.getCGToken());
-				liveReport.setMsisdn(mt2ZainIraqDeliveryNotification.getMSISDN());
+				liveReport.setMsisdn(mt2ZainIraqDeliveryNotification.getMsisdn());
 				liveReport.setCircleId(0);
 				liveReport.setMode("");
-				String status = Objects.toString(redisCacheService.getCacheValue(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_ACT_CACHE_PREFIX+mt2ZainIraqDeliveryNotification.getMSISDN())); 
-			if(mt2ZainIraqDeliveryNotification.getStatus().equals("Success") 
+				String status = Objects.toString(redisCacheService.getCacheValue(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_ACT_CACHE_PREFIX+mt2ZainIraqDeliveryNotification.getMsisdn())); 
+			string = "Success";
+			if(mt2ZainIraqDeliveryNotification.getStatus().equals(string) 
 					&& MConstants.ACT.equals(status)) {
 				  //act 
 					 liveReport.setAction(MConstants.ACT);	
 					 liveReport.setConversionCount(1);
-					 liveReport.setAmount(MUtility.toDouble(mt2ZainIraqDeliveryNotification.getPrice(), 0));
-					 liveReport.setNoOfDays(MUtility.toInt(mt2ZainIraqDeliveryNotification.getValidaityDays(), 0));
-					// msg=mt2ZainIraqServiceConfig.getSubMsgTemplate();
-					 redisCacheService.removeObjectCacheValue(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_ACT_CACHE_PREFIX+mt2ZainIraqDeliveryNotification.getMSISDN());
-				}else if(mt2ZainIraqDeliveryNotification.getStatus().equals("Success") && Objects.nonNull(subscriberRegs)){
+					 liveReport.setAmount(mt2ZainIraqDeliveryNotification.getPrice());
+					 liveReport.setNoOfDays(mt2ZainIraqDeliveryNotification.getValidity());
+					 redisCacheService.removeObjectCacheValue(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_ACT_CACHE_PREFIX+mt2ZainIraqDeliveryNotification.getMsisdn());
+				}else if(mt2ZainIraqDeliveryNotification.getStatus().equals(string) && Objects.nonNull(subscriberRegs)){
 					 liveReport.setAction(MConstants.RENEW);
 					 liveReport.setRenewalCount(1);
 					 liveReport.setRenewalAmount(MUtility.toDouble(mt2ZainIraqServiceConfig.getPricePoint().toString(),0));
 					 liveReport.setNoOfDays(mt2ZainIraqServiceConfig.getValidity());
-					 liveReport.setParam1(mt2ZainIraqDeliveryNotification.getId());
-					// msg = mt2ZainIraqServiceConfig.getRenewMsgTemplate();
+					 liveReport.setParam1(mt2ZainIraqDeliveryNotification.getId().toString());
 				} 
 				else {
-					//grace
 					liveReport.setAction(MConstants.GRACE);
 					liveReport.setGraceConversionCount(1);
 				}
@@ -124,13 +116,6 @@ public class JMSMt2ZainIraqDLRListener implements MessageListener {
 				if(liveReport.getAction()!=null){
 					liveReportFactoryService.process(liveReport);
 				}
-				/*
-				 * if(msg!=null){ msg=Mt2ZainIraqConstant.prepareMessage(msg,
-				 * mt2ZainIraqServiceConfig,liveReport.getParam1());
-				 * mt2ZainIraqServiceApi.sendContentSms(mt2ZainIraqDeliveryNotification.
-				 * getMSISDN(), msg, "", mt2ZainIraqDeliveryNotification.getAction()); }
-				 */
-				
 			} catch (Exception ex) {
 				logger.error(" fianlly liveReport:: " + liveReport
 						+ ", : mt2ZainIraqDeliveryNotification:: "

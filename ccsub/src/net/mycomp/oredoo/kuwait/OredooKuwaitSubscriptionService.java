@@ -9,6 +9,8 @@ import java.io.StringWriter;
 import java.net.URLEncoder;
 import java.security.Key;
 import java.security.KeyStore;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
@@ -97,12 +99,9 @@ public class OredooKuwaitSubscriptionService {
 		ocsRequest.setSubscriptionFlag("S");
 		 Marshaller jaxbMarshaller = jaxbContextOCSRequest.createMarshaller();
 	     jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		 StringWriter sw = new StringWriter();
+	     StringWriter sw = new StringWriter();
 	     jaxbMarshaller.marshal(ocsRequest, sw);	
-	     oredooKuwaitOCSLogDetail.setRequet(sw.toString()
-	    		 .replaceAll(" standalone=\"yes\"","")
-	    		 .replaceAll("\"1.0\"","'1.0'")
-	    		 .replaceAll("\"UTF-8\"", "'UTF-8'"));
+	     oredooKuwaitOCSLogDetail.setRequet(sw.toString());
 	     HTTPResponse  httpResponse= httpURLConnectionUtil.makeHTTPPOSTRequestWithXML(dbillApi, sw.toString());
 	    oredooKuwaitOCSLogDetail.setResponse(dbillApi+":response code: "+httpResponse.getResponseCode()+": response: "+ httpResponse.getResponseStr());
 		oredooKuwaitCGCallback.setSubscriptonApiResponse(httpResponse.getResponseStr());
@@ -145,10 +144,7 @@ public class OredooKuwaitSubscriptionService {
 	     jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	     StringWriter sw = new StringWriter();
 	     jaxbMarshaller.marshal(ocsRequest, sw);	
-	     oredooKuwaitOCSLogDetail.setRequet(sw.toString()
-	    		 .replaceAll(" standalone=\"yes\"","")
-	    		 .replaceAll("\"1.0\"","'1.0'")
-	    		 .replaceAll("\"UTF-8\"", "'UTF-8'"));
+	     oredooKuwaitOCSLogDetail.setRequet(sw.toString());
 	     HTTPResponse  httpResponse= httpURLConnectionUtil.makeHTTPPOSTRequestWithXML(dbillApi, sw.toString());
 	  //  oredooKuwaitOCSLogDetail.setResponse(dbillApi+":"+httpResponse.getResponseStr());
 	    oredooKuwaitOCSLogDetail.setResponse(dbillApi+":response code: "+httpResponse.getResponseCode()+": response: "+ httpResponse.getResponseStr());
@@ -199,11 +195,7 @@ public class OredooKuwaitSubscriptionService {
 	     jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	     StringWriter sw = new StringWriter();
 	     jaxbMarshaller.marshal(ocsRequest, sw);	
-	     //oredooKuwaitOCSLogDetail.setRequet(sw.toString());
-	     oredooKuwaitOCSLogDetail.setRequet(sw.toString()
-	    		 .replaceAll(" standalone=\"yes\"","")
-	    		 .replaceAll("\"1.0\"","'1.0'")
-	    		 .replaceAll("\"UTF-8\"", "'UTF-8'"));
+	     oredooKuwaitOCSLogDetail.setRequet(sw.toString());
 	     HTTPResponse  httpResponse= httpURLConnectionUtil.makeHTTPPOSTRequestWithXML(dbillApi, sw.toString());
 	    oredooKuwaitOCSLogDetail.setResponse(dbillApi+":"+httpResponse.getResponseStr());
 		logger.info("sendMT:: httpResponse::: "+httpResponse);
@@ -243,28 +235,31 @@ public class OredooKuwaitSubscriptionService {
 		ocsRequest.setBearerId(oredooKuwaitServiceConfig.getReqMode());
 		ocsRequest.setSubscriptionFlag("S");
 		ocsRequest.setAsyncFlag("N");
+		ocsRequest.setOptionalParameter12(null);
+		ocsRequest.setPlanId(null);
+		ocsRequest.setOptionalParameter4("balanceFlag#-1");
+		ocsRequest.setOptionalParameter9("languageId#en");
+		ocsRequest.setPlanId("-1");
 		
 		Marshaller jaxbMarshaller = jaxbContextOCSRequest.createMarshaller();
 	     jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-	     StringWriter sw = new StringWriter();
+	    StringWriter sw = new StringWriter();
 	     jaxbMarshaller.marshal(ocsRequest, sw);	
-	     //oredooKuwaitOCSLogDetail.setRequet(sw.toString());
-	     oredooKuwaitOCSLogDetail.setRequet(sw.toString()
-	    		 .replaceAll(" standalone=\"yes\"","")
-	    		 .replaceAll("\"1.0\"","'1.0'")
-	    		 .replaceAll("\"UTF-8\"", "'UTF-8'"));
 	     logger.info("checksub :: ocsRequest::: "+ocsRequest);
-	     HTTPResponse  httpResponse= httpURLConnectionUtil.makeHTTPPOSTRequestWithXML(dbillApi,
-	    		 sw.toString());
+	     oredooKuwaitOCSLogDetail.setRequet(sw.toString());
+	     HTTPResponse  httpResponse= httpURLConnectionUtil
+	    		 .makeHTTPPOSTRequestWithXML(dbillApi,sw.toString());
+	     
 	    oredooKuwaitOCSLogDetail.setResponse(dbillApi+":"+httpResponse.getResponseStr());
 	    logger.info("checksub :: httpResponse::: "+httpResponse);
+	    
 		if(httpResponse.getResponseCode()==200){
 			 StringReader sr = new StringReader(httpResponse.getResponseStr());	
 		       ocsResponse= (OCSResponse)jaxbContextOCSResponse.createUnmarshaller().unmarshal(sr);
 		     logger.info("ocsResponse:::::::::::: "+ocsResponse);
 		}
 	}catch(Exception ex){
-		logger.error("sendMT:: ",ex);
+		logger.error("checkSubs:: ",ex);
 	}finally{
 		daoService.updateObject(oredooKuwaitOCSLogDetail);
 	}
@@ -299,11 +294,7 @@ public class OredooKuwaitSubscriptionService {
 	     jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	     StringWriter sw = new StringWriter();
 	     jaxbMarshaller.marshal(ocsRequest, sw);	
-	    // oredooKuwaitOCSLogDetail.setRequet(sw.toString());
-	     oredooKuwaitOCSLogDetail.setRequet(sw.toString()
-	    		 .replaceAll(" standalone=\"yes\"","")
-	    		 .replaceAll("\"1.0\"","'1.0'")
-	    		 .replaceAll("\"UTF-8\"", "'UTF-8'"));
+	     oredooKuwaitOCSLogDetail.setRequet(sw.toString());
 	     logger.info("checkSubsToPublisher :: ocsRequest::: "+ocsRequest);
 	     HTTPResponse  httpResponse= httpURLConnectionUtil.makeHTTPPOSTRequestWithXML(dbillApi,
 	    		 sw.toString());

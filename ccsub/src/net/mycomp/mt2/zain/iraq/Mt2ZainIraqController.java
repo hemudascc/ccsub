@@ -35,9 +35,6 @@ public class Mt2ZainIraqController {
 	@Autowired
 	private IDaoService daoService;
 	
-	@Autowired
-	private JMSService jmsService;
-	
    @Autowired
    private RedisCacheService redisCacheService;
 	
@@ -120,7 +117,7 @@ public class Mt2ZainIraqController {
 	@RequestMapping(value={"notification"},method={RequestMethod.GET,RequestMethod.POST})	
 	@ResponseBody
 	public String notification(HttpServletRequest request,ModelAndView modelAndView){
-		Mt2ZainIraqNotification mt2ZainIraqNotification=new Mt2ZainIraqNotification(true);
+		Mt2ZainIraqNotification mt2ZainIraqNotification = new Mt2ZainIraqNotification(true);
 		try{
 			//Sub , Get request : PartnerURL?Id=<id from MT2 SDP>&Data=S,<serviceid>,<subscriberReferenceID>
 			//&MSISDN=<msisdn>&ShortCode=<shortcode>&Date=20201021&Operator= Zain Iraq&ValidityDays=<days>
@@ -180,51 +177,36 @@ public class Mt2ZainIraqController {
 	@RequestMapping(value={"lp"},method={RequestMethod.GET,RequestMethod.POST})	
 	public ModelAndView lp(HttpServletRequest request,ModelAndView modelAndView){
 		MT2ZainIraqServiceApiTrans mt2ZainIraqServiceApiTrans=null;
+		CGToken cgToken=null;
 		try{
-			
-				
-				Mt2ZainIraqServiceConfig mt2ZainIraqServiceConfig=Mt2ZainIraqConstant
-						.mapServiceIdToMt2ZainIrqServiceConfig
-						.get(83);
-				modelAndView.addObject("mt2ZainIraqServiceConfig",mt2ZainIraqServiceConfig);
-				String token=request.getParameter("token");
-				if(token==null){
-					token=Objects.toString(redisCacheService.getObjectCacheValue(
-							Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_SOURCE_CACHE_PREFIX
-							+request.getRemoteAddr()));
-				}
-				
-				CGToken cgToken=null;
-				if(token!=null){
+			Mt2ZainIraqServiceConfig mt2ZainIraqServiceConfig=Mt2ZainIraqConstant.mapServiceIdToMt2ZainIrqServiceConfig.get(83);
+			modelAndView.addObject("mt2ZainIraqServiceConfig",mt2ZainIraqServiceConfig);
+			String token=request.getParameter("token");
+			if(token==null){
+				token=Objects.toString(redisCacheService.getObjectCacheValue(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_SOURCE_CACHE_PREFIX+request.getRemoteAddr()));
+			}
+			if(token!=null){
 					 cgToken=new CGToken(token);
-				}else{
-				//http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid=194&token=zain
-				 cgToken=new CGToken(System.currentTimeMillis(), -1, 194); 
-				}
-				
-				modelAndView.addObject("token",cgToken.getCGToken());
-				Enumeration<String> en = request.getHeaderNames();
-				Map<String, String> headerMap = new HashMap<String, String>();
-				while (en.hasMoreElements()) {
-					String key = en.nextElement();				
-					headerMap.put(key, request.getHeader(key));
-				}
-				
-				logger.info("lp:: header: "+headerMap);
-				 mt2ZainIraqServiceApiTrans=
-						mt2ZainIraqServiceApi.getScriptSource(mt2ZainIraqServiceConfig,
-								cgToken.getCGToken()
-					, headerMap,request.getRemoteAddr(),"http://192.241.253.234/ccsub/cnt/mt2zainiraq/lp");
-				
-				String uniqid=null;
-				if(mt2ZainIraqServiceApiTrans.getResponseToCaller()){
-					//Map map=JsonMapper.getJsonToObject(mt2ZainIraqServiceApiTrans.getResponse(), Map.class);
-					
+			}else{
+				cgToken=new CGToken(System.currentTimeMillis(), -1, 194); 
+			}
+			modelAndView.addObject("token",cgToken.getCGToken());
+			Enumeration<String> en = request.getHeaderNames();
+			Map<String, String> headerMap = new HashMap<String, String>();
+			while (en.hasMoreElements()) {
+				String key = en.nextElement();				
+				headerMap.put(key, request.getHeader(key));
+			}
+			logger.info("lp:: header: "+headerMap);
+			mt2ZainIraqServiceApiTrans = mt2ZainIraqServiceApi.getScriptSource(mt2ZainIraqServiceConfig,cgToken.getCGToken()
+										, headerMap,request.getRemoteAddr(),"http://192.241.253.234/ccsub/cnt/mt2zainiraq/lp");
+			String uniqid=null;
+			if(mt2ZainIraqServiceApiTrans.getResponseToCaller()){
 					modelAndView.addObject("source",mt2ZainIraqServiceApiTrans.getSource());
 					modelAndView.addObject("uniqid",mt2ZainIraqServiceApiTrans.getUniqueId());
 					uniqid=mt2ZainIraqServiceApiTrans.getUniqueId();//Objects.toString(map.get("uniqid"));
-				}else{
-					 uniqid = mt2ZainIraqServiceApi.getSha1Hash( request.getRemoteAddr()
+			}else{
+				 uniqid = mt2ZainIraqServiceApi.getSha1Hash( request.getRemoteAddr()
 							+"-"+cgToken.getCGToken()
 							+"-"+System.currentTimeMillis()); // Unique Key To Use For Block API Call
 					String source = "(function(s, o, u, r, k){b = s.URL;v = (b.substr(b.indexOf(r)).replace(r + '=', '')).toString();"
@@ -238,21 +220,16 @@ public class Mt2ZainIraqController {
 					modelAndView.addObject("uniqid",uniqid);
 					mt2ZainIraqServiceApiTrans.setUniqueId(uniqid);
 					mt2ZainIraqServiceApiTrans.setSource(source);
-				}
-				
-				String cgUrl=mt2ZainIraqServiceConfig.getSubUrl()
+			}
+			String cgUrl=mt2ZainIraqServiceConfig.getSubUrl()
 						  .replaceAll("<serviceid>", mt2ZainIraqServiceConfig.getZainIraqServiceId())
 						  .replaceAll("<spid>", mt2ZainIraqServiceConfig.getSpid())
 						  .replaceAll("<shortcode>", mt2ZainIraqServiceConfig.getShortCode())
 						  .replaceAll("<uniqid>", uniqid);
-				redisCacheService.putObjectCacheValueByEvictionDay(
-						Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_UNIQUEID_CACHE_PREFIX+uniqid
-						, token,10);
+				redisCacheService.putObjectCacheValueByEvictionDay(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_UNIQUEID_CACHE_PREFIX+uniqid, token,10);
 				modelAndView.addObject("cgUrl",cgUrl);
-				
 				modelAndView.addObject("token",token);				
 				modelAndView.setViewName("mt2zainiraq/lp");
-				
 			}catch(Exception ex){
 				logger.error("Exception    ",ex);
 			}finally{

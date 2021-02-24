@@ -37,6 +37,7 @@ public class Mt2ZainIraqNotification implements Serializable{
 	
 	public Mt2ZainIraqNotification(Boolean status) {
 		this.status = status;
+		this.createTime = new Timestamp(System.currentTimeMillis());
 	}
 	
 	@Id

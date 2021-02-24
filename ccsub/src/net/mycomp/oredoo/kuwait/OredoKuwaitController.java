@@ -402,10 +402,27 @@ public class OredoKuwaitController {
 	}
 	
 	
-	
 	@RequestMapping(value="/checksub", produces = { MediaType.APPLICATION_XML_VALUE })
 	@ResponseBody
-	public String checkSub(@RequestParam("msisdn")String msisdn){
+	public OCSResponse checkSub(@RequestParam("msisdn")String msisdn){
+		
+		String str="";
+		OCSResponse  ocsResponse=null;
+		try {
+			OredooKuwaitServiceConfig oredooKuwaitServiceConfig=OredoKuwaitConstant
+					.mapServiceIdToOredooKuwaitServiceConfig.get(23);
+			  ocsResponse=oredooKuwaitSubscriptionService.checkSubs(msisdn, oredooKuwaitServiceConfig);
+			///str+=", value: "+redisCacheService.getObjectCacheValue(key);
+		} catch (Exception e) {
+			
+			str=e.toString();
+		}		
+		return ocsResponse;		
+	}
+	
+	@RequestMapping(value="/pub/checksub", produces = { MediaType.APPLICATION_XML_VALUE })
+	@ResponseBody
+	public String checkSubPublisher(@RequestParam("msisdn")String msisdn){
 		
 		String str="";
 		try {

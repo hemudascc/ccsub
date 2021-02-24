@@ -56,15 +56,11 @@ public class JMSMt2ZainIraqNotificationListener implements MessageListener {
 			//redisCacheService.putObjectCacheValueByEvictionDay("MT2_ZAIN_IRAQ_MSISDN_TOKEN_CACHE_PREFIX"+mt2ZainIraqNotification.getMsisdn(), "-1c-1c221", 1);
 			logger.info("mt2ZainIraqNotification::::: "+mt2ZainIraqNotification);
 			
-			String token=Objects.toString(redisCacheService.getObjectCacheValue(
-					 Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_MSISDN_TOKEN_CACHE_PREFIX+mt2ZainIraqNotification.getMsisdn()));
-			logger.info("token:"+token);
-			if(token!=null && !token.isEmpty() && !token.contains("c") && !token.equals("ACT")){
-					logger.info("calculating cg token..");
+			String token = Objects.toString(redisCacheService.getObjectCacheValue(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_MSISDN_TOKEN_CACHE_PREFIX+mt2ZainIraqNotification.getMsisdn()));
+			logger.info("token::::::::"+token);
+			if(!token.equals("null")){
 					 cgToken=new CGToken(token);
 			}else{
-				//http://192.241.253.234/ccsub/cnt/cmp?adid=2&cmpid=221&token=zain
-					logger.info("setting default cg token");
 				 cgToken=new CGToken(System.currentTimeMillis(), -1, 221); 
 			}
 				
@@ -73,7 +69,6 @@ public class JMSMt2ZainIraqNotificationListener implements MessageListener {
 			serviceId = vwServiceCampaignDetail.getServiceId();
 			mt2ZainIraqServiceConfig = Mt2ZainIraqConstant.mapServiceIdToMt2ZainIrqServiceConfig
 									   .get(serviceId);
-			
 			liveReport=new LiveReport(MConstants.MT2_ZAIN_IRAQ_OPERATOR_ID, new
 					  Timestamp(System.currentTimeMillis())
 					  ,cgToken.getCampaignId(),serviceId,0); 
@@ -82,21 +77,17 @@ public class JMSMt2ZainIraqNotificationListener implements MessageListener {
 			liveReport.setToken(cgToken.getCGToken());
 			liveReport.setMsisdn(mt2ZainIraqNotification.getMsisdn());
 			liveReport.setCircleId(0);
-			
 			if(mt2ZainIraqNotification.getAction().equals(MConstants.ACT)) {
-				
-				liveReport.setAction(MConstants.GRACE); 
+				liveReport.setAction(MConstants.GRACE);
 				liveReport.setGraceConversionCount(1);
 				liveReport.setAmount(0d);
 				liveReport.setParam1(mt2ZainIraqNotification.getSubscriberReferenceID());
 				liveReport.setNoOfDays(mt2ZainIraqServiceConfig.getValidity()); 
 				redisCacheService.putObjectCacheValueByEvictionMinute(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_ACT_CACHE_PREFIX+mt2ZainIraqNotification.getMsisdn(), MConstants.ACT, 60*10);
-				//msg=mt2ZainIraqServiceConfig.getSubMsgTemplate();
 			}
 			if(mt2ZainIraqNotification.getAction().equals(MConstants.DCT)){
 				  liveReport.setAction(MConstants.DCT);			
 				  liveReport.setDctCount(1);
-				 // msg=mt2ZainIraqServiceConfig.getUnsubMsgTemplate();
 			}
 		} catch (Exception ex) {
 			logger.error("onMessage::::: ", ex);

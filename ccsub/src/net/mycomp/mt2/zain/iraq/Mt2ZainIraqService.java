@@ -2,17 +2,18 @@ package net.mycomp.mt2.zain.iraq;
 
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import net.bizao.BizaoConstant;
-import net.bizao.BizaoIpPool;
+import org.apache.commons.net.util.SubnetUtils;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 import net.common.service.IDaoService;
 import net.common.service.RedisCacheService;
-import net.common.service.SubscriberRegService;
 import net.jpa.repository.JPAMt2ZainIraqIpPool;
 import net.jpa.repository.JPAMt2ZainIraqServiceConfig;
 import net.jpa.repository.JPASubscriberReg;
@@ -23,16 +24,8 @@ import net.persist.bean.SubscriberReg;
 import net.process.bean.AdNetworkRequestBean;
 import net.process.bean.DeactivationResponse;
 import net.process.request.AbstractOperatorService;
-import net.util.JsonMapper;
 import net.util.MConstants;
 import net.util.MData;
-
-import org.apache.commons.net.util.SubnetUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 @Service("mt2ZainIraqService")
 public class Mt2ZainIraqService  extends AbstractOperatorService {
@@ -44,11 +37,6 @@ public class Mt2ZainIraqService  extends AbstractOperatorService {
 	
 	@Autowired
 	private JPASubscriberReg jpaSubscriberReg;
-	@Autowired
-	private SubscriberRegService subscriberRegService;
-	
-	@Autowired
-	private Mt2ZainIraqServiceApi mt2ZainIraqServiceApi;
 	
 	@Autowired
 	private JPAMt2ZainIraqServiceConfig jpaMt2ZainIraqServiceConfig;
@@ -153,74 +141,31 @@ public class Mt2ZainIraqService  extends AbstractOperatorService {
 	public boolean processBilling(ModelAndView modelAndView,
 			AdNetworkRequestBean adNetworkRequestBean) {
 		try{
-			
-			Mt2ZainIraqServiceConfig mt2ZainIraqServiceConfig=Mt2ZainIraqConstant
-					.mapServiceIdToMt2ZainIrqServiceConfig
-					.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
+			Mt2ZainIraqServiceConfig mt2ZainIraqServiceConfig=Mt2ZainIraqConstant.mapServiceIdToMt2ZainIrqServiceConfig
+									.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
 			modelAndView.addObject("mt2ZainIraqServiceConfig",mt2ZainIraqServiceConfig);			
 			modelAndView.addObject("token",adNetworkRequestBean.adnetworkToken.getTokenToCg());
-			
-//			MT2ZainIraqServiceApiTrans mt2ZainIraqServiceApiTrans=mt2ZainIraqServiceApi.getScriptSource(mt2ZainIraqServiceConfig, adNetworkRequestBean.adnetworkToken.getTokenToCg()
-//				, adNetworkRequestBean.getHeaderMap(), adNetworkRequestBean.adnetworkToken.getSource(),
-//				"http://192.241.253.234/ccsub/cnt/cmp");
-//			String uniqid=null;
-//			if(mt2ZainIraqServiceApiTrans.getResponseToCaller()){
-//				Map map=JsonMapper.getJsonToObject(mt2ZainIraqServiceApiTrans.getResponse(), Map.class);
-//				modelAndView.addObject("source",Objects.toString(map.get("source")));
-//				modelAndView.addObject("uniqid",Objects.toString(map.get("uniqid")));
-//				uniqid=Objects.toString(map.get("uniqid"));
-//			}else{
-//				 uniqid = mt2ZainIraqServiceApi.getSha1Hash( adNetworkRequestBean.adnetworkToken.getSource()
-//						+"-"+ adNetworkRequestBean.adnetworkToken.getTokenToCg()
-//						+"-"+System.currentTimeMillis()); // Unique Key To Use For Block API Call
-//				String source = "(function(s, o, u, r, k){b = s.URL;v = (b.substr(b.indexOf(r)).replace(r + '=', '')).toString();"
-//						+ "r = (v.indexOf('&') !== -1) ? v.split('&')[0] : v;"
-//						+ "a = s.createElement(o),m = s.getElementsByTagName(o)[0];"
-//						+ "a.async = 1;a.setAttribute('crossorigin', 'anonymous');"
-//						+ "a.src = u+'script.js?ak='+k+'&lpi='+r+'&lpu='+encodeURIComponent(b)+'&key=$uniqid';"
-//						+ "m.parentNode.insertBefore(a, m);})"
-//						+ "(document, 'script', '"+mt2ZainIraqServiceConfig.getApiSnippetUrl()+"', 'token', '"+mt2ZainIraqServiceConfig.getZainServiceKey()+"');";
-//				modelAndView.addObject("source",source);
-//				modelAndView.addObject("uniqid",uniqid);
-//			}
-//			
-//			String cgUrl=mt2ZainIraqServiceConfig.getSubUrl()
-//					  .replaceAll("<serviceid>", mt2ZainIraqServiceConfig.getZainIraqServiceId())
-//					  .replaceAll("<spid>", mt2ZainIraqServiceConfig.getSpid())
-//					  .replaceAll("<shortcode>", mt2ZainIraqServiceConfig.getShortCode())
-//					  .replaceAll("<uniqid>", uniqid);
-//			logger.info("cgUrl:: "+cgUrl);
-//			modelAndView.addObject("cgUrl",cgUrl);
 			redisCacheService.putObjectCacheValueByEvictionMinute(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_SOURCE_CACHE_PREFIX+adNetworkRequestBean.adnetworkToken.getSource()
 					, adNetworkRequestBean.adnetworkToken.getTokenToCg(), 5);
-			
 			modelAndView.setViewName("mt2zainiraq/auto_lp");
 			adNetworkRequestBean.adnetworkToken.setRedirectToUrl("mt2zainiraq/auto_lp");			
 			adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_CG);
 		}catch(Exception ex){
-			logger.error("Exception    ",ex);
+			logger.error("Exception",ex);
 		}
-		return true;	    	
-		 
+		return true; 
 	}
 	
 	
 	
 	@Override
 	public boolean isSubscribed(AdNetworkRequestBean adNetworkRequestBean) {
-		
-	
 		   return false;
 	}
 	
 	@Override
 	public boolean checkSub(Integer productId,Integer opid,String msisdn) {
-		try{
-
-			
-		}catch(Exception ex){
-			logger.error("searchSubscriber ",ex);
-		}
+		try{}catch(Exception ex){logger.error("searchSubscriber ",ex);}
 		return false;
 	}
 	

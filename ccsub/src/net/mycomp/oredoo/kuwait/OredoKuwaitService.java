@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import net.common.jms.JMSService;
 import net.common.service.CommonService;
@@ -144,6 +145,11 @@ public class OredoKuwaitService extends AbstractOperatorService {
     	  modelAndView.addObject("msisdn",OredoKuwaitConstant.formatMsisdnRemove965(adNetworkRequestBean.getMsisdn()));
     	  modelAndView.addObject("portalUrl",OredoKuwaitConstant.getPortalUrl(
     			  oredooKuwaitServiceConfig.getPortalUrl(),OredoKuwaitConstant.formatMsisdnRemove965(adNetworkRequestBean.getMsisdn()),0));
+    	 
+    	  modelAndView.setView(new RedirectView(OredoKuwaitConstant.getPortalUrl(
+    			  oredooKuwaitServiceConfig.getPortalUrl()
+    			  ,OredoKuwaitConstant.formatMsisdnRemove965(adNetworkRequestBean.getMsisdn()),0)));
+    	 
     	  
     	  String lpImage="";
   		if(oredooKuwaitServiceConfig.getLpImages()!=null&&oredooKuwaitServiceConfig.getLpImages().size()>0){
@@ -234,6 +240,7 @@ public class OredoKuwaitService extends AbstractOperatorService {
 		logger.info("Model Map "+map);
 		}catch(Exception ex){
 			logger.error("processing billing::: ",ex);
+			 
 		}
 		
 		return true;

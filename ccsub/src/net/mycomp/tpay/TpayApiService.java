@@ -415,7 +415,6 @@ public class TpayApiService {
 		requestMap.put("subscriptionPlanId",tpayServiceConfig.getSubscriptionPlanId());
 		requestMap.put("initialPaymentproductId",tpayServiceConfig.getPaymentProductId());
 		requestMap.put("initialPaymentDate", getCurrentTimeStamp()+"Z");
-		requestMap.put("operatorCode",tpayServiceConfig.getOperatorCode());
 		requestMap.put("executeInitialPaymentNow","false");
 		requestMap.put("executeRecurringPaymentNow","false");
 		requestMap.put("recurringPaymentproductId",tpayServiceConfig.getPaymentProductId());

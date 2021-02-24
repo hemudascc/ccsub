@@ -24,7 +24,6 @@ import net.process.bean.AdNetworkRequestBean;
 import net.process.bean.DeactivationResponse;
 import net.process.request.AbstractOperatorService;
 import net.util.MConstants;
-import net.util.MUtility;
 
 @Service("mt2UAEService")
 public class Mt2UAEService  extends AbstractOperatorService {
@@ -90,7 +89,8 @@ public class Mt2UAEService  extends AbstractOperatorService {
 			mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig
 					.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
 
-			if(adNetworkRequestBean.vwserviceCampaignDetail.getOpId()==MConstants.MT2_UAE_DU_OPERATOR_ID){
+			if(adNetworkRequestBean.vwserviceCampaignDetail.getOpId()==MConstants.MT2_UAE_DU_OPERATOR_ID
+					|| adNetworkRequestBean.vwserviceCampaignDetail.getOpId()==MConstants.MT2_UAE_ETISALAT_OPERATOR_ID){
 				if(Objects.nonNull(mt2UAEServiceConfig)) {
 					cgURL = mt2UAEServiceConfig.getCgUrl().replaceAll("<token>", 
 							adNetworkRequestBean.adnetworkToken.getTokenToCg());

@@ -1,55 +1,136 @@
 package net.mycomp.mt2.zain.iraq;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Id;
 
 @Entity
 @Table(name = "tb_mt2_zain_iraq_delivery_notification")
 public class Mt2ZainIraqDeliveryNotification implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	
+	public Mt2ZainIraqDeliveryNotification() {}
+	public Mt2ZainIraqDeliveryNotification(Boolean status) {
+		this.status = status;
+		this.createTime = new Timestamp(System.currentTimeMillis());
+	}
+	
 	@Id
 	@GeneratedValue
-	@Column(name="dlr_id")
-	private Integer dirId;
-	@Column(name="msisdn")
-	private String MSISDN;
-	@Column(name="date")
-	private String Date;
-	@Column(name="id")
-	private String Id;
-	@Column(name="data")
-	private String Data;
-	@Column(name="status")
-	private String Status;
-	@Column(name="operator")
-	private String Operator;
-	@Column(name="short_code")
-	private String ShortCode;
-	@Column(name="service_id")
-	private String ServiceId;
-	@Column(name="validaity_days")
-	private String ValidaityDays;
-	@Column(name="create_date")
-	private String createDate;
+	@Column(name = "id")
+	private Integer id;
+	@Column(name = "sdp_id")
+	@JsonProperty("Id")
+	private String sdpId;
+	@Column(name = "data")
+	@JsonProperty("Data")
+	private String data;
+	@Column(name = "msisdn")
+	@JsonProperty("MSISDN")
+	private String msisdn;
+	@Column(name = "sdp_date")
+	@JsonProperty("Date")
+	private String date;
+	@Column(name = "sdp_status")
+	@JsonProperty("Status")
+	private String sdpStatus;
+	@Column(name = "operator")
+	@JsonProperty("Operator")
+	private String operator;
+	@Column(name = "short_code")
+	@JsonProperty("ShortCode")
+	private String shortCode;
+	@Column(name = "sdp_service_id")
+	@JsonProperty("ServiceId")
+	private Integer serviceId;
+	@Column(name = "price")
+	@JsonProperty("Price")
+	private Double price;
+	@Column(name = "validity")
+	@JsonProperty("ValidityDays")
+	private Integer validity;
+	@Column(name="token")
 	private String token;
+	@Column(name="action")
 	private String action;
-	@Column(name="price")
-	private String Price;
-	
-	public Integer getDirId() {
-		return dirId;
+	@Column(name="create_time")
+	private Timestamp createTime;
+	@Column(name="status")
+	private Boolean status;
+	public Integer getId() {
+		return id;
 	}
-	public void setDirId(Integer dirId) {
-		this.dirId = dirId;
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getSdpId() {
+		return sdpId;
+	}
+	public void setSdpId(String sdpId) {
+		this.sdpId = sdpId;
+	}
+	public String getData() {
+		return data;
+	}
+	public void setData(String data) {
+		this.data = data;
+	}
+	public String getMsisdn() {
+		return msisdn;
+	}
+	public void setMsisdn(String msisdn) {
+		this.msisdn = msisdn;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	public String getSdpStatus() {
+		return sdpStatus;
+	}
+	public void setSdpStatus(String sdpStatus) {
+		this.sdpStatus = sdpStatus;
+	}
+	public String getOperator() {
+		return operator;
+	}
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+	public String getShortCode() {
+		return shortCode;
+	}
+	public void setShortCode(String shortCode) {
+		this.shortCode = shortCode;
+	}
+	public Integer getServiceId() {
+		return serviceId;
+	}
+	public void setServiceId(Integer serviceId) {
+		this.serviceId = serviceId;
+	}
+	public Double getPrice() {
+		return price;
+	}
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	public Integer getValidity() {
+		return validity;
+	}
+	public void setValidity(Integer validity) {
+		this.validity = validity;
 	}
 	public String getToken() {
 		return token;
@@ -63,78 +144,23 @@ public class Mt2ZainIraqDeliveryNotification implements Serializable {
 	public void setAction(String action) {
 		this.action = action;
 	}
-	public String getMSISDN() {
-		return MSISDN;
+	public Timestamp getCreateTime() {
+		return createTime;
 	}
-	public void setMSISDN(String mSISDN) {
-		MSISDN = mSISDN;
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
 	}
-	public String getDate() {
-		return Date;
+	public Boolean getStatus() {
+		return status;
 	}
-	public void setDate(String date) {
-		Date = date;
-	}
-	public String getId() {
-		return Id;
-	}
-	public void setId(String id) {
-		Id = id;
-	}
-	public String getData() {
-		return Data;
-	}
-	public void setData(String data) {
-		Data = data;
-	}
-	public String getStatus() {
-		return Status;
-	}
-	public void setStatus(String status) {
-		Status = status;
-	}
-	public String getOperator() {
-		return Operator;
-	}
-	public void setOperator(String operator) {
-		Operator = operator;
-	}
-	public String getShortCode() {
-		return ShortCode;
-	}
-	public void setShortCode(String shortCode) {
-		ShortCode = shortCode;
-	}
-	public String getServiceId() {
-		return ServiceId;
-	}
-	public void setServiceId(String serviceId) {
-		ServiceId = serviceId;
-	}
-	public String getValidaityDays() {
-		return ValidaityDays;
-	}
-	public void setValidaityDays(String validaityDays) {
-		ValidaityDays = validaityDays;
-	}
-	public String getCreateDate() {
-		return createDate;
-	}
-	public void setCreateDate(String createDate) {
-		this.createDate = createDate;
-	}
-	
-	public String getPrice() {
-		return Price;
-	}
-	public void setPrice(String price) {
-		Price = price;
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 	@Override
 	public String toString() {
-		return "Mt2UAEDeliveryNotification [MSISDN=" + MSISDN + ", Date=" + Date + ", Id=" + Id + ", Data=" + Data
-				+ ", Status=" + Status + ", Operator=" + Operator + ", ShortCode=" + ShortCode + ", ServiceId="
-				+ ServiceId + ", ValidaityDays=" + ValidaityDays + ", createDate=" + createDate + "]";
-	}
-	
+		return "Mt2ZainIraqDeliveryNotification [id=" + id + ", sdpId=" + sdpId + ", data=" + data + ", msisdn="
+				+ msisdn + ", date=" + date + ", sdpStatus=" + sdpStatus + ", operator=" + operator + ", shortCode="
+				+ shortCode + ", serviceId=" + serviceId + ", price=" + price + ", validity=" + validity + ", token="
+				+ token + ", action=" + action + ", createTime=" + createTime + ", status=" + status + "]";
+	}	
 }

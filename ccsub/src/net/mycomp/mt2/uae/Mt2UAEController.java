@@ -92,7 +92,9 @@ public class Mt2UAEController {
 		}catch(Exception  ex){
 			logger.error("Exception" ,ex);
 		}finally{
-			jmsMt2UAEService.saveMt2UAENotification(mt2UAENotification);
+			if(!mt2UAENotification.getCurrencyISOCode().equalsIgnoreCase("JOD")) {
+				jmsMt2UAEService.saveMt2UAENotification(mt2UAENotification);
+			}
 		}
 		return responseMap;
 	}
@@ -220,10 +222,10 @@ public Map<String, String> dlrSdp(@RequestBody List<Mt2UAEDeliveryNotificationSd
 	return response;
 }
 
-//http://192.241.253.234/ccsub/cnt/mt2uae/du-check-by-refrenceid?id=<refrenceid>
-@RequestMapping(value={"du-check-by-refrenceid"},method={RequestMethod.GET,RequestMethod.POST})
+//http://192.241.253.234/ccsub/cnt/mt2uae/check-by-refrenceid?op=du&id=<refrenceid>
+@RequestMapping(value={"check-by-refrenceid"},method={RequestMethod.GET,RequestMethod.POST})
 @ResponseBody
-public Map<String, String> SubInfoByReferenceId(@RequestParam("id") String id){
+public Map<String, String> subInfoByReferenceId(@RequestParam("id") String id,@RequestParam("op") String op){
 	Map<String, String> response = new HashMap<>();
 	response.put("subid", "");
 	response.put("status", "");
@@ -235,7 +237,29 @@ public Map<String, String> SubInfoByReferenceId(@RequestParam("id") String id){
 			subscriberReg = subscriberRegs.get(0);
 			response.put("subid", subscriberReg.getSubscriberId().toString());
 			response.put("status", subscriberReg.getStatus()==1?"ACTIVE":"INACTIVE");
-			response.put("opid", "du");
+			response.put("opid", op);
+		}
+	} catch (Exception e) {
+		logger.error("error while fetching subs details by reference id");
+	}
+	return response;
+}
+//http://192.241.253.234/ccsub/cnt/mt2uae/check-by-msisdn?op=du&msisdn=<msisdn>
+@RequestMapping(value={"check-by-msisdn"},method={RequestMethod.GET,RequestMethod.POST})
+@ResponseBody
+public Map<String, String> subInfoByMsisdn(@RequestParam("msisdn") String msisdn, @RequestParam("op") String op){
+	Map<String, String> response = new HashMap<>();
+	response.put("subid", "");
+	response.put("status", "");
+	response.put("opid", "");
+	SubscriberReg subscriberReg=null;
+	try {
+		List<SubscriberReg> subscriberRegs = jpaSubscriberReg.findSubscriberRegByMsisdn(msisdn);
+		if(Objects.nonNull(subscriberRegs) && subscriberRegs.size()>0) {
+			subscriberReg = subscriberRegs.get(0);
+			response.put("subid", subscriberReg.getSubscriberId().toString());
+			response.put("status", subscriberReg.getStatus()==1?"ACTIVE":"INACTIVE");
+			response.put("opid", op);
 		}
 	} catch (Exception e) {
 		logger.error("error while fetching subs details by reference id");
