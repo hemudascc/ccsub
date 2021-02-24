@@ -110,7 +110,7 @@
 	<!-- Body Start -->
 	<div class="img-div">
 		<img
-			src="${pageContext.request.contextPath}/resources/tpay/image/gamespark-banners.png"
+			src="${pageContext.request.contextPath}/${TpayServiceConfig.lpImageUrl}"
 			class="center-block img-rounded img-banner" alt="gamepad">
 	</div>
 	<div class="center-div">
@@ -157,7 +157,7 @@
 		 
 		<%-- 		<ol>
 					<li dir="rtl">سوف تشترك في GamesHub مقابل 2 جنيه / يوم.</li>
-					<li dir="rtl">لإلغاء اشتراكك ، بالنسبة لمشتركي
+					<li dir="rtl">لإلغاء اشتراكك ، بالنسبة ل  مشتركي
 						${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} ،
 						يرجى إرسال ${TpayServiceConfig.unsubKeyword} إلى 4041.</li>
 					<li dir="rtl">لأية استفسارات يرجى الاتصال بنا على

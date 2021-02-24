@@ -170,7 +170,7 @@ $(document).ready(function(){
 		});
 		$("#unsubscribe-button").click(function(){
 			$("#unsubscribe-button").prop("disabled",true);
-			$.get("./unsubscribe?msisdn="+$("#msisdn").val()+"&lang="+$("#lang").val(), function(data, status){
+			$.get("./unsubscribe?msisdn="+$("#msisdn").val()+"&lang="+$("#lang").val()+"&token="+token, function(data, status){
 				if(parseInt(data)==51){
 					$("#consent-p").css('display',"none");
 					$("#unsubscribe-msg").text($("#already-unsub-message").val());
@@ -213,7 +213,7 @@ function sendWelcomeMT(msisdn,token,subscriptionContractId){
 }
 
 function sendPortalUrlMt(){
-	$.get("./"+$('#baseURL').val()+"/send-content-mt?msisdn="+$('#msisdn').val()+"&lang="+$("#langvalue").val(), function(data, status){
+	$.get("./"+$('#baseURL').val()+"/send-content-mt?msisdn="+$('#msisdn').val()+"&lang="+$("#langvalue").val()+"&token="+token, function(data, status){
 		var obj = JSON.parse(data);
 		if(obj.messageDeliveryStatus==true){
 			$("#message").text($("#success-content-msg").val());

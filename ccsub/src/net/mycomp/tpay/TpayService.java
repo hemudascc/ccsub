@@ -68,9 +68,9 @@ public class TpayService extends AbstractOperatorService {
 			String date = getCurrentTimeStamp() + "Z";
 			String message = date+lang;
 			logger.info("message: " + message);
-			byte[] keyBytes = TpayConstant.SECRET_KEY.getBytes();
+			byte[] keyBytes = tpayServiceConfig.getPrivateKey().getBytes();
 
-			String digest = TpayConstant.PUBLIC_KEY + ":" + TpayUtill.hmacSHA256(message, keyBytes);
+			String digest = tpayServiceConfig.getPublicKey() + ":" + TpayUtill.hmacSHA256(message, keyBytes);
 			logger.info("Digest:" + digest);
 			
 			String msisdn = TpayConstant.getMsisdnByOperatorCode(tpayServiceConfig.getOperatorCode());

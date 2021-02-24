@@ -21,9 +21,9 @@ public interface TpayConstant {
 	public static final String THEME = "light";
 	public static final String HASH_KEY_TYPE = "HMACSHA256";
 	public static final String TPAY_JS_API = "http://lookup.tpay.me/idxml.ashx/js?date=<date>&digest=<digest>&simulate=true&operatorcode=<oc>&msisdn=<msisdn>";
-	public static final String PUBLIC_KEY = "hODiE6QhSFbTxNWIKpMH";
-	public static final String PRIVATE_KEY = "5RZvZlkP4izzuBxLz3eT";	
-	public static final String SECRET_KEY = "5RZvZlkP4izzuBxLz3eT";
+//	public static final String PUBLIC_KEY = "hODiE6QhSFbTxNWIKpMH";
+//	public static final String PRIVATE_KEY = "5RZvZlkP4izzuBxLz3eT";	
+//	public static final String SECRET_KEY = "5RZvZlkP4izzuBxLz3eT";
 	public static final String TPAY_PORTAL_URL="http://mob.ccd2c.com/gamepad/tp/home?msisdn=<msisdn>&lang=<lang>";
 	public static final String PIN_URL = "https://live.tpay.me/api/TPaySubscription.svc/json/AddSubscriptionContractRequest";
 	public static final String PIN_VALIDATE_URL = "https://live.tpay.me/api/TPaySubscription.svc/json/VerifySubscriptionContract";
@@ -31,9 +31,9 @@ public interface TpayConstant {
 	public static final String SMS_URL = "https://live.tpay.me/api/TPay.svc/json/SendFreeMTMessage";
 	public static final String CANCEL_SUBSCRIPTION_CONTARCT_URL = "https://live.tpay.me/api/TPaySubscription.svc/json/CancelSubscriptionContractRequest";
 	public static final String WELCOME_MESSAGE_SMS_ENG = "Thanks for subscribing to GamePad to enjoy visit http://mob.ccd2c.com/gamepad/tp/home?msisdn=<msisdn>&lang=<lang>. You will be charged for <price> Egyptian Pound/<billing_sequence> to unsubscribe send <unsub_keyword> to <shortcode> for free. For queries, contact on tech.d2c@collectcent.com";
-	public static final String WELCOME_MESSAGE_SMS_ARB = new String("شكرًا لاشتراكك في GamePad للاستمتاع بزيارة http://mob.ccd2c.com/gamepad/tp/home؟msisdn=<msisdn>&lang= <lang>. سيتم محاسبتك على <price> جنيه مصري / <billing_sequence> لإلغاء الاشتراك ، أرسل <unsub_keyword> إلى <shortcode> مجانًا. للاستفسارات ، اتصل على tech.d2c@collectcent.com".getBytes(),StandardCharsets.UTF_8);
+	public static final String WELCOME_MESSAGE_SMS_ARB = new String("Ø´ÙƒØ±Ù‹Ø§ Ù„Ø§Ø´ØªØ±Ø§ÙƒÙƒ Ù�ÙŠ GamePad Ù„Ù„Ø§Ø³ØªÙ…ØªØ§Ø¹ Ø¨Ø²ÙŠØ§Ø±Ø© http://mob.ccd2c.com/gamepad/tp/homeØŸmsisdn=<msisdn>&lang= <lang>. Ø³ÙŠØªÙ… Ù…Ø­Ø§Ø³Ø¨ØªÙƒ Ø¹Ù„Ù‰ <price> Ø¬Ù†ÙŠÙ‡ Ù…ØµØ±ÙŠ / <billing_sequence> Ù„Ø¥Ù„ØºØ§Ø¡ Ø§Ù„Ø§Ø´ØªØ±Ø§Ùƒ ØŒ Ø£Ø±Ø³Ù„ <unsub_keyword> Ø¥Ù„Ù‰ <shortcode> Ù…Ø¬Ø§Ù†Ù‹Ø§. Ù„Ù„Ø§Ø³ØªÙ�Ø³Ø§Ø±Ø§Øª ØŒ Ø§ØªØµÙ„ Ø¹Ù„Ù‰ tech.d2c@collectcent.com".getBytes(),StandardCharsets.UTF_8);
 	public static final String CONTENT_MESSAGE_SMS_ENG = "Please access the content using http://mob.ccd2c.com/gamepad/tp/home?msisdn=<msisdn>&lang=<lang> URL. For queries, contact on tech.d2c@collectcent.com";
-	public static final String CONTENT_MESSAGE_SMS_ARB = "يرجى الوصول إلى المحتوى باستخدام http://mob.ccd2c.com/gamepad/tp/home؟msisdn=<msisdn>&lang= <lang> URL. للاستفسارات ، اتصل على tech.d2c@collectcent.com";
+	public static final String CONTENT_MESSAGE_SMS_ARB = "ÙŠØ±Ø¬Ù‰ Ø§Ù„ÙˆØµÙˆÙ„ Ø¥Ù„Ù‰ Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø¨Ø§Ø³ØªØ®Ø¯Ø§Ù… http://mob.ccd2c.com/gamepad/tp/homeØŸmsisdn=<msisdn>&lang= <lang> URL. Ù„Ù„Ø§Ø³ØªÙ�Ø³Ø§Ø±Ø§Øª ØŒ Ø§ØªØµÙ„ Ø¹Ù„Ù‰ tech.d2c@collectcent.com";
 	public static final String ACTIVE_CACHE_PREFIX = "TPAY_ACTIVE_CACHE_PREFIX";
 	public static final String GRACE_CACHE_PREFIX = "TPAY_GRACE_CACHE_PREFIX";
 	

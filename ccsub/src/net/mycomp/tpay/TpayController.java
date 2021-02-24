@@ -176,13 +176,13 @@ public class TpayController {
 	}
 	
 	@RequestMapping("send-content-mt")
-	public String sendContentMT(@RequestParam String msisdn, @RequestParam Integer lang) {
+	public String sendContentMT(@RequestParam String msisdn, @RequestParam Integer lang,@RequestParam String token) {
 
 		String response = null;
 		logger.info("Sending Content message to user msisdn : " + msisdn+" lang: "+lang);
 		try {
 
-			response = tpayApiService.sendContentMT(msisdn, lang);
+			response = tpayApiService.sendContentMT(msisdn, lang,token);
 
 			logger.info("Sent Content message to user msisdn : " + msisdn+" lang: "+lang);	
 		} catch (Exception e) {
@@ -207,13 +207,13 @@ public class TpayController {
 	}
 
 	@RequestMapping("unsubscribe")
-	public String unsubscribe(@RequestParam String msisdn, @RequestParam String lang) {
+	public String unsubscribe(@RequestParam String msisdn, @RequestParam String lang,@RequestParam String token) {
 
 		String response = null;
 		logger.info("unsubscribing user msisdn : " + msisdn);
 		try {
 
-			response = tpayApiService.unsubscribe(msisdn, lang);
+			response = tpayApiService.unsubscribe(msisdn, lang,token);
 
 			logger.info("unsubscribing user msisdn : " + msisdn);
 		} catch (Exception e) {
@@ -235,9 +235,9 @@ public class TpayController {
 		String date = getCurrentTimeStamp() + "Z";
 		String message = date+langString;
 		logger.info("message: " + message);
-		byte[] keyBytes = TpayConstant.SECRET_KEY.getBytes();
+		byte[] keyBytes = tpayServiceConfig.getPrivateKey().getBytes();
 
-		String digest = TpayConstant.PUBLIC_KEY + ":" + TpayUtill.hmacSHA256(message, keyBytes);
+		String digest = tpayServiceConfig.getPublicKey() + ":" + TpayUtill.hmacSHA256(message, keyBytes);
 		logger.info("Digest:" + digest);
 		
 	//	String msisdn = TpayConstant.getMsisdnByOperatorCode(tpayServiceConfig.getOperatorCode());
@@ -302,9 +302,9 @@ public class TpayController {
 		String date = getCurrentTimeStamp() + "Z";
 		String message = date+langString;
 		logger.info("message: " + message);
-		byte[] keyBytes = TpayConstant.SECRET_KEY.getBytes();
+		byte[] keyBytes = tpayServiceConfig.getPrivateKey().getBytes();  
 
-		String digest = TpayConstant.PUBLIC_KEY + ":" + TpayUtill.hmacSHA256(message, keyBytes);
+		String digest = tpayServiceConfig.getPublicKey() + ":" + TpayUtill.hmacSHA256(message, keyBytes);
 		logger.info("Digest:" + digest);
 		
 	//	String msisdn = TpayConstant.getMsisdnByOperatorCode(tpayServiceConfig.getOperatorCode());
