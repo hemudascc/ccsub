@@ -1,0 +1,83 @@
+.img-container {
+    padding: 2% 10% 0 10%;
+    text-align: center;
+}
+.jumbotron{
+    text-align: center;
+    padding: 10px 0px 10px 0px;
+}
+.img-banner {
+    width: 75%;
+    height: 280px;
+    border: 1px solid #d2973f;
+    margin: 0px 0px 15px 0px;
+}
+.enter-mob-label {
+    font-size: 24px;
+}
+.mobile-input {
+    width: 270px;
+    margin: 0px auto;
+}
+.operator-input{
+    width: 270px;
+    margin: 10px auto;
+}
+.btn-custom {
+    width: 200px;
+}
+.price-info-container {
+    color: red;
+    background: yellow;
+    margin: 10px auto;
+    font-size: 13px;
+    width: 355px;
+}
+.dsc-container{
+    padding: 0 20px 0 20px;
+    text-align: justify;
+    font-size: 12px;
+    line-height: 14px;
+}
+.footer {
+    margin: 50px auto 0 auto;
+    max-width: 800px;
+}
+.dsc-container>span {
+    color: red;
+    font-weight: bold;
+}
+.copyright{
+    padding: 10px 0;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+}
+
+.content-div {
+    height: 275px;
+    overflow-y: scroll;
+}
+.content-div>div {
+    margin-bottom: 30px;
+}
+.btn {
+    width: 165px;
+}
+.modal-footer {
+    display: flex;
+    flex-direction: column;
+}
+
+
+@media only screen and (max-width: 320px) {
+    .price-info-container {
+        width: 300px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .img-banner {
+        width: 100%;
+    }
+}

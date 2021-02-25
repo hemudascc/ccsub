@@ -12,6 +12,7 @@ import net.bizao.BizaoService;
 import net.indonesia.triyakom.TriyakomService;
 import net.mycom.nxt.vas.NxtVasService;
 import net.mycomp.actel.ActelService;
+import net.mycomp.beecel.jordon.BCJordonService;
 import net.mycomp.comviva.ooredo.oman.OoredooOmanService;
 import net.mycomp.du.DUService;
 import net.mycomp.etisalat.EtisalatService;
@@ -151,6 +152,10 @@ public class OperatorRequestService implements IOperatorService{
 	@Autowired
 	@Qualifier("mkHongkongService")
 	private MKHongkongService mkHongkongService;
+	
+	@Autowired
+	@Qualifier("bcJordonService")
+	private BCJordonService bcJordonService;
 	 
 	private IOperatorService findProcessRequest(int opId){
 		
@@ -321,6 +326,11 @@ public class OperatorRequestService implements IOperatorService{
 			ioperatorService=mkHongkongService;
 			break;
 		}	 
+		case MConstants.BC_JORDON_JORDON_ORANGE_OPERATOR_ID:
+		case MConstants.BC_JORDON_JORDON_UMNIAH_OPERATOR_ID:{
+			ioperatorService=bcJordonService;
+			break;
+		}	
 		default:	{
 			ioperatorService=defaultOperatorService	;
 		}
