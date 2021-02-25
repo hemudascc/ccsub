@@ -237,10 +237,12 @@ public class TpayApiService {
 		String message = "";
 		if(lang==0) { 
 			message =	TpayConstant.CONTENT_MESSAGE_SMS_ENG
+						 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
 						 .replaceAll("<msisdn>", msisdn)
 						 .replaceAll("<lang>","1");
 		}else {
 			message = TpayConstant.CONTENT_MESSAGE_SMS_ARB
+					 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
 					 .replaceAll("<msisdn>", msisdn)
 					 .replaceAll("<lang>","2");
 		}
@@ -291,6 +293,9 @@ public class TpayApiService {
 		String message = "";
 		if(lang==0) { 
 			message =	TpayConstant.WELCOME_MESSAGE_SMS_ENG.replaceAll("<price>", tpayServiceConfig.getPrice())
+						 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
+						 .replaceAll("<servicename>", tpayServiceConfig.getServiceName())
+						 .replaceAll("<currency>", tpayServiceConfig.getCurrency())
 						 .replaceAll("<msisdn>", msisdn)
 						 .replaceAll("<billing_sequence>",tpayServiceConfig.getBillingSequence())
 						 .replaceAll("<unsub_keyword>", tpayServiceConfig.getUnsubKeyword())
@@ -298,6 +303,9 @@ public class TpayApiService {
 						 .replaceAll("<lang>","1");
 		}else {
 			message = TpayConstant.WELCOME_MESSAGE_SMS_ARB.replaceAll("<price>", tpayServiceConfig.getPrice())
+					 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
+					 .replaceAll("<servicename>", tpayServiceConfig.getServiceName())
+					 .replaceAll("<currency>", tpayServiceConfig.getCurrency())
 					 .replaceAll("<msisdn>", msisdn)
 					 .replaceAll("<billing_sequence>",tpayServiceConfig.getBillingSequence())
 					 .replaceAll("<unsub_keyword>", tpayServiceConfig.getUnsubKeyword())

@@ -58,7 +58,7 @@ $(document).ready(function(){
 						}
 					},operatorCode,msisdn);
 				}else{
-					window.location.href="./"+$('#baseURL').val()+"/redirect-portal/"+subId+"/"+lang
+					window.location.href="./"+$('#baseURL').val()+"/redirect-portal/"+subId+"/"+lang+"/"+token	
 				}
 			});
 		}else{

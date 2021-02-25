@@ -274,13 +274,18 @@ public class TpayController {
 		
 		return modelAndView;
 	}
-	@RequestMapping("redirect-portal/{subscriptionContractId}/{lang}")
+	@RequestMapping("redirect-portal/{subscriptionContractId}/{lang}/{token}")
 	public ModelAndView redirectPortal(@PathVariable("subscriptionContractId") String subscriptionContractId,
-										@PathVariable("lang") String lang, ModelAndView modelAndView) {
+										@PathVariable("lang") String lang,@PathVariable("token") String token, ModelAndView modelAndView) {
 		String portalURL="http://subscriptionContractId";
+		CGToken cgToken=new CGToken(token);
+		VWServiceCampaignDetail 
+		vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+		TpayServiceConfig tpayServiceConfig = TpayConstant.mapServiceIdToTpayServiceConfig
+				.get(vwServiceCampaignDetail.getServiceId());
 		List<SubscriberReg> subscriberRegs = tpayApiService.getSubscriberRegBySubscriptionContractId(subscriptionContractId);
 		if(subscriberRegs!=null) {
-			portalURL = TpayConstant.TPAY_PORTAL_URL.replaceAll("<msisdn>", subscriberRegs.get(0).getMsisdn())
+			portalURL = tpayServiceConfig.getProtalUrl().replaceAll("<msisdn>", subscriberRegs.get(0).getMsisdn())
 					.replaceAll("<lang>", lang.equals("0")?"1":"2");
 		}
 		modelAndView.setView(new RedirectView(portalURL));
