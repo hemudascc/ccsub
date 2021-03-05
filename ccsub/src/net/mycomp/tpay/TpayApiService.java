@@ -266,6 +266,9 @@ public class TpayApiService {
 		
 		tpaySubscriptionContractRequest.setResponseCode(response.getStatusCode().value());
 		tpaySubscriptionContractRequest.setResponse(response.getBody());
+		tpaySubscriptionContractRequest.setToken(token);
+		tpaySubscriptionContractRequest.setMsisdn(msisdn);
+		tpaySubscriptionContractRequest.setCampaignId(cgToken.getCampaignId());
 		logger.info("response:"+response.getBody());
 
 		return tpaySubscriptionContractRequest;
@@ -332,6 +335,9 @@ public class TpayApiService {
 		
 		tpaySubscriptionContractRequest.setResponseCode(response.getStatusCode().value());
 		tpaySubscriptionContractRequest.setResponse(response.getBody());
+		tpaySubscriptionContractRequest.setToken(token);
+		tpaySubscriptionContractRequest.setMsisdn(msisdn);
+		tpaySubscriptionContractRequest.setCampaignId(cgToken.getCampaignId());
 		logger.info("response:"+response.getBody());
 
 		return tpaySubscriptionContractRequest;

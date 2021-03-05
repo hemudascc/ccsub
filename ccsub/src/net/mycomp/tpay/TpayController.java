@@ -87,7 +87,9 @@ public class TpayController {
 		JSONObject object = null;
 		logger.info("sending pin to user msisdn : " + msisdn + " token : " + token);
 		try {
-			
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
 			CGToken cgToken = new CGToken(token);
 
 			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail
@@ -115,7 +117,9 @@ public class TpayController {
 		String response = null;
 		logger.info("resending pin to user msisdn : " + msisdn + " token : " + token);
 		try {
-
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
 			response = tpayApiService.resendPin(token, msisdn, subscriptionContractId,lang);
 
 			logger.info("pin resent to user msisdn : " + msisdn + " token : " + token);
@@ -132,6 +136,12 @@ public class TpayController {
 		JSONObject object = null;
 		logger.info("validate pin to user subscriptionContractId : " + subscriptionContractId + " pin : " + pin);
 		try {
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
+			if(pin !=null) {
+				pin = pin.trim();
+			}
 			redisCacheService.putObjectCacheValueByEvictionMinute(
 					TpayConstant.TPAY_CACHE_PREFIX + subscriptionContractId, msisdn, 60 * 24);
 			CGToken cgToken = new CGToken(token);
@@ -163,7 +173,9 @@ public class TpayController {
 		logger.info("Sending welcome message to user msisdn : " + msisdn + " token : " + token
 				+ " subscriptionContractId: " + subscriptionContractId+" lang: "+lang);
 		try {
-
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
 			response = tpayApiService.sendWelcomeMT(token, msisdn, subscriptionContractId,lang);
 
 			logger.info("Sending welcome message to user msisdn : " + msisdn + " token : " + token
@@ -181,7 +193,9 @@ public class TpayController {
 		String response = null;
 		logger.info("Sending Content message to user msisdn : " + msisdn+" lang: "+lang);
 		try {
-
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
 			response = tpayApiService.sendContentMT(msisdn, lang,token);
 
 			logger.info("Sent Content message to user msisdn : " + msisdn+" lang: "+lang);	
@@ -212,7 +226,9 @@ public class TpayController {
 		String response = null;
 		logger.info("unsubscribing user msisdn : " + msisdn);
 		try {
-
+			if(msisdn !=null) {
+				msisdn = msisdn.trim();
+			}
 			response = tpayApiService.unsubscribe(msisdn, lang,token);
 
 			logger.info("unsubscribing user msisdn : " + msisdn);
