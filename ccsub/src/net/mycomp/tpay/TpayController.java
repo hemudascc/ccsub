@@ -58,7 +58,7 @@ public class TpayController {
 		TpayNotification tpayNotification = new TpayNotification(true);
 		try {
 			tpayNotification.setTpayAction(request.getParameter("action"));
-			tpayNotification.setTransactionId(request.getParameter("transactionId"));
+			tpayNotification.setTransactionId(request.getParameter("transactionId"));  
 			tpayNotification.setAmount(request.getParameter("collectedAmount"));
 			tpayNotification.setErrorMessage(request.getParameter("errorMessage"));
 			tpayNotification.setBillingAction(request.getParameter("billAction"));
@@ -302,7 +302,8 @@ public class TpayController {
 		List<SubscriberReg> subscriberRegs = tpayApiService.getSubscriberRegBySubscriptionContractId(subscriptionContractId);
 		if(subscriberRegs!=null) {
 			portalURL = tpayServiceConfig.getProtalUrl().replaceAll("<msisdn>", subscriberRegs.get(0).getMsisdn())
-					.replaceAll("<lang>", lang.equals("0")?"1":"2");
+					.replaceAll("<lang>", lang.equals("0")?"1":"2")
+					.replaceAll("<subid>", subscriptionContractId);
 		}
 		modelAndView.setView(new RedirectView(portalURL));
 		return modelAndView;

@@ -139,7 +139,7 @@ public class TpayApiService {
 
 		Map<String,String> headerMap=new HashMap<String,String>();
 
-		
+		CGToken cgtoken = new CGToken(token);
 		headerMap.put("Content-Type", "application/json");
 		headerMap.put("Accept", "application/json");
 		
@@ -147,6 +147,9 @@ public class TpayApiService {
 			logger.info("can not proceed request for unsubscription msisdn"+msisdn);
 			tpaySubscriptionContractRequest.setResponseCode(400);
 			tpaySubscriptionContractRequest.setResponse("51");
+			tpaySubscriptionContractRequest.setCampaignId(cgtoken.getCampaignId());
+			tpaySubscriptionContractRequest.setMsisdn(msisdn);
+			tpaySubscriptionContractRequest.setToken(token);
 			return tpaySubscriptionContractRequest;
 		}
 		
@@ -163,7 +166,10 @@ public class TpayApiService {
 		HTTPResponse  httpResponse = httpURLConnectionUtil.makeHTTPPOSTRequest(TpayConstant.CANCEL_SUBSCRIPTION_CONTARCT_URL, request,headerMap);
 
 		tpaySubscriptionContractRequest.setResponseCode(httpResponse.getResponseCode());
+		tpaySubscriptionContractRequest.setCampaignId(cgtoken.getCampaignId());
 		tpaySubscriptionContractRequest.setResponse(httpResponse.getResponseStr());
+		tpaySubscriptionContractRequest.setMsisdn(msisdn);
+		tpaySubscriptionContractRequest.setToken(token);
 
 		return tpaySubscriptionContractRequest;
 
@@ -428,7 +434,7 @@ public class TpayApiService {
 		tpaySubscriptionContractRequest.setToken(token);
 		tpaySubscriptionContractRequest.setCampaignId(cgToken.getCampaignId());
 		Map<String, String> requestMap = new HashMap<>();
-		requestMap.put("customerAccountNumber","tpayvaca");
+		requestMap.put("customerAccountNumber","tpaycc");
 		requestMap.put("msisdn",msisdn);
 		requestMap.put("operatorCode",tpayServiceConfig.getOperatorCode());
 		requestMap.put("subscriptionPlanId",tpayServiceConfig.getSubscriptionPlanId());
