@@ -17,9 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.common.service.RedisCacheService;
+import net.jpa.repository.JPASubscriberReg;
 import net.jpa.repository.JPATpayServiceConfig;
+import net.persist.bean.SubscriberReg;
 import net.process.bean.AdNetworkRequestBean;
 import net.process.request.AbstractOperatorService;
+import net.util.MConstants;
 
 @Service("tpayService")
 public class TpayService extends AbstractOperatorService {
@@ -35,6 +38,10 @@ public class TpayService extends AbstractOperatorService {
 	
 	@Autowired
 	private RedisCacheService redisCacheService;
+	
+	@Autowired
+	private JPASubscriberReg jpaSubscriberReg;
+	
 
 	@PostConstruct
 	public void init() {
@@ -116,6 +123,16 @@ public class TpayService extends AbstractOperatorService {
 
 	@Override
 	public boolean checkSub(Integer productId, Integer opid, String msisdn) {
+		List<SubscriberReg> list=jpaSubscriberReg.findSubscriberRegByMsisdn(msisdn);
+		logger.info("checkSub:::::::::: list of subscriberreg "+list);
+		SubscriberReg subscriberReg=null;
+		if(list!=null&&list.size()>0){
+			subscriberReg=list.get(0);
+		}
+		logger.info("checkSub:::::::::: subscriberReg: "+subscriberReg);
+		if(subscriberReg!=null&&subscriberReg.getStatus()==MConstants.SUBSCRIBED){
+			return true;
+		}		
 		return false;
 	}
 	
