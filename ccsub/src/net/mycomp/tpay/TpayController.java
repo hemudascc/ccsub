@@ -155,7 +155,7 @@ public class TpayController {
 			response = tpayApiService.validatePin(token, msisdn, subscriptionContractId, pin);
 			object = new JSONObject(response);
 			object.put("portalUrl", tpayServiceConfig.getProtalUrl().replaceAll("<msisdn>", msisdn)
-					.replaceAll("<lang>", lang.equals("1")?"2":"1"));
+					.replaceAll("<lang>", lang.equals("1")?"2":"1").replaceAll("<subid>", msisdn));
 			// response = response.substring(0, response.length()-1)+","":"++"}";
 
 			logger.info("pin validation to user subscriptionContractId : " + subscriptionContractId + " pin : " + pin);
@@ -209,15 +209,22 @@ public class TpayController {
 	@RequestMapping("unsub")
 	public ModelAndView confirmUnsubscribe(HttpServletRequest request, ModelAndView modelAndView) {
 		String msisdn = request.getParameter("msisdn");
-		String lang = request.getParameter("lang");
+		String lang = request.getParameter("lang");  
 		SubscriberReg subscriberReg = daoService.searchSubscriber(msisdn);
-		modelAndView.setViewName("tpay/unsubscribe");
+		modelAndView.setViewName("tpay/unsubscribe");  
 		modelAndView.addObject("msisdn", msisdn);
-		if(subscriberReg!=null && subscriberReg.getStatus()==1) {
-			modelAndView.addObject("campId", subscriberReg.getServiceId());	
+		if(subscriberReg!=null && subscriberReg.getStatus()==1) {  
+			TpayServiceConfig tpayServiceConfig = TpayConstant.mapServiceIdToTpayServiceConfig
+					.get(subscriberReg.getServiceId());
+			CGToken cgToken = new CGToken(subscriberReg.getParam3());
+			modelAndView.addObject("lpImageUrl", tpayServiceConfig.getLpImageUrl());
+			modelAndView.addObject("portalUrl", tpayServiceConfig.getProtalUrl().replaceAll("<msisdn>", msisdn).replaceAll("<lang>", lang).replaceAll("<subid>", msisdn));	
+			modelAndView.addObject("campId", cgToken.getCampaignId());	
+			modelAndView.addObject("token", subscriberReg.getParam3());	
+			  
 		}
 		modelAndView.addObject("lang", lang);
-		return modelAndView;
+		return modelAndView;  
 	}
 
 	@RequestMapping("unsubscribe")

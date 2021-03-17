@@ -36,6 +36,7 @@
 	<input id="subscriptionPlanId" value="${TpayServiceConfig.subscriptionPlanId}" type="hidden">
 	<input id="catalogName" value="${TpayServiceConfig.catalogName}" type="hidden">
 	<input id="paymentProductId" value="${TpayServiceConfig.paymentProductId}" type="hidden">
+	<input id="protalUrl" value="${TpayServiceConfig.protalUrl}" type="hidden">
 	
 
 	<c:choose>

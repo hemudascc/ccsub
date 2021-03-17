@@ -5,7 +5,8 @@ var portalurlsentcount=0;
 $(document).ready(function(){
 	token = $("#token").val();
 	lang = $("#langvalue").val();
-	
+	var portal = $("#protalUrl").val();
+	portalUrl = portal.split("?")[0];
 	if($("#sessionToken").val()===''){
 		sessionToken = TPay.HeaderEnrichment.sessionToken();	
 	}
@@ -165,12 +166,19 @@ $(document).ready(function(){
 			   event.returnValue = false;
 			}
 		}
-		$("#exit-button").click(function(){
-			window.location.href="http://mob.ccd2c.com/gamepad/tp/home?msisdn="+$("#msisdn").val()+"&lang="+lang
-		});
-		$("#unsubscribe-button").click(function(){
-			$("#unsubscribe-button").prop("disabled",true);
-			$.get("./unsubscribe?msisdn="+$("#msisdn").val()+"&lang="+$("#lang").val()+"&token="+token, function(data, status){
+	
+		
+});
+ 
+function exit(){
+	window.location.href=$("#portalurl").val();
+} 
+ 
+function unsubscribe(){
+	
+		$("#unsubscribe-button").prop("disabled",true);
+		$("#unsubscribe-button1").prop("disabled",true);
+			$.get("./unsubscribe?msisdn="+$("#msisdn").val()+"&lang="+$("#langvalue").val()+"&token="+$("#tokenvalue").val(), function(data, status){
 				if(parseInt(data)==51){
 					$("#consent-p").css('display',"none");
 					$("#unsubscribe-msg").text($("#already-unsub-message").val());
@@ -182,7 +190,7 @@ $(document).ready(function(){
 					$("#consent-p").css('display',"none");
 					$("#unsubscribe-msg").text($("#success-unsub-message").val());
 					$("#unsubscribe-msg").css('display',"block");
-					setTimeout(function(){ window.location.href="http://192.241.167.189:8080/vacavas/sys/sub?adid=1&evid="+$("#campId").val()+"&ref=test" }, 3000);
+					setTimeout(function(){ window.location.href="http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid="+$("#campId").val()+"&token=878" }, 3000);
 				}else{
 					$("#consent-p").css('display',"none");
 					$("#unsubscribe-msg").text($("#already-unsub-message").val());
@@ -190,8 +198,8 @@ $(document).ready(function(){
 				}
 				}
 			});
-		});
-});
+
+}
 
 function changeLang(){
 	var x = document.getElementById("redirectStatus").value;
