@@ -138,9 +138,5 @@ data-csp-nonce="index-123"></script>
 				</c:if>
 			</div>
 			</section>
-
-			 
-
-
  </body>
 </html>

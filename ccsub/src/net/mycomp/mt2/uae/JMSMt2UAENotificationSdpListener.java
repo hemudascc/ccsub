@@ -91,6 +91,8 @@ public class JMSMt2UAENotificationSdpListener implements MessageListener {
 					if(Objects.isNull(mt2UAEServiceConfig)) {
 						if("Du".equalsIgnoreCase(mt2UAENotification.getOperator())) {
 							mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(89);
+						}else if("Etisalat".equalsIgnoreCase(mt2UAENotification.getOperator())){
+							mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(90);
 						}else {
 							mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(90);
 						}

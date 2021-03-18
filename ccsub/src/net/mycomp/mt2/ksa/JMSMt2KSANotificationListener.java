@@ -94,8 +94,8 @@ public class JMSMt2KSANotificationListener implements MessageListener {
 			logger.error("onMessage::::: ", ex);
 		} finally {
 			try {
+				logger.info(liveReport.getAction());
 				mt2KSANotification.setMyAction(liveReport.getAction());
-				
 				if(liveReport.getAction()!=null){
 					liveReportFactoryService.process(liveReport);
 				}

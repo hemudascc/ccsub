@@ -89,20 +89,23 @@ public class Mt2UAEService  extends AbstractOperatorService {
 			mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig
 					.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
 
-			if(adNetworkRequestBean.vwserviceCampaignDetail.getOpId()==MConstants.MT2_UAE_DU_OPERATOR_ID
-					|| adNetworkRequestBean.vwserviceCampaignDetail.getOpId()==MConstants.MT2_UAE_ETISALAT_OPERATOR_ID){
-				if(Objects.nonNull(mt2UAEServiceConfig)) {
+			/*
+			 * if(adNetworkRequestBean.vwserviceCampaignDetail.getOpId()==MConstants.
+			 * MT2_UAE_DU_OPERATOR_ID ||
+			 * adNetworkRequestBean.vwserviceCampaignDetail.getOpId()==MConstants.
+			 * MT2_UAE_ETISALAT_OPERATOR_ID){
+			 */	if(Objects.nonNull(mt2UAEServiceConfig)) {
 					cgURL = mt2UAEServiceConfig.getCgUrl().replaceAll("<token>", 
 							adNetworkRequestBean.adnetworkToken.getTokenToCg());
 				}
 				adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_CG);
 				modelAndView.setView(new RedirectView(cgURL));
-			}else {
+			/*}else {
 			modelAndView.addObject("mt2UAEServiceConfig",mt2UAEServiceConfig);
 			modelAndView.addObject("token",adNetworkRequestBean.adnetworkToken.getTokenToCg());
 			modelAndView.setViewName(mt2UAEServiceConfig.getLpPage());
 			modelAndView.addObject("l", 1);
-			}
+			}*/
 
 		}catch(Exception ex){
 			logger.error("Exception    ",ex);

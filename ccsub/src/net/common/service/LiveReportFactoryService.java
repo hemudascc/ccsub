@@ -63,6 +63,7 @@ public class LiveReportFactoryService {
 
 
 		logger.debug("process:::::::::::::LiveReportFactoryService::::::::::::::::::::::::: "+liveReport);
+		logger.debug("ACTION:"+liveReport.getAction().equalsIgnoreCase(MConstants.RENEW));
 		try{
 			if (liveReport.getAction().equalsIgnoreCase(MConstants.ACT)) {
 				logger.debug("process:::::::::::::LiveReportFactoryServiceact:::::::::::::::::::::::::");

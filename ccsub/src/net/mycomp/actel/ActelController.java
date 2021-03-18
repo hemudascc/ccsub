@@ -848,5 +848,13 @@ public class ActelController {
 		return actelApiTrans;
        }
 	
+	@RequestMapping(value={"tc"},method={RequestMethod.GET,RequestMethod.POST})
+	public ModelAndView tc(HttpServletRequest request,ModelAndView modelAndView){
+		modelAndView.setViewName("actel/tc");
+		modelAndView.addObject("token", request.getParameter("token"));
+		modelAndView.addObject("l", request.getParameter("l"));
+		return modelAndView;
+	}
+	
 }
 

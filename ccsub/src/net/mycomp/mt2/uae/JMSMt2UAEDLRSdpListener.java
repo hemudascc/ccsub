@@ -1,7 +1,6 @@
 package net.mycomp.mt2.uae;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Objects;
 
 import javax.jms.Message;
@@ -14,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import net.common.service.IDaoService;
 import net.common.service.LiveReportFactoryService;
 import net.common.service.RedisCacheService;
-import net.jpa.repository.JPASubscriberReg;
 import net.persist.bean.LiveReport;
 import net.persist.bean.Service;
-import net.persist.bean.SubscriberReg;
-import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.CGToken;
 import net.util.MConstants;
 import net.util.MData;
@@ -31,9 +27,6 @@ public class JMSMt2UAEDLRSdpListener implements MessageListener {
 
 	@Autowired
 	private IDaoService daoService;
-
-	@Autowired
-	private JPASubscriberReg jpaSubscriberReg; 
 
 	@Autowired
 	private LiveReportFactoryService liveReportFactoryService;
@@ -50,24 +43,13 @@ public class JMSMt2UAEDLRSdpListener implements MessageListener {
 		long time = System.currentTimeMillis();
 		CGToken cgToken=null;
 		Mt2UAEServiceConfig mt2UAEServiceConfig=null;
-		List<SubscriberReg> subscriberRegs=null;
 		try {
 			ObjectMessage objectMessage = (ObjectMessage) m;
 			mt2uaeDeliveryNotification = (Mt2UAEDeliveryNotificationSdp) objectMessage.getObject();
 			logger.info("mt2UAEDeliveryNotification::::: "+mt2uaeDeliveryNotification);
 			cgToken = new CGToken(Objects.toString(redisCacheService.getObjectCacheValue(Mt2UAEConstant.MT2_UAE_MSISDN_TOKEN_CAHCHE_PREFIX+mt2uaeDeliveryNotification.getMsisdn())));
-			if(cgToken.getCampaignId()>0) {
-				mt2uaeDeliveryNotification.setToken(cgToken.getCGToken());
-				VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
-				if(Objects.nonNull(vwServiceCampaignDetail)) {
-					mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(vwServiceCampaignDetail.getServiceId());
-				}
-			}else {
-				subscriberRegs = jpaSubscriberReg.findSubscriberRegByMsisdn(mt2uaeDeliveryNotification.getMsisdn());
-				if(Objects.nonNull(subscriberRegs) && subscriberRegs.size()!=0) {
-					cgToken = new CGToken(subscriberRegs.get(0).getToken());
-				}
-			}
+			mt2uaeDeliveryNotification.setToken(cgToken.getCGToken());
+			mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(mt2uaeDeliveryNotification.getOperator().equals("Etisalat")?88:89);
 			Service service = MData.mapServiceIdToService.get(mt2UAEServiceConfig.getServiceId());
 			liveReport = new LiveReport(service.getOpId(), new Timestamp(System.currentTimeMillis()), 
 					cgToken.getCampaignId(),mt2UAEServiceConfig.getServiceId(),mt2UAEServiceConfig.getProductId()); 
@@ -76,17 +58,17 @@ public class JMSMt2UAEDLRSdpListener implements MessageListener {
 			liveReport.setMsisdn(mt2uaeDeliveryNotification.getMsisdn());
 			liveReport.setCircleId(0);
 			liveReport.setMode("");
-			if(mt2uaeDeliveryNotification.getSdpStatus().equals("Success") && subscriberRegs==null) {
+			if(mt2uaeDeliveryNotification.getSdpStatus().equals("Success") && cgToken.getCampaignId()>0) {
 				//act
 				liveReport.setAction(MConstants.ACT);
 				liveReport.setConversionCount(1);
-				liveReport.setAmount(MUtility.toDouble(mt2UAEServiceConfig.getPricePoint().toString(),mt2uaeDeliveryNotification.getPrice()));
+				liveReport.setAmount(MUtility.toDouble(mt2uaeDeliveryNotification.getPrice().toString(), mt2UAEServiceConfig.getPricePoint()));
 				liveReport.setNoOfDays(MUtility.toInt(mt2uaeDeliveryNotification.getValidity().toString(),0));
-			}else if(mt2uaeDeliveryNotification.getSdpStatus().equals("Success") && subscriberRegs!=null){
+			}else if(mt2uaeDeliveryNotification.getSdpStatus().equals("Success") && cgToken.getCampaignId()<=0){
 				//renew
 				liveReport.setAction(MConstants.RENEW);
 				liveReport.setRenewalCount(1);
-				liveReport.setRenewalAmount(MUtility.toDouble(mt2UAEServiceConfig.getPricePoint().toString(),mt2uaeDeliveryNotification.getPrice()));
+				liveReport.setRenewalAmount(MUtility.toDouble(mt2uaeDeliveryNotification.getPrice().toString(), mt2UAEServiceConfig.getPricePoint()));
 				liveReport.setNoOfDays(MUtility.toInt(mt2uaeDeliveryNotification.getValidity().toString(),0));
 			}else {
 				//grace
