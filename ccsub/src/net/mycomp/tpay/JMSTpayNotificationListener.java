@@ -122,30 +122,44 @@ public class JMSTpayNotificationListener implements MessageListener{
 		}
 	}
 
-	private String findAction(final TpayNotification tpayNotification) {
-    	System.out.println("TEST::::::::::::::"+Objects.nonNull(redisCacheService.getObjectCacheValue("TPAY_TEMP_SUBSCRIBE" + tpayNotification.getSubscriptionContractId())));
-       if(Objects.nonNull(redisCacheService.getObjectCacheValue("TPAY_TEMP_SUBSCRIBE" + tpayNotification.getSubscriptionContractId()))) {
-    	   if ("PaymentCompletedSuccessfully".equalsIgnoreCase(tpayNotification.getPaymentTransactionStatusCode())) {
-    		   return MConstants.ACT;
-    	   }else {
-    		   if(Objects.nonNull(redisCacheService.getObjectCacheValue(TpayConstant.TPAY_GRACE_RECEIVED_CACHE+tpayNotification.getSubscriptionContractId()))) {
-    			   redisCacheService.putObjectCacheValueByEvictionDay(TpayConstant.TPAY_GRACE_RECEIVED_CACHE+tpayNotification.getSubscriptionContractId(), "RECEIVED", 1);
-    			   return MConstants.GRACE;
-    		   }else {  
-    			   return "";
-    		   }
-    	   }
-       }else if("SubscriptionContractStatusChanged".equalsIgnoreCase(tpayNotification.getTpayAction()) && "Canceled".equalsIgnoreCase(tpayNotification.getNotificationStatus())) {
-		   return MConstants.DCT;
-	   }
-       else {
-    	   if("PaymentCompletedSuccessfully".equalsIgnoreCase(tpayNotification.getPaymentTransactionStatusCode())) {
-    		   return MConstants.RENEW;
-    	   }else {
-    		   return "";
-    	   }
-       }
-    }
+	private synchronized TpayNotification findAction(TpayNotification tpayNotification) {
+		List<SubscriberReg> subscriberRegs = jpaSubscriberReg.findSubscriberRegByParam1(tpayNotification.getSubscriptionContractId());
+		boolean subToday= LocalDate.now().equals(LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(subscriberRegs.get(0).getSubDate())));
+		if("SubscriptionContractStatusChanged".equals((tpayNotification.getTpayAction()))){
+			if("Canceled".equals(tpayNotification.getNotificationStatus()) || "Suspended".equals(tpayNotification.getNotificationStatus()) || "Purged".equals(tpayNotification.getNotificationStatus())) {
+				tpayNotification.setAction(MConstants.DCT);
+			}else {
+				tpayNotification.setAction("NONE");
+			}
+		}else {
+			if("RecurringPayment".equalsIgnoreCase(tpayNotification.getBillingAction())) {
+				if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode())) {
+					tpayNotification.setAction(MConstants.ACT);
+				}else {
+					tpayNotification.setAction(MConstants.GRACE);  
+				}   
+			}else if("RetrailPayment".equalsIgnoreCase(tpayNotification.getBillingAction())){
+				if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode()) && subToday) {
+					tpayNotification.setAction(MConstants.ACT);
+				}else if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode()) && !subToday){
+					tpayNotification.setAction(MConstants.RENEW);
+				}else {
+					tpayNotification.setAction("NONE");
+				}
+			}else {
+				if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode())) {
+					tpayNotification.setAction(MConstants.RENEW);
+				}else {
+					tpayNotification.setAction("NONE");
+				}
+			}
+		}
+		
+		if(Objects.nonNull(subscriberRegs) && subscriberRegs.size()>0) {
+			tpayNotification.setToken(Objects.toString(subscriberRegs.get(0).getParam3()));
+		}
+		return tpayNotification;
+	}
 	
 	private synchronized String getToken(TpayNotification tpayNotification) {
 		
