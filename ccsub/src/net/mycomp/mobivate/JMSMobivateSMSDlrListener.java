@@ -68,7 +68,7 @@ public class JMSMobivateSMSDlrListener implements MessageListener {
 					}else {
 						cgToken=new CGToken(Objects.toString(redisCacheService.getObjectCacheValue(MobivateConstant.TOKEN_MSISDN_CHACHE_PREFIX+mobivateSMSDlr.getMsisdn())));
 					}
-					if(cgToken.getCampaignId()>0) {
+					if(cgToken.getCampaignId()<0) {
 						cgToken = new CGToken("-1c-1c228"); 
 					}
 					vwServiceCampaignDetail = 

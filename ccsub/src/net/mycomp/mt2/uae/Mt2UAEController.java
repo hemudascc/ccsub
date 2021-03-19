@@ -92,9 +92,9 @@ public class Mt2UAEController {
 		}catch(Exception  ex){
 			logger.error("Exception" ,ex);
 		}finally{
-			if(!mt2UAENotification.getCurrencyISOCode().equalsIgnoreCase("JOD")) {
+			//if(!mt2UAENotification.getCurrencyISOCode().equalsIgnoreCase("JOD")) {
 				jmsMt2UAEService.saveMt2UAENotification(mt2UAENotification);
-			}
+			//}
 		}
 		return responseMap;
 	}
