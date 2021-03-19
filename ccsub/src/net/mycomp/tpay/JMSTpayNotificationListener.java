@@ -100,7 +100,7 @@ public class JMSTpayNotificationListener implements MessageListener{
 			}else {}
 			
 		} catch (Exception e) {
-			logger.error("onMessage::::: ", e);
+			logger.error("onMessage::::: "+ e);
 		} finally {
 			try {
 				if(liveReport.getAction()!=null){
@@ -112,7 +112,7 @@ public class JMSTpayNotificationListener implements MessageListener{
 				logger.error(" fianlly liveReport:: " + liveReport
 						+ ", : tpayNotification:: "
 						+ tpayNotification);
-				logger.error("onMessage::::::::::finally " ,ex);
+				logger.error("onMessage::::::::::finally " +ex);
 			} finally {
 				update = daoService.saveObject(tpayNotification);
 			}

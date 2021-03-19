@@ -322,11 +322,6 @@ public class OperatorRequestService implements IOperatorService{
 			ioperatorService=mkHongkongService;
 			break;
 		}
-		case MConstants.BEECELL_JORDON_ORANGE_OPERATOR_ID:
-		case MConstants.BEECELL_JORDON_UMNIAH_OPERATOR_ID:{
-			ioperatorService=mkHongkongService;
-			break;
-		}
 		default:	{
 			ioperatorService=defaultOperatorService	;
 		}

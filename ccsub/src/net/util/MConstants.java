@@ -111,8 +111,6 @@ public interface MConstants {
 	    public static final int TPAY_EGYPT_ORANGE_OPERATOR_ID= 118;
 	    public static final int MK_HONGKONG_SMARTONE_OPERATOR_ID=119;
 	    public static final int MK_HONGKONG_HUTCHISON_OPERATOR_ID=120;
-	    public static final int BEECELL_JORDON_ORANGE_OPERATOR_ID=121;
-	    public static final int BEECELL_JORDON_UMNIAH_OPERATOR_ID=122;
 	    public static final int TPAY_KSA_ZAIN_OPERATOR_ID=123;
 	    
 	public static final String CMPID="cmpid";
