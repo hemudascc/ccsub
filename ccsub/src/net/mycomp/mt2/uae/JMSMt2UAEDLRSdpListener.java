@@ -49,7 +49,17 @@ public class JMSMt2UAEDLRSdpListener implements MessageListener {
 			logger.info("mt2UAEDeliveryNotification::::: "+mt2uaeDeliveryNotification);
 			cgToken = new CGToken(Objects.toString(redisCacheService.getObjectCacheValue(Mt2UAEConstant.MT2_UAE_MSISDN_TOKEN_CAHCHE_PREFIX+mt2uaeDeliveryNotification.getMsisdn())));
 			mt2uaeDeliveryNotification.setToken(cgToken.getCGToken());
-			mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(mt2uaeDeliveryNotification.getOperator().equals("Etisalat")?88:89);
+			//mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(mt2uaeDeliveryNotification.getOperator().equals("Etisalat")?88:89);
+			if(Objects.isNull(mt2UAEServiceConfig)) {
+				if("Du".equalsIgnoreCase(mt2uaeDeliveryNotification.getOperator())) {
+					mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(89);
+				}else if("Etisalat".equalsIgnoreCase(mt2uaeDeliveryNotification.getOperator())){
+					mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(88);
+				}else {
+					mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(90);
+				}
+			}
+			
 			Service service = MData.mapServiceIdToService.get(mt2UAEServiceConfig.getServiceId());
 			liveReport = new LiveReport(service.getOpId(), new Timestamp(System.currentTimeMillis()), 
 					cgToken.getCampaignId(),mt2UAEServiceConfig.getServiceId(),mt2UAEServiceConfig.getProductId()); 
@@ -64,7 +74,7 @@ public class JMSMt2UAEDLRSdpListener implements MessageListener {
 				liveReport.setConversionCount(1);
 				liveReport.setAmount(MUtility.toDouble(mt2uaeDeliveryNotification.getPrice().toString(), mt2UAEServiceConfig.getPricePoint()));
 				liveReport.setNoOfDays(MUtility.toInt(mt2uaeDeliveryNotification.getValidity().toString(),0));
-			}else if(mt2uaeDeliveryNotification.getSdpStatus().equals("Success") && cgToken.getCampaignId()<=0){
+			}else if(mt2uaeDeliveryNotification.getSdpStatus().equals("Success") && cgToken.getCampaignId()<0){
 				//renew
 				liveReport.setAction(MConstants.RENEW);
 				liveReport.setRenewalCount(1);

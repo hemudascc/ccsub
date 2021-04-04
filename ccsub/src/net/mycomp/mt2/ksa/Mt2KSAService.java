@@ -1,26 +1,11 @@
 package net.mycomp.mt2.ksa;
 
 import java.sql.Timestamp;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
-
-import net.common.service.IDaoService;
-import net.common.service.SubscriberRegService;
-import net.jpa.repository.JPAMt2KSAServiceConfig;
-import net.jpa.repository.JPASubscriberReg;
-import net.persist.bean.LiveReport;
-import net.persist.bean.SubscriberReg;
-import net.persist.bean.VWServiceCampaignDetail;
-import net.process.bean.AdNetworkRequestBean;
-import net.process.bean.CGToken;
-import net.process.bean.DeactivationResponse;
-import net.process.request.AbstractOperatorService;
-import net.thialand.ThiaConstant;
-import net.util.MConstants;
-import net.util.MData;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +13,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import net.common.service.IDaoService;
+import net.common.service.SubscriberRegService;
+import net.jpa.repository.JPAMt2KSAServiceConfig;
+import net.jpa.repository.JPASubscriberReg;
+import net.persist.bean.LiveReport;
+import net.persist.bean.SubscriberReg;
+import net.process.bean.AdNetworkRequestBean;
+import net.process.bean.DeactivationResponse;
+import net.process.request.AbstractOperatorService;
+import net.util.MConstants;
 
 @Service("mt2KSAService")
 public class Mt2KSAService  extends AbstractOperatorService {
@@ -86,15 +82,26 @@ public class Mt2KSAService  extends AbstractOperatorService {
 	@Override
 	public boolean processBilling(ModelAndView modelAndView,
 			AdNetworkRequestBean adNetworkRequestBean) {
+		Mt2KSAServiceConfig mt2KSAServiceConfig =null;
+		String cgURL=null;
 		try{
-			Mt2KSAServiceConfig mt2KSAServiceConfig=
+			 mt2KSAServiceConfig=
 					Mt2KSAConstant.mapServiceIdToMt2KSAServiceConfig
 			.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
 			
-			modelAndView.addObject("mt2KSAServiceConfig",mt2KSAServiceConfig);
-			modelAndView.addObject("token",adNetworkRequestBean.adnetworkToken.getTokenToCg());
-			modelAndView.setViewName("mt2ksa/msisdn_missing");
+			/*
+			 * modelAndView.addObject("mt2KSAServiceConfig",mt2KSAServiceConfig);
+			 * modelAndView.addObject("token",adNetworkRequestBean.adnetworkToken.
+			 * getTokenToCg()); modelAndView.setViewName("mt2ksa/msisdn_missing");
+			 * adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_CG);
+			 */
+			if(Objects.nonNull(mt2KSAServiceConfig)) {
+				cgURL = mt2KSAServiceConfig.getCgURL().replaceAll("<token>", 
+						adNetworkRequestBean.adnetworkToken.getTokenToCg());
+			}
+			
 			adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_CG);
+			modelAndView.setView(new RedirectView(cgURL));
 			
 		}catch(Exception ex){
 			logger.error("Exception    ",ex);

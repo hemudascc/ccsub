@@ -6,7 +6,7 @@
 <meta charset="ISO-8859-1">
 <title>Terms and Conditions</title>
 </head>
-<body style="text-align:center">
+<body style="text-align:center;padding: 5%;">
 <h3>Terms and Conditions</h3>
 <h4>PlayIt</h4>
 	<ol style="text-align: left;">

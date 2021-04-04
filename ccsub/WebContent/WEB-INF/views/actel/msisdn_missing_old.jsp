@@ -51,6 +51,18 @@ function changeLang(lang){
 			<div style="text-align:right;padding-top:10px;font-weight: bold">
 			<a href="#" onclick="changeLang(0)">ENG</a> <a href="#" onclick="changeLang(1)">عربى</a>						
 			</div>
+			
+		  <c:if test="${l==0}">	
+			<div style="text-align:center;padding-top:10px;font-weight: bold">			
+			Free for 1 day then AED ${actelServiceConfig.price}/${actelServiceConfig.validityDesc}, VAT Included	            	
+			</div>
+			</c:if>
+			 <c:if test="${l==1}">	
+			<div style="text-align:center;padding-top:10px;font-weight: bold" dir="rtl">			
+			مجانًا لمدة يوم واحد ثم 11.0 درهمًا إماراتيًا / أسبوعيًا ، شاملة ضريبة القيمة المضافة	            	
+			</div>
+			</c:if>
+			
 			</div>
 			</header>
 			<section>
@@ -79,95 +91,76 @@ function changeLang(lang){
 				<input type="hidden"  name="token" value="${token}"/>
 				<input type="hidden"  name="l" value="${l}"/>
 				<br/><br/>
+				   <c:if test="${l==0}">
+			  <div style="text-align:center;" >
+				 Free for 1 day then AED ${actelServiceConfig.price}/${actelServiceConfig.validityDesc}, VAT Included		
+				</div>
+				</c:if>
+				
+				 <c:if test="${l==1}">
+			  <div style="text-align:center;" dir="rtl">
+				مجانًا لمدة يوم واحد ثم 11.0 درهمًا إماراتيًا / أسبوعيًا ، شاملة ضريبة القيمة المضافة		
+				</div>
+				</c:if>
+				
 				<input type="submit"  class="button" style="font-size: 15px;" value="${l==0?'Subscribe':'الإشتراك'}"/><br/><br/>
 				<input type="submit" class="button" style="font-size: 15px;" onclick="return  exit();" value="${l==0?'Exit':'خروج'}"/>
 			 </form>
 			</div> 
 			
-				<div class="terms-condition">
-		<p>
 			<c:if test="${l==0}">
-					<b>Terms and Conditions:</b>
-			</c:if>
-			<c:if test="${l==1}">
-					<b  dir="rtl">الأحكام والشروط</b>
-			</c:if>
-		</p>
-		<p>
-			<b>-</b>
-			<c:if test="${l==0}">
-			After 1 day free trial, you will be charged AED 
-			${actelServiceConfig.price}/${actelServiceConfig.validityDesc} automatically.
-			</c:if>
-			<c:if test="${l==1}">
-				<span dir="rtl">
-				بعد يوم واحد من الإصدار التجريبي المجاني ، ستتم محاسبتك تلقائيًا على ${actelServiceConfig.price} / 
-				<c:if test="${actelServiceConfig.validityDesc=='daily'}">يوم</c:if>
-				<c:if test="${actelServiceConfig.validityDesc=='Weekly'}">أسبوع</c:if> درهم إماراتي.
-				</span>
-			</c:if>
-		</p>
-			<p>
-			<b>-</b>
-			<c:if test="${l==0}">
-				<span>No commitment you can cancel anytime by sending
-					${actelServiceConfig.unsubKey} to
-					${actelServiceConfig.shortCode}</span>
-			</c:if>
-			<c:if test="${l==1}">
-				<span dir="rtl"> لا يوجد التزام يمكنك إلغاؤه في أي وقت بإرسال
-					${actelServiceConfig.unsubKey} إلى
-					${actelServiceConfig.shortCode}</span>
-			</c:if>
-		</p>
-		
-			<p>
-			<c:if test="${l==0}">
-				<b>-</b>
-				<span>For support please contact etisalatnoc@altruistindia.com</span>
-			</c:if>
-			<c:if test="${l==1}">
-				<span dir="rtl"> للحصول على الدعم ، يرجى الاتصال بـ
-					etisalatnoc@altruistindia.com </span>
-			</c:if>
-		</p>
-		
-		<p>
-			<b>-</b>
-			<c:if test="${l==0}">
-				<span > Free trial applicable only for first time subscriber.</span>
-			</c:if>
-			<c:if test="${l==1}">
-			<span dir="rtl">
-			نسخة تجريبية مجانية قابلة للتطبيق فقط للمشترك لأول مرة.
-			</span>
-			</c:if>
-		</p>
-		<p>
-			<b>-</b>
-			<c:if test="${l==0}">
-				<span>Enjoy your Free trial until today 23:59 hours</span>
-			</c:if>
-			<c:if test="${l==1}">
-			<span dir="rtl">
-			استمتع بتجربتك المجانية حتى اليوم الساعة 23:59
-			</span>
-			</c:if>
-		</p>
-		<p>
-			<b>-</b>
-			<c:if test="${l==0}">
-				<span>For complete T's &amp;C's 
-				<a href="${pageContext.request.contextPath}/cnt/actel/tc?token=${token}&l=${l}">click here</a>
-			</c:if>
-			<c:if test="${l==1}">
-				<span dir="rtl"> للحصول على T's &amp;C's كاملة 
-				<a href="${pageContext.request.contextPath}/cnt/actel/tc?token=${token}&l=${l}">انقر هنا</a>
-				</span>
-			</c:if>
-		</p>
-	</div>
-			
+				<div style="text-align:center;font-weight:bold;">
+				By clicking on Subscribe, you agree to the below terms and conditions:
+				</div>
+
+				<div style="text-align:center;">
+				• You will start the paid subscription automatically after the free trial period.	
+				</div>
+				<div style="text-align:center;">
+				• No commitment. You can cancel anytime by sending ${actelServiceConfig.unsubKey} to ${actelServiceConfig.shortCode}
+				
+				</div>
+				<div style="text-align:center;">
+				• The Free Trial is valid only for new subscribers	
+				</div>
+				<div style="text-align:center;">
+				• For support, please contact etisalatnoc@altruistindia.com or 00971044204520
+				</div>
+				<div style="text-align:center;">
+				• For full T&C, please click on this link<a href="${pageContext.request.contextPath}/cnt/actel/tc?token=${token}&l=${l}">T&C</a>
+				</div>
+				
+				</c:if>
+				
+					<c:if test="${l==1}">
+								
+				<div style="text-align:center;font-weight:bold;" dir="rtl">
+			من خلال الضغط على زر الإشتراك، تجري الموافقة على هذه الأحكام والشروط:
+				</div>
+
+				<div style="text-align:center;" dir="rtl">
+				• سيبدأ الاشتراك المدفوع بعد انتهاء الفترة المجانية تلقائيا	
+				</div>
+				<div style="text-align:center;" dir="rtl">
+				•	لا إلتزام، يمكنك إلغاء اشتراكك في أي وقت بإرسال  ${actelServiceConfig.unsubKey} إلى 1111	
+				</div>
+				<div style="text-align:center;" dir="rtl">
+				•	التجربة المجانية صالحة فقط للمشتركين الجدد.	
+				</div>
+				<div style="text-align:center;" dir="rtl">
+				•	للحصول على المساعدة, الرجاء الإتصال بنا على etisalatnoc@altruistindia.com أو 00971044204520
+				</div>
+				<div style="text-align:center;" dir="rtl">
+				• للمزيد من المعلومات، اضغط على هذا <a href="${pageContext.request.contextPath}/cnt/actel/tc?token=${token}&l=${l}"> الرابط </a>
+				
+				
+				</div>
+				
+				
+				</c:if>
+
+				
+				
 			</div>
 			</section>
  </body>

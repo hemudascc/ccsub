@@ -1,4 +1,4 @@
-package net.mycomp.mt2.uae;
+package net.mycomp.mt2.ksa;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -16,6 +16,7 @@ import net.common.service.LiveReportFactoryService;
 import net.common.service.RedisCacheService;
 import net.jpa.repository.JPAAdnetworkToken;
 import net.jpa.repository.JPASubscriberReg;
+import net.mycomp.mt2.uae.Mt2UAEConstant;
 import net.persist.bean.AdnetworkToken;
 import net.persist.bean.LiveReport;
 import net.persist.bean.Service;
@@ -25,13 +26,9 @@ import net.process.bean.CGToken;
 import net.util.MConstants;
 import net.util.MData;
 
-public class JMSMt2UAENotificationSdpListener implements MessageListener {
+public class JMSMt2KSANotificationSdpListener implements MessageListener {
 
-	private static final Logger logger = Logger
-			.getLogger(JMSMt2UAENotificationSdpListener.class);
-
-
-
+	private static final Logger logger = Logger.getLogger(JMSMt2KSANotificationSdpListener.class);
 	@Autowired
 	private IDaoService daoService;
 
@@ -49,34 +46,37 @@ public class JMSMt2UAENotificationSdpListener implements MessageListener {
 	@Override
 	public void onMessage(Message m) {
 
-		Mt2UAENotificationSdp mt2UAENotification = null;
+		Mt2KSANotificationSdp mt2ksaNotificationSdp = null;
 		LiveReport liveReport = null;
 		boolean update = false;
 		long time = System.currentTimeMillis();
 		CGToken cgToken=new CGToken("");
-		Mt2UAEServiceConfig mt2UAEServiceConfig=null;
+		Mt2KSAServiceConfig mt2ksaServiceConfig =null;
 		List<SubscriberReg> subscriberRegs;
 		try {
-
 			ObjectMessage objectMessage = (ObjectMessage) m;
-			mt2UAENotification = (Mt2UAENotificationSdp) objectMessage.getObject();
-			logger.info("mt2UAENotification::::: "+mt2UAENotification);
-
-			String[] array = mt2UAENotification.getData().split(",");
+			mt2ksaNotificationSdp = (Mt2KSANotificationSdp) objectMessage.getObject(); 
+			logger.debug("received notification ="+mt2ksaNotificationSdp);
+			String[] array = mt2ksaNotificationSdp.getData().split(",");
 			if("S".equals(array[0])) {
-				if("Du".equalsIgnoreCase(mt2UAENotification.getOperator())) {
-					cgToken= new CGToken(Objects.toString(redisCacheService.getObjectCacheValue(Mt2UAEConstant.MT2_UAE_TOKEN_TRACKINGID_PREFIX+mt2UAENotification.getTrackingId())));
-				}else {
-					cgToken= new CGToken(Objects.toString(redisCacheService.getObjectCacheValue(Mt2UAEConstant.MT2_UAE_MSISDN_TOKEN_CAHCHE_PREFIX+mt2UAENotification.getMsisdn())));
-				}
-				mt2UAENotification.setAction(MConstants.ACT);
-				mt2UAENotification.setSdpServiceId(array[1]);
-				mt2UAENotification.setReferenceId(array[2]);
-				mt2UAENotification.setToken(cgToken.getCGToken());
-				redisCacheService.putObjectCacheValueByEvictionDay(Mt2UAEConstant.MT2_UAE_MSISDN_TOKEN_CAHCHE_PREFIX+mt2UAENotification.getMsisdn(), cgToken.getCGToken(), 1);
+				/*
+				 * if("".equalsIgnoreCase(mt2ksaNotificationSdp.getOperator())) { cgToken= new
+				 * CGToken(Objects.toString(redisCacheService.getObjectCacheValue(Mt2UAEConstant
+				 * .MT2_UAE_TOKEN_TRACKINGID_PREFIX+mt2UAENotification.getTrackingId()))); }else
+				 * { cgToken= new
+				 * CGToken(Objects.toString(redisCacheService.getObjectCacheValue(Mt2UAEConstant
+				 * .MT2_UAE_MSISDN_TOKEN_CAHCHE_PREFIX+mt2UAENotification.getMsisdn()))); }
+				 */
+
+				//TODO need to fetch token here 
+				mt2ksaNotificationSdp.setAction(MConstants.ACT);
+				mt2ksaNotificationSdp.setSdpServiceId(array[1]);
+				mt2ksaNotificationSdp.setReferenceId(array[2]);
+				mt2ksaNotificationSdp.setToken(cgToken.getCGToken());
+				redisCacheService.putObjectCacheValueByEvictionDay(Mt2UAEConstant.MT2_UAE_MSISDN_TOKEN_CAHCHE_PREFIX+mt2ksaNotificationSdp.getMsisdn(), cgToken.getCGToken(), 1);
 			}else if("U".equals(array[0])){
-				mt2UAENotification.setAction(MConstants.DCT);
-				subscriberRegs = jpaSubscriberReg.findSubscriberRegByMsisdn(mt2UAENotification.getMsisdn());
+				mt2ksaNotificationSdp.setAction(MConstants.DCT);
+				subscriberRegs = jpaSubscriberReg.findSubscriberRegByMsisdn(mt2ksaNotificationSdp.getMsisdn());
 				if(Objects.nonNull(subscriberRegs) && subscriberRegs.size()!=0) {
 					AdnetworkToken adnetworkToken = jpaAdnetworkToken.findEnableAdnetworkToken(subscriberRegs.get(0).getTokenId());
 					if(Objects.nonNull(adnetworkToken)) {
@@ -86,51 +86,49 @@ public class JMSMt2UAENotificationSdpListener implements MessageListener {
 			}else {
 				logger.error("unknown action mt2uae notification");
 			}
-			if(Objects.nonNull(mt2UAENotification.getAction())){
+			if(Objects.nonNull(mt2ksaNotificationSdp.getAction())){
 				VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 				if(Objects.nonNull(vwServiceCampaignDetail)) {
-					mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(vwServiceCampaignDetail.getServiceId());
+					mt2ksaServiceConfig = Mt2KSAConstant.mapServiceIdToMt2KSAServiceConfig.get(vwServiceCampaignDetail.getServiceId());
 				}
-				if(Objects.isNull(mt2UAEServiceConfig)) {
-					if("Du".equalsIgnoreCase(mt2UAENotification.getOperator())) {
-						mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(89);
-					}else if("Etisalat".equalsIgnoreCase(mt2UAENotification.getOperator())){
-						mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(88);
+				if(Objects.isNull(mt2ksaServiceConfig)) {
+					if("Zain".equalsIgnoreCase(mt2ksaNotificationSdp.getOperator())) {
+						mt2ksaServiceConfig = Mt2KSAConstant.mapServiceIdToMt2KSAServiceConfig.get(81);
 					}else {
-						mt2UAEServiceConfig = Mt2UAEConstant.mapServiceIdToMt2UAEServiceConfig.get(90);
+						mt2ksaServiceConfig = Mt2KSAConstant.mapServiceIdToMt2KSAServiceConfig.get(82);
 					}
 				}
-				Service service = MData.mapServiceIdToService.get(mt2UAEServiceConfig.getServiceId());
+				Service service = MData.mapServiceIdToService.get(mt2ksaServiceConfig.getServiceId());
 				liveReport = new LiveReport(service.getOpId(), new Timestamp(System.currentTimeMillis()),
-						cgToken.getCampaignId(),mt2UAEServiceConfig.getServiceId(),
-						mt2UAEServiceConfig.getProductId()); 
+						cgToken.getCampaignId(),mt2ksaServiceConfig.getServiceId(),
+						20); 
 				liveReport.setTokenId(cgToken.getTokenId());
 				liveReport.setToken(cgToken.getCGToken());
-				liveReport.setMsisdn(mt2UAENotification.getMsisdn());
+				liveReport.setMsisdn(mt2ksaNotificationSdp.getMsisdn());
 				liveReport.setCircleId(0);
-				liveReport.setParam1(mt2UAENotification.getReferenceId());
+				liveReport.setParam1(mt2ksaNotificationSdp.getReferenceId());
 				//liveReport.setMode(MT2UAENotificationMode.getMode(mt2UAENotification.getChannel()));
 				liveReport.setMode("");
-				if(mt2UAENotification.getAction().equals(MConstants.DCT)) {
+				if(mt2ksaNotificationSdp.getAction().equals(MConstants.DCT)) {
 					liveReport.setAction(MConstants.DCT);			
 					liveReport.setDctCount(1);
 				}
 			}
-		} catch (Exception ex) {
-			logger.error("onMessage::::: ", ex);
-		} finally {
+		} catch (Exception e) {
+			logger.error("onMessage::::: ", e);
+		}finally {
 			try {		
-				liveReport.setAction(mt2UAENotification.getAction());			
+				liveReport.setAction(mt2ksaNotificationSdp.getAction());			
 				if(liveReport.getAction()!=null){
 					liveReportFactoryService.process(liveReport);
 				}
 			} catch (Exception ex) {
 				logger.error(" fianlly liveReport:: " + liveReport
-						+ ", : mt2UAENotification:: "
-						+ mt2UAENotification);
+						+ ", : mt2KSANotificationSdp:: "
+						+ mt2ksaNotificationSdp);
 				logger.error("onMessage::::::::::finally " ,ex);
 			} finally {
-				update = daoService.saveObject(mt2UAENotification);
+				update = daoService.saveObject(mt2ksaNotificationSdp);
 			}
 			logger.info("onMessage::::::::::::::::: :: update::live report "
 					+ update + ", total time:: "

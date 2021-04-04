@@ -18,9 +18,11 @@ public interface Mt2KSAConstant {
 			.getLogger(Mt2KSAConstant.class.getName());
 	
 	 public static final String MT2_KSA_MSISDN_TOKEN_CACHE_PREFIX="MT2_KSA_MSISDN_TOKEN_CACHE_PREFIX";
+	 public static final String MT2_KSA_TOKEN_TRACKINGID_PREFIX="MT2_KSA_TOKEN_TRACKINGID_PREFIX";
 	 
 	public static final String SMS_CONTENT_ALERT="SMS_CONTENT_ALERT";
 	public static final String VALIDATE_OTP="VALIDATE_OTP";
+	public static final String MT2_KSA_MSISDN_TOKEN_CAHCHE_PREFIX="MT2_KSA_MSISDN_TOKEN_CAHCHE_PREFIX";
 	 public static final  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	public static final  DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 	

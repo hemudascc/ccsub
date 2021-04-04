@@ -7,18 +7,17 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import net.common.service.IDaoService;
 import net.common.service.LiveReportFactoryService;
 import net.common.service.RedisCacheService;
-import net.jpa.repository.JPASubscriberReg;
 import net.persist.bean.LiveReport;
 import net.persist.bean.Service;
 import net.process.bean.CGToken;
 import net.util.MConstants;
 import net.util.MData;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class JMSMt2KSANotificationListener implements MessageListener {
 
@@ -27,9 +26,6 @@ public class JMSMt2KSANotificationListener implements MessageListener {
 
 	@Autowired
 	private IDaoService daoService;
-	
-	@Autowired
-	private JPASubscriberReg jpaSubscriberReg; 
 	
 	@Autowired
 	private RedisCacheService redisCacheService;

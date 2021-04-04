@@ -126,13 +126,18 @@
 		<class>net.mycomp.worldplay.WorldplayNotification</class>
 		<class>net.mycomp.mt2.ksa.Mt2KSAServiceConfig</class>
 		<class>net.mycomp.mt2.ksa.MT2KSAServiceApiTrans</class>
+		<class>net.mycomp.mt2.ksa.Mt2KSANotificationSdp</class>
+		<class>net.mycomp.mt2.ksa.Mt2KSACGCallbackSdp</class>
+		<class>net.mycomp.mt2.ksa.Mt2KSATracking</class>
+		<class>net.mycomp.mt2.ksa.Mt2KSANotification</class>
+		<class>net.mycomp.mt2.ksa.Mt2KSADeliveryNotificationSdp</class>
+		
 		<class>net.mycomp.mt2.uae.Mt2UAEServiceConfig</class>
 		<class>net.mycomp.mt2.zain.iraq.Mt2ZainIraqServiceConfig</class>
 		<class>net.mycomp.mt2.zain.iraq.MT2ZainIraqServiceApiTrans</class>
 		<class>net.mycomp.mt2.zain.iraq.Mt2ZainIraqNotification</class>
 		<class>net.mycomp.mt2.uae.Mt2UAENotificationSdp</class>
 		<class>net.mycomp.mt2.uae.Mt2UAENotification</class>
-		<class>net.mycomp.mt2.ksa.Mt2KSANotification</class>
 		<class>net.mycomp.mobivate.MobivateSMSTrans</class>
 		<class>net.mycomp.mobivate.MobivateMO</class>
 		<class>net.mycomp.mobivate.MobivateSMSDlr</class>

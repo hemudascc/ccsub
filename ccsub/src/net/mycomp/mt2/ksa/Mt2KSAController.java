@@ -1,8 +1,23 @@
 package net.mycomp.mt2.ksa;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import net.common.service.RedisCacheService;
 import net.common.service.SubscriberRegService;
@@ -14,16 +29,6 @@ import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.CGToken;
 import net.util.MData;
 import net.util.MUtility;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("mt2ksa")
@@ -240,6 +245,138 @@ public class Mt2KSAController {
 	  jmsMt2KSAService.processPinValidation(mt2KSAServiceApiTrans);
 		return "ok";
 		 }
+	
+	
+	
+	@RequestMapping(value="/v2/cgcallback",method = RequestMethod.GET)
+	public ModelAndView cgCallbackSdp(HttpServletRequest request,ModelAndView modelAndView){
+		//token=collectcent&trxid=aaa2086a11f048adb81cabd162e2f4d2
+		Mt2KSACGCallbackSdp mt2ksacgCallback = new Mt2KSACGCallbackSdp(true);
+		Mt2KSAServiceConfig mt2KSAServiceConfig=null;
+		CGToken cgToken=null;
+		try {
+			mt2ksacgCallback.setToken(request.getParameter("token"));
+			mt2ksacgCallback.setTrackingId(request.getParameter("trxid"));
+			mt2ksacgCallback.setQueryStr(request.getQueryString());
+			cgToken = new CGToken(mt2ksacgCallback.getToken());
+			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+			mt2KSAServiceConfig = Mt2KSAConstant.mapServiceIdToMt2KSAServiceConfig.get(vwServiceCampaignDetail.getServiceId());
+			if(Objects.nonNull(mt2KSAServiceConfig)) {
+				modelAndView.addObject("mt2UAEServiceConfig",mt2KSAServiceConfig);
+			}
+		} catch (Exception e) {
+			logger.error("exception cg callback mt2 uae"+e);
+		}finally {
+			jmsMt2KSAService.savemt2ksacgCallbackSdp(mt2ksacgCallback);
+		}
+		modelAndView.setViewName("/mt2uae/final");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/v2/tracking", method = {RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public String tracking(HttpServletRequest request){
+		//token=1234&msisdn6789
+		Mt2KSATracking mt2ksaTracking = new Mt2KSATracking(true);
+		try {	
+			mt2ksaTracking.setToken(request.getParameter("token"));
+			mt2ksaTracking.setMsisdn(request.getParameter("msisdn"));
+			mt2ksaTracking.setQueryStr(request.getQueryString());
+		} catch (Exception e) {
+			logger.error("exception notification mt2 uae"+e);
+		}finally {
+			jmsMt2KSAService.saveMt2KSATrakingSdp(mt2ksaTracking);
+		}
+		return "OK";
+	}
+
+	@RequestMapping(value = "/v2/notification", method = {RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, String> notificationSdp(HttpServletRequest request){
+		//Id=20122212303719741&Data=S,392,87dba3d7-fba1-40f2-9f6b-b9dacb374754&TrackingId=aaa2086a11f048adb81cabd162e2f4d2
+		//&MSISDN=971523051932&ShortCode=9132&Date=20202212&Operator=Du&ValidityDays=0
+		Mt2KSANotificationSdp mt2KSANotification = new Mt2KSANotificationSdp(true);
+		Map<String, String> response = new HashMap<>();
+		response.put("ResponseCode", "Success");
+		response.put("Message", "Subscription info shared successfully");
+		try {	
+			mt2KSANotification.setSdpId(request.getParameter("Id"));
+			mt2KSANotification.setData(request.getParameter("Data"));
+			mt2KSANotification.setTrackingId(request.getParameter("TrackingId"));
+			mt2KSANotification.setMsisdn(request.getParameter("MSISDN"));
+			mt2KSANotification.setShortCode(request.getParameter("ShortCode"));
+			mt2KSANotification.setSdpDate(request.getParameter("Date"));
+			mt2KSANotification.setOperator(request.getParameter("Operator"));
+			mt2KSANotification.setValidity(request.getParameter("ValidityDays"));
+			mt2KSANotification.setQueryStr(request.getQueryString());
+		} catch (Exception e) {
+			logger.error("exception notification mt2 uae"+e);
+		}finally {
+			jmsMt2KSAService.saveMt2KSANotificationSdp(mt2KSANotification);
+		}
+		return response;
+	}
+
+
+	@RequestMapping(value={"/v2/dlr"},method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, String> dlrSdp(@RequestBody List<Mt2KSADeliveryNotificationSdp> dlrs){
+		Map<String, String> response = new HashMap<>();
+		response.put("ResponseCode", "Success");
+		response.put("Message", "Subscription info shared successfully");
+		try{
+			logger.info("dlrs="+dlrs);
+		}catch(Exception  ex){logger.error("Exception" ,ex);}finally{
+			jmsMt2KSAService.saveMt2KSADlrSdp(dlrs);
+		}
+		return response;
+	}
+
+	//http://192.241.253.234/ccsub/cnt/mt2ksa/check-by-refrenceid?op=du&id=<refrenceid>
+	@RequestMapping(value={"check-by-refrenceid"},method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, String> subInfoByReferenceId(@RequestParam("id") String id,@RequestParam("op") String op){
+		Map<String, String> response = new HashMap<>();
+		response.put("subid", "");
+		response.put("status", "");
+		response.put("opid", "");
+		SubscriberReg subscriberReg=null;
+		try {
+			List<SubscriberReg> subscriberRegs = jpaSubscriberReg.findSubscriberRegByParam1(id);
+			if(Objects.nonNull(subscriberRegs) && subscriberRegs.size()>0) {
+				subscriberReg = subscriberRegs.get(0);
+				response.put("subid", subscriberReg.getSubscriberId().toString());
+				response.put("status", subscriberReg.getStatus()==1?"ACTIVE":"INACTIVE");
+				response.put("opid", op);
+			}
+		} catch (Exception e) {
+			logger.error("error while fetching subs details by reference id");
+		}
+		return response;
+	}
+	//http://192.241.253.234/ccsub/cnt/mt2ksa/check-by-msisdn?op=zani&msisdn=<msisdn>
+	@RequestMapping(value={"check-by-msisdn"},method={RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public Map<String, String> subInfoByMsisdn(@RequestParam("msisdn") String msisdn, @RequestParam("op") String op){
+		Map<String, String> response = new HashMap<>();
+		response.put("subid", "");
+		response.put("status", "");
+		response.put("opid", "");
+		SubscriberReg subscriberReg=null;
+		try {
+			List<SubscriberReg> subscriberRegs = jpaSubscriberReg.findSubscriberRegByMsisdn(msisdn);
+			if(Objects.nonNull(subscriberRegs) && subscriberRegs.size()>0) {
+				subscriberReg = subscriberRegs.get(0);
+				response.put("subid", subscriberReg.getSubscriberId().toString());
+				response.put("status", subscriberReg.getStatus()==1?"ACTIVE":"INACTIVE");
+				response.put("opid", op);
+			}
+		} catch (Exception e) {
+			logger.error("error while fetching subs details by reference id");
+		}
+		return response;
+	}
+	
 	
 	
 }

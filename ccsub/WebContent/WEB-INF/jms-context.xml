@@ -936,6 +936,57 @@
 	</bean>
 	<bean id="mt2KSANotificationListener"
 		class="net.mycomp.mt2.ksa.JMSMt2KSANotificationListener" />
+		
+		
+		
+	<bean id="mt2KSANotificationSdpJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName" value="cc/mt2KSANotificationSdpQueue" />
+		<qualifier value="mt2KSANotificationSdpJMSTemplate" />
+	</bean>
+	
+	<bean id="mt2KSACallbackSdpJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName" value="cc/mt2KSACGCallbackSdpQueue" />
+		<qualifier value="mt2KSACallbackSdpJMSTemplate" />
+	</bean>
+	
+	<bean id="mt2KSADlrJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName" value="cc/mt2KSADLRSdpQueue" />
+		<qualifier value="mt2KSADlrJMSTemplate" />
+	</bean>
+	
+	<bean id="mt2KSATrakingSdpJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName" value="cc/mt2KSATrackingQueue" />
+		<qualifier value="mt2KSATrakingSdpJMSTemplate" />
+	</bean>
+		
+			
+	<bean id="mt2KSANotificationSdpDestination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="cc/mt2KSANotificationSdpQueue?consumer.prefetchSize=3" />
+	</bean>
+	
+	<bean id="mt2KSACGCallbackSdpDestination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="cc/mt2KSACGCallbackSdpQueue?consumer.prefetchSize=3" />
+	</bean>
+	
+	<bean id="mt2KSADLRSdpDestination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="cc/mt2KSADLRSdpQueue?consumer.prefetchSize=3" />
+	</bean>
+	
+	<bean id="mt2KSATrackingDestination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="cc/mt2KSATrackingQueue?consumer.prefetchSize=3" />
+	</bean>
+		
+	<bean id="mt2KSANotificationSdpListener" class="net.mycomp.mt2.ksa.JMSMt2KSANotificationSdpListener" />
+
+	<bean id="mt2KSACGCallbackSdpListener" class="net.mycomp.mt2.ksa.JMSMt2KSACGCallbackSdpListener" />
+	
+	<bean id="mt2KSADLRSdpListener" class="net.mycomp.mt2.ksa.JMSMt2KSADLRSdpListener" />
+	
+	<bean id="mt2KSATrackingListener" class="net.mycomp.mt2.ksa.JMSMt2KSATrackingListener" />
 
 	<!-- MT2 KSA END -->
 
@@ -1344,7 +1395,13 @@
 
 		<jms:listener destination="cc/mt2KSANotificationQueue"
 			ref="mt2KSANotificationListener" method="onMessage" />
-
+			
+			<jms:listener destination="cc/mt2KSANotificationSdpQueue" ref="mt2KSANotificationSdpListener" method="onMessage" />
+		<jms:listener destination="cc/mt2KSACGCallbackSdpQueue" ref="mt2KSACGCallbackSdpListener" method="onMessage" />
+		
+		<jms:listener destination="cc/mt2KSADLRSdpQueue" ref="mt2KSADLRSdpListener" method="onMessage" />
+		<jms:listener destination="cc/mt2KSATrackingQueue" ref="mt2KSATrackingListener" method="onMessage" />
+			
 		<jms:listener
 			destination="cc/mobivateCGCallbackListenerQueue"
 			ref="jmsMobivateCGCallbackListener" method="onMessage" />

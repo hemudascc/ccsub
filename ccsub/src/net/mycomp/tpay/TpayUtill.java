@@ -69,21 +69,27 @@ public class TpayUtill {
     {
         try 
         {
+        	String result = "";
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
             SecretKeySpec secret_key = new SecretKeySpec(privateKey.getBytes(), "HmacSHA256");
             sha256_HMAC.init(secret_key);
             byte[] digest = sha256_HMAC.doFinal(message.getBytes());
-            String result = publicKey + ":" + new BigInteger(1, digest).toString(16);
+            logger.info("digest byte :"+digest);
+            if(publicKey == "oiMMvdeSxsXrMS5iLwmC") {
+             result = publicKey + ":0" + new BigInteger(1, digest).toString(16);
+            }else {
+             result = publicKey + ":" + new BigInteger(1, digest).toString(16);
+            }
             logger.info("DIGEST:"+result);
-            return result;
+            return result;  
         } 
-		
+		   
 		catch(Exception ex) 
 		{
 			throw new RuntimeException(ex);
 		}
     }
-
+ 
 	/*
 	 * public static void main(String args[]) throws Exception {
 	 * 
@@ -96,14 +102,14 @@ public class TpayUtill {
 	 * + TpayConstant.PUBLIC_KEY + ":" + digest); }
 	 */
 	public static void main(String[] args) {
-		System.out.println(CalculateDigest(TpayConstant.PUBLIC_KEY,
-				TpayConstant.WELCOME_MESSAGE_SMS_ARB.replaceAll("<msisdn>", "201558802080")
-				.replaceAll("<lang>", "2")
-				.replaceAll("<price>", "2")
-				.replaceAll("<billing_sequence>", "DAY")
-				.replaceAll("<unsub_keyword>", "STOP GMP")
-				.replaceAll("<shortcode>", "4041")
-				+"201558802080"+"60204",TpayConstant.PRIVATE_KEY));
+//		System.out.println(CalculateDigest(TpayConstant.PUBLIC_KEY,
+//				TpayConstant.WELCOME_MESSAGE_SMS_ARB.replaceAll("<msisdn>", "201558802080")
+//				.replaceAll("<lang>", "2")
+//				.replaceAll("<price>", "2")
+//				.replaceAll("<billing_sequence>", "DAY")
+//				.replaceAll("<unsub_keyword>", "STOP GMP")
+//				.replaceAll("<shortcode>", "4041")
+//				+"201558802080"+"60204",TpayConstant.PRIVATE_KEY));
 	}
 	
 }

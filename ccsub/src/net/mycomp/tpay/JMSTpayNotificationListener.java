@@ -51,7 +51,7 @@ public class JMSTpayNotificationListener implements MessageListener{
 		try {
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			tpayNotification = (TpayNotification)objectMessage.getObject();
-			logger.info("tpayNotification::::: "+tpayNotification);
+			logger.info("tpayNotification::::: "+tpayNotification);  
 			findAction(tpayNotification);
 			cgToken= new CGToken(tpayNotification.getToken());
 			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
@@ -136,8 +136,8 @@ public class JMSTpayNotificationListener implements MessageListener{
 				if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode())) {
 					tpayNotification.setAction(MConstants.ACT);
 				}else {
-					tpayNotification.setAction(MConstants.GRACE);
-				}
+					tpayNotification.setAction(MConstants.GRACE);  
+				}   
 			}else if("RetrailPayment".equalsIgnoreCase(tpayNotification.getBillingAction())){
 				if("PaymentCompletedSuccessfully".equals(tpayNotification.getPaymentTransactionStatusCode()) && subToday) {
 					tpayNotification.setAction(MConstants.ACT);
@@ -169,6 +169,8 @@ public class JMSTpayNotificationListener implements MessageListener{
 				tpayNotification.setToken("-1c-1c252");
 			}else if("GamePadVodaEG".equals(tpayNotification.getProductId())) {
 				tpayNotification.setToken("-1c-1c282");
+			}else if("GogamesZainKSA".equals(tpayNotification.getProductId())) {
+				tpayNotification.setToken("-1c-1c288");
 			}else {
 				tpayNotification.setToken("-1c-1c283");
 			}

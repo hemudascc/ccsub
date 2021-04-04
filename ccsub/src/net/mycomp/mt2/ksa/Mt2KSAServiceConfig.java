@@ -72,6 +72,9 @@ public class Mt2KSAServiceConfig {
 	private String lpImg;
 	@Column(name="alert_sms_template")
 	private String alertSmsTemplate;
+	@Column(name="cg_url")
+	private String cgURL;
+	
 	
 	private Boolean status;
 	
@@ -237,5 +240,12 @@ public class Mt2KSAServiceConfig {
 	public void setAlertSmsTemplate(String alertSmsTemplate) {
 		this.alertSmsTemplate = alertSmsTemplate;
 	}
+	public String getCgURL() {
+		return cgURL;
+	}
+	public void setCgURL(String cgURL) {
+		this.cgURL = cgURL;
+	}
+	
 	
 }
