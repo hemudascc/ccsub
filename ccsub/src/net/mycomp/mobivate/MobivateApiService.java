@@ -51,7 +51,7 @@ public class MobivateApiService {
 			
 			String url=mobivateServiceConfig.getMtBilledUrl()
 					.replaceAll("<originator>",MUtility.urlEncoding(mobivateServiceConfig.getShortcode()))
-					.replaceAll("<msisdn>",MUtility.urlEncoding(msisdn	))
+					.replaceAll("<msisdn>",MUtility.urlEncoding(msisdn))
 					//.replaceAll("<provider>",mobivateServiceConfig.getSortcode())
 					.replaceAll("<text>",MUtility.urlEncoding(msg))
 					.replaceAll("<value>",Objects.toString(

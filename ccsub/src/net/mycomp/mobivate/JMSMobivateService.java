@@ -93,7 +93,7 @@ public class JMSMobivateService {
 				@Override
 				public Message createMessage(Session session) throws JMSException {
 					Message message=session.createObjectMessage(mobivateMO);
-					message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 10*1000);
+					message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 10*1000L);
 					return message;
 				}
 			});

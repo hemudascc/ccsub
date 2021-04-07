@@ -62,7 +62,7 @@ public class JMSMobivateCGCallbackListener implements MessageListener {
 			SubscriberReg subscriberReg=jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(mobivateCGCallback.getUserId(), 
 					vwServiceCampaignDetail.getProductId());
 			 
-			if(mobivateServiceConfig.getCcOpId()==MConstants.MOBIVATE_SOUTH_AFRICA_CELLC_OPERATOR_ID){
+			if(mobivateServiceConfig.getCcOpId()==MConstants.MOBIVATE_SOUTH_AFRICA_CELLC_OPERATOR_ID || mobivateServiceConfig.getCcOpId()==MConstants.MOBIVATE_SOUTH_AFRICA_MTN_OPERATOR_ID){
 			if(mobivateCGCallback.getCgStatus().equalsIgnoreCase(MobivateConstant.SUCCESS)){
 				String msg=mobivateServiceConfig.getWelcomeMessageTemplate();				
 				mobivateApiService.sendBilledMessage(mobivateCGCallback.getUserId(),
