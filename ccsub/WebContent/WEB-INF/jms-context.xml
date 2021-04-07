@@ -1203,7 +1203,40 @@
 	<bean id="onMobileChargingNotificationListener"
 		class="net.mycomp.onmobile.JMSOnMobileChargingNotificationListener" />
    <!-- OnMobile End -->
-
+		<!-- bc Joron Start -->
+	<bean id="bcJordonMtJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/bcjordonMTMessageQueue" />
+		<qualifier value="bcJordonMtJMSTemplate" />
+	</bean>
+	<bean id="bcJordonMtMessageDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/bcjordonMTMessageQueue?consumer.prefetchSize=10" />
+	</bean>
+	<bean id="bcJordonMTMessageListener"
+		class="net.mycomp.beecel.jordon.JMSJordonMTListener" />
+		
+				
+	<bean id="bcJordonNotificationJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/bcjordonNotificationQueue" />
+		<qualifier value="bcJordonNotificationJMSTemplate" />
+	</bean>
+	<bean id="bcJordonNotificationDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/bcjordonNotificationQueue?consumer.prefetchSize=10" />
+	</bean>
+	<bean id="bcJordonNotificationListener"
+		class="net.mycomp.beecel.jordon.JMSJordonNotificationListener" />	
+		<!-- bc Joron End -->
 	<jms:listener-container container-type="default"
 		connection-factory="cachedConnectionFactory" acknowledge="auto"
 		concurrency="5-340">
@@ -1435,6 +1468,14 @@
 			ref="hongkongMTMessageListener" method="onMessage" />
 
 	<!-- mk_hongkong end-->	
+	<!-- bc Joron Start -->
+	 	<jms:listener destination="cc/bcjordonMTMessageQueue"
+			ref="bcJordonMTMessageListener" method="onMessage" />
+
+		<jms:listener destination="cc/bcjordonNotificationQueue"
+			ref="bcJordonNotificationListener" method="onMessage" />
+
+	<!-- bc Joron end-->	
 	</jms:listener-container>
 
 </beans>

@@ -129,7 +129,7 @@ public class EtisalatController {
 				 etisalatServiceConfig=EtisalatConstant.mapServiceIdToEtisalatServiceConfig.get(vwServiceCampaignDetail.getServiceId());
 			}
 			
-			if(etisalatServiceConfig!=null){
+			if(etisalatServiceConfig!=null){  
 				request.getSession().setAttribute("msisdn", request.getParameter("msisdn"));	
 				request.getSession().setMaxInactiveInterval(12000);	
 				portalUrl=etisalatServiceConfig.getPortalUrl()+"&msisdn="+request.getParameter("msisdn");
@@ -152,7 +152,7 @@ public class EtisalatController {
 			if(portalUrl==null){
 				portalUrl=defaultPortalUrl;
 			}
-			etisalatCGCallback.setRedirectToUrl(portalUrl);
+			etisalatCGCallback.setRedirectToUrl(portalUrl);  
 			jmsService.saveObject(etisalatCGCallback);
 		}		
 		modelAndView.setView(new RedirectView(portalUrl));

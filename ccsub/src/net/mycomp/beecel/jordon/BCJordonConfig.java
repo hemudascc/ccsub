@@ -30,6 +30,8 @@ public class BCJordonConfig {
 	private String senderName;
 	@Column(name="op_code")
 	private String opCode;
+	@Column(name="operator_id")
+	private Integer operatorId;
 	@Column(name="operator_name")
 	private String operatorName;
 	@Column(name="pub")
@@ -44,12 +46,12 @@ public class BCJordonConfig {
 	private Double pricePoint;	
 	@Column(name="product_id")
 	private Integer productId;
-	@Column(name="mt_billing_message_template")
-	private String mtBillingMessageTemplate;
-	@Column(name="mt_welcome_message_template")
-	private String mtWelcomeMessageTemplate;	
-	@Column(name="mt_renewal_message_template")
-	private String mtRenewalMessageTemplate;
+//	@Column(name="mt_billing_message_template")
+//	private String mtBillingMessageTemplate;
+//	@Column(name="mt_welcome_message_template")
+//	private String mtWelcomeMessageTemplate;	
+//	@Column(name="mt_renewal_message_template")
+//	private String mtRenewalMessageTemplate;
 	@Column(name="lp_pages")
 	private String lpPages;	
 	@Column(name="lp_images")
@@ -105,6 +107,12 @@ public class BCJordonConfig {
 	public void setOpCode(String opCode) {
 		this.opCode = opCode;
 	}
+	public Integer getOperatorId() {
+		return operatorId;
+	}
+	public void setOperatorId(Integer operatorId) {
+		this.operatorId = operatorId;
+	}
 	public String getOperatorName() {
 		return operatorName;
 	}
@@ -147,24 +155,24 @@ public class BCJordonConfig {
 	public void setProductId(Integer productId) {
 		this.productId = productId;
 	}
-	public String getMtBillingMessageTemplate() {
-		return mtBillingMessageTemplate;
-	}
-	public void setMtBillingMessageTemplate(String mtBillingMessageTemplate) {
-		this.mtBillingMessageTemplate = mtBillingMessageTemplate;
-	}
-	public String getMtWelcomeMessageTemplate() {
-		return mtWelcomeMessageTemplate;
-	}
-	public void setMtWelcomeMessageTemplate(String mtWelcomeMessageTemplate) {
-		this.mtWelcomeMessageTemplate = mtWelcomeMessageTemplate;
-	}
-	public String getMtRenewalMessageTemplate() {
-		return mtRenewalMessageTemplate;
-	}
-	public void setMtRenewalMessageTemplate(String mtRenewalMessageTemplate) {
-		this.mtRenewalMessageTemplate = mtRenewalMessageTemplate;
-	}
+//	public String getMtBillingMessageTemplate() {
+//		return mtBillingMessageTemplate;
+//	}
+//	public void setMtBillingMessageTemplate(String mtBillingMessageTemplate) {
+//		this.mtBillingMessageTemplate = mtBillingMessageTemplate;
+//	}
+//	public String getMtWelcomeMessageTemplate() {
+//		return mtWelcomeMessageTemplate;
+//	}
+//	public void setMtWelcomeMessageTemplate(String mtWelcomeMessageTemplate) {
+//		this.mtWelcomeMessageTemplate = mtWelcomeMessageTemplate;
+//	}
+//	public String getMtRenewalMessageTemplate() {
+//		return mtRenewalMessageTemplate;
+//	}
+//	public void setMtRenewalMessageTemplate(String mtRenewalMessageTemplate) {
+//		this.mtRenewalMessageTemplate = mtRenewalMessageTemplate;
+//	}
 	public String getLpPages() {
 		return lpPages;
 	}
@@ -189,12 +197,9 @@ public class BCJordonConfig {
 				+ ", serviceId=" + serviceId + ", countryCode=" + countryCode + ", senderName=" + senderName
 				+ ", opCode=" + opCode + ", operatorName=" + operatorName + ", pub=" + pub + ", opServiceName="
 				+ opServiceName + ", portalUrl=" + portalUrl + ", price=" + price + ", pricePoint=" + pricePoint
-				+ ", productId=" + productId + ", mtBillingMessageTemplate=" + mtBillingMessageTemplate
-				+ ", mtWelcomeMessageTemplate=" + mtWelcomeMessageTemplate + ", mtRenewalMessageTemplate="
-				+ mtRenewalMessageTemplate + ", lpPages=" + lpPages + ", lpImages=" + lpImages + ", status=" + status
+				+ ", productId=" + productId + ", lpPages=" + lpPages + ", lpImages=" + lpImages + ", status=" + status
 				+ "]";
 	}
 
-	
 	
 }

@@ -36,6 +36,7 @@ $(document).ready(function() {
 	<form id="frm" action="${pageContext.request.contextPath}/cnt/beecell/tocg" >
 	<input id="token" name="token" value="${token}" type="hidden">
 	<input id="cid" name="cid" value="${cid}" type="hidden">
+	<input id="tokenToCg" name="tokenToCg" value="${tokenToCg}" type="hidden">
 	<!-- <input id="token" value="1234" type="hidden">
 	<input id="accessToken" value="C415681b9-894c-4ff8-9ce4-0ccdcdd22a18" type="hidden"> -->
 	<!-- Hidden Parameters End -->

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import net.common.service.IDaoService;
 import net.common.service.RedisCacheService;
@@ -21,6 +22,7 @@ import net.persist.bean.AdnetworkOperatorConfig;
 import net.persist.bean.Operator;
 import net.persist.bean.Product;
 import net.persist.bean.SubscriberReg;
+import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.AdNetworkRequestBean;
 import net.process.request.AbstractOperatorService;
 import net.util.MConstants;
@@ -47,8 +49,10 @@ public class BCJordonService extends AbstractOperatorService {
 	@Autowired
 	private IDaoService daoService;
 	
+	
 	 @Value("${jdbc.db.name}")
 		private String dbName;
+	 
 	 
 //	private final String msisdnForwardingUrl;
 	private final String heCallBackUrl;
@@ -109,24 +113,46 @@ public class BCJordonService extends AbstractOperatorService {
 	public boolean processBilling(ModelAndView modelAndView,
 			AdNetworkRequestBean adNetworkRequestBean) {
 		try{
-		BCJordonConfig bcJordonConfig=
-				BCJordonConstant.mapServiceIdToBCJordonConfig
+			logger.info("adNetworkRequestBean :  "+adNetworkRequestBean);
+
+//			String token=request.getParameter("token");
+//			String tokenToCg=request.getParameter("tokenToCg");
+//			BCJordonCGToken bcJordonCGToken=new BCJordonCGToken(token);
+//			VWServiceCampaignDetail vwServiceCampaignDetail=MData
+//					.mapCamapignIdToVWServiceCampaignDetail.get(adNetworkRequestBean.VWServiceCampaignDetail.getCampaignId());
+//			logger.info("token: "+token+" tokenToCg "+tokenToCg);
+		BCJordonConfig bcJordonConfig=BCJordonConstant
+				.mapServiceIdToBCJordonConfig   
 				.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
-		
-		BCJordonCGToken bcJordonCGToken=new BCJordonCGToken(
-				adNetworkRequestBean.adnetworkToken.getTokenId(),
-				adNetworkRequestBean.vwserviceCampaignDetail.getCampaignId());
-		
-		logger.info("bcJordonConfig: "+bcJordonConfig);
-		modelAndView.addObject("token",bcJordonCGToken.getCGToken());
-		modelAndView.addObject("bcJordonConfig",bcJordonConfig);				
-		//modelAndView.setViewName("bcjordon/lp");
-		modelAndView.setViewName(bcJordonConfig.getLpPages());
-		
-		}catch(Exception ex){
-			logger.error("Exception    ",ex);
+			String url=BCJordonConstant.CG_URL.replaceAll("<cid>", adNetworkRequestBean.adnetworkToken.getTokenToCg()).replaceAll("<t>",bcJordonConfig.getT() ).replaceAll("<pub>",bcJordonConfig.getPub());	
+			logger.info("toMo:: url: "+url);
+			modelAndView.setView(new RedirectView(url));
+			}catch(Exception ex){
+			logger.error("Exception    ",ex);  
 		}
-		return true;	    	
+		return true;	
+			
+			
+			//		BCJordonConfig bcJordonConfig=
+//				BCJordonConstant.mapServiceIdToBCJordonConfig
+//				.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
+//		
+//		BCJordonCGToken bcJordonCGToken=new BCJordonCGToken(
+//				adNetworkRequestBean.adnetworkToken.getTokenId(),
+//				adNetworkRequestBean.vwserviceCampaignDetail.getCampaignId());
+//		
+//		logger.info("bcJordonConfig: "+bcJordonConfig);
+//		modelAndView.addObject("token",bcJordonCGToken.getCGToken());
+//		modelAndView.addObject("bcJordonConfig",bcJordonConfig);
+//		modelAndView.addObject("tokenToCg",adNetworkRequestBean.adnetworkToken.getTokenToCg());
+//		
+//		//modelAndView.setViewName("bcjordon/lp");
+//		modelAndView.setViewName(bcJordonConfig.getLpPages());
+//		
+//		}catch(Exception ex){
+//			logger.error("Exception    ",ex);
+//		}
+//		return true;	    	
 		 
 	}
 	
@@ -141,8 +167,16 @@ public class BCJordonService extends AbstractOperatorService {
 	
 	@Override
 	public boolean checkSub(Integer productId,Integer opid,String msisdn) {
-		
-	
+		List<SubscriberReg> list=jpaSubscriberReg.findSubscriberRegByMsisdn(msisdn);
+		logger.info("checkSub:::::::::: list of subscriberreg "+list);
+		SubscriberReg subscriberReg=null;
+		if(list!=null&&list.size()>0){
+			subscriberReg=list.get(0);
+		}
+		logger.info("checkSub:::::::::: subscriberReg: "+subscriberReg);
+		if(subscriberReg!=null&&subscriberReg.getStatus()==MConstants.SUBSCRIBED){
+			return true;
+		}		
 		return false;
 	}
 	

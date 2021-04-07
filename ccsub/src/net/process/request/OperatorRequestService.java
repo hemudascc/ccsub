@@ -313,6 +313,7 @@ public class OperatorRequestService implements IOperatorService{
 			ioperatorService=ooredooOmanService;
 			break;
 		}
+		case MConstants.TPAY_KSA_ZAIN_OPERATOR_ID:
 		case MConstants.TPAY_EGYPT_WE_OPERATOR_ID:
 		case MConstants.TPAY_EGYPT_ETISALAT_OPERATOR_ID:
 		case MConstants.TPAY_EGYPT_VODAFONE_OPERATOR_ID:
@@ -323,7 +324,7 @@ public class OperatorRequestService implements IOperatorService{
 		}
 		case MConstants.MK_HONGKONG_HUTCHISON_OPERATOR_ID:
 		case MConstants.MK_HONGKONG_SMARTONE_OPERATOR_ID:{
-			ioperatorService=mkHongkongService;
+			ioperatorService=mkHongkongService;  
 			break;
 		}	 
 		case MConstants.BC_JORDON_JORDON_ORANGE_OPERATOR_ID:
