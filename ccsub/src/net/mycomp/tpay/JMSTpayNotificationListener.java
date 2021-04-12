@@ -171,6 +171,8 @@ public class JMSTpayNotificationListener implements MessageListener{
 				tpayNotification.setToken("-1c-1c282");
 			}else if("GogamesZainKSA".equals(tpayNotification.getProductId())) {
 				tpayNotification.setToken("-1c-1c288");
+			}else if("GogamesZainKSAWeekly".equals(tpayNotification.getProductId())) {
+				tpayNotification.setToken("-1c-1c289");
 			}else {
 				tpayNotification.setToken("-1c-1c283");
 			}

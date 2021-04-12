@@ -245,12 +245,14 @@ public class TpayApiService {
 			message =	TpayConstant.CONTENT_MESSAGE_SMS_ENG
 						 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
 						 .replaceAll("<msisdn>", msisdn)
-						 .replaceAll("<lang>","1");
+						 .replaceAll("<lang>","1")
+						 .replaceAll("<subid>",msisdn);
 		}else {
 			message = TpayConstant.CONTENT_MESSAGE_SMS_ARB
 					 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
 					 .replaceAll("<msisdn>", msisdn)
-					 .replaceAll("<lang>","2");
+					 .replaceAll("<lang>","2")
+					 .replaceAll("<subid>",msisdn);
 		}
 		
 		Map<String, String> requestMap = new HashMap<>();
@@ -309,17 +311,20 @@ public class TpayApiService {
 						 .replaceAll("<billing_sequence>",tpayServiceConfig.getBillingSequence())
 						 .replaceAll("<unsub_keyword>", tpayServiceConfig.getUnsubKeyword())
 						 .replaceAll("<shortcode>", tpayServiceConfig.getShortCode())
-						 .replaceAll("<lang>","1");
-		}else {
+						 .replaceAll("<lang>","1")  
+						 .replaceAll("<subid>",msisdn);
+		}else {  
 			message = TpayConstant.WELCOME_MESSAGE_SMS_ARB.replaceAll("<price>", tpayServiceConfig.getPrice())
 					 .replaceAll("<portalurl>", tpayServiceConfig.getProtalUrl())
 					 .replaceAll("<servicename>", tpayServiceConfig.getServiceName())
+					 .replaceAll("<currencyandbillingsequence>",(tpayServiceConfig.getCountryCode()==TpayConstant.EGYPT_COUNTRY_CODE)?TpayConstant.EGYPTIAN_CURRENCY_AND_BELLINGSEQUESNCE:TpayConstant.SAUDI_RIYAL_PER_DAY_ARB)
 					 .replaceAll("<currency>", tpayServiceConfig.getCurrency())
 					 .replaceAll("<msisdn>", msisdn)
 					 .replaceAll("<billing_sequence>",tpayServiceConfig.getBillingSequence())
 					 .replaceAll("<unsub_keyword>", tpayServiceConfig.getUnsubKeyword())
 					 .replaceAll("<shortcode>", tpayServiceConfig.getShortCode())
-					 .replaceAll("<lang>","2");
+					 .replaceAll("<lang>","2")
+					 .replaceAll("<subid>",msisdn);
 		}
 		
 		Map<String, String> requestMap = new HashMap<>();
@@ -399,7 +404,9 @@ public class TpayApiService {
 		Map<String, String> requestMap = new HashMap<>();
 		requestMap.put("subscriptionContractId", subscriptionContractId);
 		requestMap.put("signature", createSignature(requestMap,subscriptionContractId,token));
-		requestMap.put("lang", lang.equals("1")?"2":"1");
+		if(cgToken.getCampaignId()!=288) {
+			requestMap.put("lang", lang.equals("1")?"2":"1");	
+		}
 		String request = JsonMapper.getObjectToJson(requestMap);
 
 		tpaySubscriptionContractRequest.setRequest("Request URL : "+TpayConstant.PIN_RESEND_URL+"; Request : "+request+"; Headers:"+headerMap);
@@ -501,7 +508,7 @@ public class TpayApiService {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-		return sdf.format(addDays(date, 5*365));
+		return sdf.format(addDays(date, 10*365));
 	}
 	
 	public static Date addDays(Date date, int days) {
