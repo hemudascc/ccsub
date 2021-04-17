@@ -549,4 +549,14 @@ public class DaoServiceImpl implements IDaoService {
 		}
 		return null;
 	}	
+	
+	@Override
+	public LiveReport getlastupdatedliveReport() {
+		try {
+			return commonDao.getlastupdatedliveReport();
+		} catch (Exception ex) {
+			logger.error("getlastupdatedliveReport:: exception : " , ex);
+		}
+		return null;
+	}
 }

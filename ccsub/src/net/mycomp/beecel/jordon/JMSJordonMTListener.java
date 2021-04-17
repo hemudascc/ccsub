@@ -42,6 +42,7 @@ public class JMSJordonMTListener implements MessageListener{
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			bcJordonMTMessage = (BCJordonMTMessage)objectMessage.getObject();
 			logger.info("bcJordonNotification::::: "+bcJordonMTMessage);
+			daoService.saveObject(bcJordonMTMessage);
 		} catch (Exception e) {
 			logger.error("onMessage::::: ", e);
 		}

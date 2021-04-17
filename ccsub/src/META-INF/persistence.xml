@@ -176,6 +176,7 @@
 		<class>net.mycomp.beecel.jordon.BCJordonCGCallback</class>
 		<class>net.mycomp.beecel.jordon.BCJordonNotification</class>
 		<class>net.mycomp.beecel.jordon.BCJordonMTMessage</class>
+		<class>net.mycomp.beecel.jordon.BCOrangeMTMessage</class>
 		<!-- Beecell Jordon end -->
 		    <exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<validation-mode>NONE</validation-mode>

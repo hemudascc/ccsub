@@ -33,6 +33,8 @@ public class BCJordonNotification  implements Serializable{
 	private Timestamp createTime;
 	@Column(name="renew")
 	private boolean renew;
+	@Column(name="mo")
+	private String mo;
 	
 	private boolean status;
 
@@ -115,6 +117,14 @@ public class BCJordonNotification  implements Serializable{
 
 	public void setRenew(boolean renew) {
 		this.renew = renew;
+	}
+
+	public String isMo() {
+		return mo;
+	}
+
+	public void setMo(String mo) {
+		this.mo = mo;
 	}
 
 	public String toString() {

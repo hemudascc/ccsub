@@ -115,20 +115,25 @@ public class BCJordonController {
 		try {
 		
 		bcJordonNotification.setMsisdn(request.getParameter("msisdn"));
-		bcJordonNotification.setNotificationtype(request.getParameter("notificationtype"));
+		String notificationType = request.getParameter("notificationtype");
+		if(notificationType.equals("1")) {
+			bcJordonNotification.setNotificationtype(BCJordonConstant.SUBSCRIBE);
+		}else if(notificationType.equals("2")) {
+			bcJordonNotification.setNotificationtype(BCJordonConstant.UNSUBSCRIBE);
+		}else if(notificationType.equals("3")) {
+			bcJordonNotification.setNotificationtype(BCJordonConstant.RENEW);
+			bcJordonNotification.setRenew(Boolean.parseBoolean(request.getParameter("renew")));
+		}
+//		bcJordonNotification.setNotificationtype(request.getParameter("notificationtype"));
 		bcJordonNotification.setQueryStr(request.getQueryString());
 		bcJordonNotification.setSid(request.getParameter("sid"));
-		if(bcJordonNotification.getNotificationtype() == BCJordonConstant.RENEW) {
-		bcJordonNotification.setRenew(Boolean.parseBoolean(request.getParameter("renew")));
-		}
+		bcJordonNotification.setMo(request.getParameter("mo"));
 		bcJordonNotification.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		logger.info("bcJordonNotification : "+bcJordonNotification);
 		jmsjordonService.bcJordonNotificationJMSTemplate(bcJordonNotification);
 		
 		}catch(Exception ex) {
 			logger.info("error in notification:: "+ex);
-		}finally {
-			
-			jmsService.saveObject(bcJordonNotification);
 		}
 		return "Ok";	
 	}  
@@ -148,7 +153,7 @@ public class BCJordonController {
 		}catch(Exception ex) {
 			logger.info("error in MT dlr:: "+ex);
 		}finally {
-			jmsService.saveObject(bcJordonMTMessage);
+			jmsjordonService.bcJordonMTMessageJMSTemplate(bcJordonMTMessage);
 		}
 		
 		return "Ok";	  

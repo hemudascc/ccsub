@@ -87,5 +87,6 @@ public interface ICommonDao {
 		public List<Integer> findValidationExpiredSubscriberIdForTrueMoveSecondRenewal(
 				List<Integer> operatorId, Integer status);
 		public List<VWCallbackDump> findVWCallbackDump(AggReport aggReport);
+		public LiveReport getlastupdatedliveReport();
 		
 }

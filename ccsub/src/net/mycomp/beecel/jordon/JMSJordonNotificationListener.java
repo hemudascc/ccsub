@@ -38,6 +38,9 @@ public class JMSJordonNotificationListener  implements MessageListener{
 	private RedisCacheService redisCacheService;
 	@Autowired
 	private JPASubscriberReg jpaSubscriberReg;
+	
+	@Autowired
+	private BCJordonSmsService bcJordonSmsService;
 
 	@Override
 	public void onMessage(Message message) {
@@ -76,6 +79,9 @@ public class JMSJordonNotificationListener  implements MessageListener{
 				liveReport.setAction(MConstants.ACT);					
 				liveReport.setConversionCount(1);
 				liveReport.setParam2(bcJordonConfig.getOpCode());
+				if(bcJordonConfig.getOperatorName().equalsIgnoreCase(BCJordonConstant.OPERATOR_ORANGE)) {
+					bcJordonSmsService.sendMTSMS(bcJordonConfig,bcJordonNotification.getMsisdn());
+				}
 			}else if(bcJordonNotification.getNotificationtype().equalsIgnoreCase(BCJordonConstant.RENEW)) {
 				liveReport.setAction(MConstants.RENEW);
 				liveReport.setRenewalCount(1);					
@@ -83,7 +89,10 @@ public class JMSJordonNotificationListener  implements MessageListener{
 			}else if(bcJordonNotification.getNotificationtype().equalsIgnoreCase(BCJordonConstant.DEACTIVATE) || bcJordonNotification.getNotificationtype().equalsIgnoreCase(BCJordonConstant.UNSUBSCRIBE)) {
 				liveReport.setAction(MConstants.DCT);			
 				liveReport.setDctCount(1);
-			}else {}
+			}else {
+				logger.info("getNotificationtype: is null :   "+bcJordonNotification);
+				logger.info("Livereport:  :   "+liveReport);
+			}
 			
 		} catch (Exception e) {
 			logger.error("onMessage::::: ", e);

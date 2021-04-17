@@ -56,13 +56,14 @@ public class JMSJordonService {
 		return true;
 	}
 
-	public boolean bcJordonNotificationJMSTemplate(final BCJordonNotification bcJordonNotification) {
+
+public boolean bcJordonNotificationJMSTemplate(final BCJordonNotification bcJordonNotification) {
 		long time=System.currentTimeMillis();
 		logger.debug("saveBcJordonNotification:: bcJordonNotification:: "+bcJordonNotification);
 		try {
 			String token =(String)redisCacheService.getObjectCacheValue(BCJordonConstant.CG_CALLBACK_CAHCHE_PREFIX+bcJordonNotification.getMsisdn());
 			
-			bcJordonNotificationJMSTemplate.convertAndSend(new MessageCreator() {
+			bcJordonNotificationJMSTemplate.send(new MessageCreator() {
 
 				@Override
 				public Message createMessage(Session session) throws JMSException {
@@ -70,7 +71,7 @@ public class JMSJordonService {
 					message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 12*1000L);
 					return message;
 				}
-			});  
+			});
 
 		} catch (Exception e) {
 			logger.error("saveBcJordonNotification::::::::::::: ",e);
