@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import net.util.MConstants;
 
 @Service("macroKioskHongkongFactoryService")
-public class MacroKioskHongkongFactoryService extends  AbstractMacroKioskMTMessage{
+public class MacroKioskHongkongFactoryService implements IMacroKioskService{
 
 	private static final Logger logger = Logger.getLogger(MacroKioskHongkongFactoryService.class);
 	
@@ -30,12 +30,13 @@ public class MacroKioskHongkongFactoryService extends  AbstractMacroKioskMTMessa
 		
 		IMacroKioskService macroKioskService=null;
 		switch(opId){
+		case MConstants.MK_HONGKONG_HUTCHISON_OPERATOR_ID:
 		case MConstants.MK_HONGKONG_SMARTONE_OPERATOR_ID:
 			macroKioskService=hongkongSmartoneMacroKioskService;	
 		break;
-		case MConstants.MK_HONGKONG_HUTCHISON_OPERATOR_ID:
-			macroKioskService=hongkongHutchisonMacroKioskService;	
-		break;
+//		case MConstants.MK_HONGKONG_HUTCHISON_OPERATOR_ID:
+//			macroKioskService=hongkongHutchisonMacroKioskService;	
+//		break;
 		default:{
 			
 			}

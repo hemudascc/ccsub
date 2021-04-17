@@ -16,5 +16,8 @@ public interface JPAMKHongkongMTMessage  extends JpaRepository<HongkongMTMessage
 	
 	@Query("select b from HongkongMTMessage b where b.msgId=:msgId order by b.id desc")
 	List<HongkongMTMessage> findMTMessageByMessageId(@Param("msgId")String msgId);
+	
+	@Query("select b from HongkongMTMessage b where b.messageType=:messageType order by b.id desc")
+	List<HongkongMTMessage> findMTMessageByMessageType(@Param("messageType")String messageType);
 
 }

@@ -156,7 +156,6 @@
   <bean id="mt2KSAScheduler" class="net.mycomp.mt2.ksa.MT2KSAScheduler"/>
   <bean id="commonScheduler" class="net.scheduler.CommonScheduler"/> 
   <bean id="mkMalaysiaRenewalScheduler" class="net.mycomp.mcarokiosk.malaysia.MKMalaysiaRenewalScheduler"/>
-    <bean id="mkHongkongMTScheduler" class="net.mycomp.mcarokiosk.hongkong.HongkongMTScheduler"/>
  </beans>
  
  

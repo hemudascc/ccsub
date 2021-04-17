@@ -36,7 +36,10 @@ public class MKHongkongConfig {
 	private Double price;
 	@Column(name = "price_point")
 	private Double pricePoint;
-
+	@Column(name = "signup_price")
+	private Double signUpPrice;
+	@Column(name = "signup_price_point")
+	private Double signUpPricePoint;
 	@Column(name = "validity")
 	private Integer validity;
 	@Column(name = "validity_for_charge")
@@ -47,6 +50,8 @@ public class MKHongkongConfig {
 
 	@Column(name = "mt_billing_message_template")
 	private String mtBillingMessageTemplate;
+	@Column(name = "mt_signup_message_template")
+	private String mtSignUpMessageTemplate;
 	@Column(name = "mt_welcome_message_template")
 	private String mtWelcomeMessageTemplate;
 	@Column(name = "mt_renewal_message_template")
@@ -69,6 +74,8 @@ public class MKHongkongConfig {
 	private String platform;
 	@Column(name = "status")
 	private Boolean status = true;
+	@Column(name = "max_price")
+	private Integer maxPrice;
 
 	public String toString() {
 
@@ -186,6 +193,22 @@ public class MKHongkongConfig {
 		this.price = price;
 	}
 
+	public Double getSignUpPrice() {
+		return signUpPrice;
+	}
+
+	public void setSignUpPrice(Double signUpPrice) {
+		this.signUpPrice = signUpPrice;
+	}
+
+	public Double getSignUpPricePoint() {
+		return signUpPricePoint;
+	}
+
+	public void setSignUpPricePoint(Double signUpPricePoint) {
+		this.signUpPricePoint = signUpPricePoint;
+	}
+
 	public List<String> getLpImages() {
 		return lpImages;
 	}
@@ -258,6 +281,14 @@ public class MKHongkongConfig {
 		this.mtBillingMessageTemplate = mtBillingMessageTemplate;
 	}
 
+	public String getMtSignUpMessageTemplate() {
+		return mtSignUpMessageTemplate;
+	}
+
+	public void setMtSignUpMessageTemplate(String mtSignUpMessageTemplate) {
+		this.mtSignUpMessageTemplate = mtSignUpMessageTemplate;
+	}
+
 	public String getMtWelcomeMessageTemplate() {
 		return mtWelcomeMessageTemplate;
 	}
@@ -296,6 +327,14 @@ public class MKHongkongConfig {
 
 	public void setPlatform(String platform) {
 		this.platform = platform;
+	}
+
+	public Integer getMaxPrice() {
+		return maxPrice;
+	}
+
+	public void setMaxPrice(Integer maxPrice) {
+		this.maxPrice = maxPrice;
 	}
 	
 	

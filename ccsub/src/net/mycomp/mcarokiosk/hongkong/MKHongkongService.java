@@ -25,6 +25,7 @@ import net.process.bean.AdNetworkRequestBean;
 import net.process.request.AbstractOperatorService;
 import net.util.MConstants;
 import net.util.MData;
+import net.util.MUtility;
 
 @Service("mkHongkongService")
 public class MKHongkongService  extends AbstractOperatorService {
@@ -50,15 +51,22 @@ public class MKHongkongService  extends AbstractOperatorService {
 	 @Value("${jdbc.db.name}")
 	 private String dbName;
 	 
+	@Value("${macrokiosk.hongkong.mo.countryCode}")
+	private String countryCode; 
+	
+	@Value("${macrokiosk.hongkong.mo.welcometext}")
+	private String welcomeText;
+	
+	@Autowired
+	private MacroKioskHongkongFactoryService macroKioskHongkongFactoryService;
+	
 //	private final String msisdnForwardingUrl;
 	private final String heCallBackUrl;
 	
 	@Autowired
 	public MKHongkongService(
-			//@Value("${macrokiosk.hongkong.msisdn.forwardng.url}")String msisdnForwardingUrl,
 			@Value("${macrokiosk.hongkong.msisdn.forwarding.he.callback.url}")String heCallBackUrl){
-		//this.msisdnForwardingUrl=msisdnForwardingUrl;
-		this.heCallBackUrl=heCallBackUrl;
+			this.heCallBackUrl=heCallBackUrl;
 	}
 	
 	@PostConstruct
@@ -73,10 +81,7 @@ public class MKHongkongService  extends AbstractOperatorService {
 		   
 		  MKHongkongConstant.mapServiceIdToMKHongkongConfig.putAll(listMKHongkongConfig.stream().collect(
 							Collectors.toMap(p -> p.getServiceId(), p -> p)));	
-		   
-//		  MKHongkongConstant.mapTelcoIdToMKHongkongConfig.putAll(listMKHongkongConfig.stream().collect(
-//					Collectors.toMap(p -> p.getTelcoId(), p -> p)));	
-		  
+ 
 		  Integer id=daoService.
 					findNextAutoIncrementId("tb_mk_hongkong_mo_message", dbName);	
 		  logger.info(id);
@@ -120,26 +125,69 @@ public class MKHongkongService  extends AbstractOperatorService {
 	@Override
 	public boolean processBilling(ModelAndView modelAndView,
 			AdNetworkRequestBean adNetworkRequestBean) {
-		try{
+		logger.info("msisdn:              :"+adNetworkRequestBean.getMsisdn());
 		MKHongkongConfig mkHongkongConfig=MKHongkongConstant.mapServiceIdToMKHongkongConfig
-				.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
+		.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
 
 		MKHongkongCGToken mkHongkongCGToken=new MKHongkongCGToken(
-				adNetworkRequestBean.adnetworkToken.getTokenId(),
-				adNetworkRequestBean.vwserviceCampaignDetail.getCampaignId());
-		logger.info("AdNetworkId: "+adNetworkRequestBean.getAdNetworkId());
-		modelAndView.addObject("token",mkHongkongCGToken.getCGToken());
-		modelAndView.addObject("mkHongkongConfig",mkHongkongConfig);	
-		modelAndView.addObject("adNetworkId", adNetworkRequestBean.getAdNetworkId());
-		modelAndView.addObject("opid",adNetworkRequestBean.getOpId());	
-		modelAndView.setViewName(mkHongkongConfig.getLpPages());
-		
+		adNetworkRequestBean.adnetworkToken.getTokenId(),
+		adNetworkRequestBean.vwserviceCampaignDetail.getCampaignId());
+		String adNetworkId = String.valueOf(adNetworkRequestBean.getAdNetworkId());
+		int opid=adNetworkRequestBean.getOpId();  
+		String msisdn=adNetworkRequestBean.getMsisdn();
+		String token = mkHongkongCGToken.getCGToken();
+		int telcoid = mkHongkongConfig.getTelcoId();
+		redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.MO_MESSAGE_CAHCHE_PREFIX+msisdn,
+				token, 1);
+		redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.HONGKONG_AD_NETWORK_CAHCHE_PREFIX+msisdn,
+				adNetworkId, 1);
+		logger.info("opid: "+opid+"  telcoid : "+telcoid+"  msisdn: "+msisdn+"  token: "+token+"  adNetworkId: "+adNetworkId);
+		HongkongMOMessage hongkongMOMessage = new HongkongMOMessage();
+		try {	
+		String tokenStr[] = token.split(MConstants.TOKEN_SEPERATOR);
+		hongkongMOMessage.setTokenId(Integer.parseInt(tokenStr[0]));
+		hongkongMOMessage.setCampaignId(adNetworkRequestBean.vwserviceCampaignDetail.getCampaignId());
+		hongkongMOMessage.setMsisdn((msisdn.startsWith(countryCode))?msisdn:countryCode+msisdn);
+		hongkongMOMessage.setToken(token);
+		hongkongMOMessage.setTelcoid(telcoid);
+		hongkongMOMessage.setText(welcomeText);
+		hongkongMOMessage.setOpId(opid);   
+		hongkongMOMessage.setIsFreeMt(true);
 		}catch(Exception ex){
-			logger.error("Exception    ",ex);
+			logger.error("exception",ex);
+		}finally {
+			boolean response=  macroKioskHongkongFactoryService.handleSubscriptionMOMessage(hongkongMOMessage);
+			logger.info("response: "+response + "  msisdn: "+ hongkongMOMessage.getMsisdn());
+			modelAndView.setViewName("mkhongkong/lp2");
+			
 		}
-		return true;	    	
-		 
+		
+		return true;	
 	}
+	
+	//	@Override
+//	public boolean processBilling(ModelAndView modelAndView,
+//			AdNetworkRequestBean adNetworkRequestBean) {
+//		try{
+//		MKHongkongConfig mkHongkongConfig=MKHongkongConstant.mapServiceIdToMKHongkongConfig
+//				.get(adNetworkRequestBean.vwserviceCampaignDetail.getServiceId());
+//
+//		MKHongkongCGToken mkHongkongCGToken=new MKHongkongCGToken(
+//				adNetworkRequestBean.adnetworkToken.getTokenId(),
+//				adNetworkRequestBean.vwserviceCampaignDetail.getCampaignId());
+//		logger.info("AdNetworkId: "+adNetworkRequestBean.getAdNetworkId());
+//		modelAndView.addObject("token",mkHongkongCGToken.getCGToken());
+//		modelAndView.addObject("mkHongkongConfig",mkHongkongConfig);	
+//		modelAndView.addObject("adNetworkId", adNetworkRequestBean.getAdNetworkId());
+//		modelAndView.addObject("opid",adNetworkRequestBean.getOpId());	
+//		modelAndView.setViewName(mkHongkongConfig.getLpPages());
+//		
+//		}catch(Exception ex){
+//			logger.error("Exception    ",ex);
+//		}
+//		return true;	    	
+//		 
+//	}
 	
 	
 	
@@ -153,13 +201,13 @@ public class MKHongkongService  extends AbstractOperatorService {
 	@Override
 	public boolean checkSub(Integer productId,Integer opid,String msisdn) {
 
-		List<SubscriberReg> list=jpaSubscriberReg.findSubscriberRegByMsisdn(msisdn);
-		logger.info("checkSub:::::::::: list of subscriberreg "+list);
-		SubscriberReg subscriberReg=null;
-		if(list!=null&&list.size()>0){
-			subscriberReg=list.get(0);
-		}
-		logger.info("checkSub:::::::::: subscriberReg: "+subscriberReg);
+		SubscriberReg subscriberReg=jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(msisdn, productId);
+		logger.info("checkSub:::::::::: list of subscriberreg "+subscriberReg);
+//		SubscriberReg subscriberReg=null;
+//		if(list!=null&&list.size()>0){
+//			subscriberReg=list.get(0);
+//		}
+//		logger.info("checkSub:::::::::: subscriberReg: "+subscriberReg);
 		if(subscriberReg!=null&&subscriberReg.getStatus()==MConstants.SUBSCRIBED){
 			return true;
 		}		
