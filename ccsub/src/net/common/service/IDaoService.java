@@ -94,6 +94,7 @@ public interface IDaoService {
 	    		Integer status);
 	 
 	 public List<VWCallbackDump> findVWCallbackDump(AggReport aggReport);
+	 public LiveReport getlastupdatedliveReport();
 	 
 	 
 }

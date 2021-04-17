@@ -37,6 +37,7 @@
 	<input id="catalogName" value="${TpayServiceConfig.catalogName}" type="hidden">
 	<input id="paymentProductId" value="${TpayServiceConfig.paymentProductId}" type="hidden">
 	<input id="protalUrl" value="${TpayServiceConfig.protalUrl}" type="hidden">
+	<input id="countryCode" value="${TpayServiceConfig.countryCode}" type="hidden">
 	
 
 	<c:choose>
@@ -152,7 +153,15 @@
 		 </div> --%>
 		 
 		 <div dir="rtl"> 
-		 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنيه في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
+		  <c:choose>
+					<c:when test="${TpayServiceConfig.countryCode == 201}">
+					 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنيه في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
+					 </c:when>
+					<c:otherwise>
+					 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} ريال سعودي في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
+			
+					</c:otherwise>
+			</c:choose>
 		 
 		 </div>
 		 
@@ -185,7 +194,7 @@
 							<label for="usr" id="msisdn-label">Mobile:</label>
 							<label for="usr" id="pin-label">Verification Code:</label>
 							<input type="text" class="form-control" onkeypress="validate(event)" value="" name="msisdn"
-								id="msisdn" placeholder="201******">
+								id="msisdn" placeholder="${TpayServiceConfig.countryCode}******">
 							<input type="text" class="form-control" value="" name="pin"
 								id="pin" placeholder="Please enter the received verification code">
 							<br>
@@ -202,7 +211,7 @@
 							<label dir="rtl" for="usr" id="msisdn-label">التليفون المحمول:</label>
 							<label dir="rtl" for="usr" id="pin-label">شيفرة التأكيد:</label>
 							<input dir="rtl" type="text" class="form-control" value="" name="msisdn"
-								id="msisdn" placeholder="201******">
+								id="msisdn" placeholder="${TpayServiceConfig.countryCode}******">
 							<input dir="rtl" type="text" class="form-control" value="" name="pin"
 								id="pin" placeholder="الرجاء إدخال رمز التحقق المستلم">
 							<br>
@@ -238,8 +247,15 @@
 							</c:when>
 							<c:otherwise>
 			 <div dir="rtl"> 
-		 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنيه في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
-		 
+			 <c:choose>
+					<c:when test="${TpayServiceConfig.countryCode == 201}">
+					 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنيه في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
+					 </c:when>
+					<c:otherwise>
+					 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} ريال سعودي في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
+				
+					</c:otherwise>
+			</c:choose>
 		 </div>
 								<%-- <ol>
 									<li dir="rtl">سوف تشترك في GamePad مقابل 2 جنيه / يوم.</li>

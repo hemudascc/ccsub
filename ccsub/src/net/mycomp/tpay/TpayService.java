@@ -71,10 +71,10 @@ public class TpayService extends AbstractOperatorService {
 			String lang = adNetworkRequestBean.getQueryString().contains("lang=2") ? TpayConstant.LANG_AR
 					: TpayConstant.LANG_EN;
 
-			
-			String date = getCurrentTimeStamp() + "Z";
+			  
+			String date = getCurrentTimeStamp() + "Z";  
 			String message = date+lang;
-			logger.info("message: " + message);
+			logger.info("message: " + message);  
 			byte[] keyBytes = tpayServiceConfig.getPrivateKey().getBytes();
 
 			String digest = tpayServiceConfig.getPublicKey() + ":" + TpayUtill.hmacSHA256(message, keyBytes);

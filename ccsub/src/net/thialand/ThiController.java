@@ -91,7 +91,7 @@ public class ThiController {
 		//// http://www.yourdomainDNurl/receive.aspx?mtid=123296707&moid=1234567&
 		// msisdn=66874111222&shortcode=4541889&telcoid=1&countryid=3&datetime=2010-06-15
 		// 10:10:10&status=OK
-		 deliveryNotification=new DeliveryNotification();
+		deliveryNotification=new DeliveryNotification();
 		deliveryNotification.setMtid(request.getParameter("mtid"));
 		deliveryNotification.setMoid(request.getParameter("moid"));		
 		deliveryNotification.setMsisdn(request.getParameter("msisdn"));

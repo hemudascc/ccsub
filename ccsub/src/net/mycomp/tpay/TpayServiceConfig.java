@@ -45,6 +45,9 @@ public class TpayServiceConfig {
 	@Column(name="country")
 	private String country;
 	
+	@Column(name="country_code")
+	private Integer countryCode;
+	
 	@Column(name="operator_name")
 	private String operatorName;
 	
@@ -149,6 +152,14 @@ public class TpayServiceConfig {
 
 	public String getCountry() {
 		return country;
+	}
+
+	public Integer getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(Integer countryCode) {
+		this.countryCode = countryCode;
 	}
 
 	public void setCountry(String country) {
@@ -257,10 +268,10 @@ public class TpayServiceConfig {
 				+ ", serviceId=" + serviceId + ", productId=" + productId + ", operatorId=" + operatorId
 				+ ", serviceName=" + serviceName + ", operatorCode=" + operatorCode + ", subscriptionPlanId="
 				+ subscriptionPlanId + ", catalogName=" + catalogName + ", paymentProductId=" + paymentProductId
-				+ ", country=" + country + ", operatorName=" + operatorName + ", shortCode=" + shortCode
-				+ ", unsubKeyword=" + unsubKeyword + ", currency=" + currency + ", price=" + price
-				+ ", billingSequence=" + billingSequence + ", lpImageUrl=" + lpImageUrl + ", protalUrl=" + protalUrl
-				+ ", validity=" + validity + ", status=" + status + "]";
+				+ ", country=" + country + ", countryCode=" + countryCode + ", operatorName=" + operatorName
+				+ ", shortCode=" + shortCode + ", unsubKeyword=" + unsubKeyword + ", currency=" + currency + ", price="
+				+ price + ", billingSequence=" + billingSequence + ", lpImageUrl=" + lpImageUrl + ", protalUrl="
+				+ protalUrl + ", validity=" + validity + ", status=" + status + "]";
 	}
 
 

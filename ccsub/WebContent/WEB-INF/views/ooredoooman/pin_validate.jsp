@@ -82,7 +82,7 @@
 			<span id="eng3">CLICK HERE TO CONFIRM</span>
 			</button>
 			<p style="text-align:center;font-size:15px;" id="eng2">
-			<strong>Only For Ooredoo clients OMR 1.25 / week(auto renewal)</strong></p>	
+			<strong>Only For Ooredoo clients OMR 1.313  ( Price includes 5% VAT ) / week(auto renewal)</strong></p>	
 			</form>
 			</div> 
 				<div id="eng5" style="font-weight: normal;">	
@@ -92,7 +92,7 @@
 						 Mobile phone. To make Use of this Service, you must be more than 
 						 <b>18 year old</b> or have received permission from your parents or the person
 						  who is authorized to pay your bill.Ooredoo Subscribers will be charged 
-						  <b>OMR 1.25 </b>per week  automatically until you unsubscribe.
+						  <b>OMR 1.313  ( Price includes 5% VAT ) </b>per week  automatically until you unsubscribe.
 						   You can stop your subscription any time by sending <b>UNSUB GA </b>to <b>91186</b> 
 						  Standard Ooredoo data charge applicable.
 						</div>
