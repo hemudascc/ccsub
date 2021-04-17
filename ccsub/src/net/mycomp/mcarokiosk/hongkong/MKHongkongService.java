@@ -48,7 +48,7 @@ public class MKHongkongService  extends AbstractOperatorService {
 	private IDaoService daoService;
 	
 	 @Value("${jdbc.db.name}")
-	 private String dbName;
+		private String dbName;
 	 
 //	private final String msisdnForwardingUrl;
 	private final String heCallBackUrl;
@@ -78,8 +78,7 @@ public class MKHongkongService  extends AbstractOperatorService {
 //					Collectors.toMap(p -> p.getTelcoId(), p -> p)));	
 		  
 		  Integer id=daoService.
-					findNextAutoIncrementId("tb_mk_hongkong_mo_message", dbName);	
-		  logger.info(id);
+					findNextAutoIncrementId("tb_mk_hongkong_mo_message", dbName);		
 		  MKHongkongConstant.moMessageIdAtomicInteger.set(id);
 		   
 		    id=daoService.
