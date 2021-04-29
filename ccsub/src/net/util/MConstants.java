@@ -114,8 +114,9 @@ public interface MConstants {
 	    public static final int BC_JORDON_JORDON_ORANGE_OPERATOR_ID=121;
 	    public static final int BC_JORDON_JORDON_UMNIAH_OPERATOR_ID=122;
 	    public static final int TPAY_KSA_ZAIN_OPERATOR_ID=123;
+	    public static final int CORNET_SUDAN_ZAIN_OPERATOR_ID=124;
 	    
-	public static final String CMPID="cmpid";
+	public static final String CMPID="cmpid"; 
 	public static final String ACTIVE="ACTIVE";
 	public static final String INACTIVE="INACTIVE";
 	
