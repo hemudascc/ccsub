@@ -33,6 +33,7 @@ public interface MKHongkongConstant {
 		//public static final DateTimeFormatter ddMMYYYYMA = DateTimeFormatter.ofPattern("dd/MM/YYYY: H:ma");
 		public static final String MT_BIILABLE_MESSAGE="MT_BILLABLE";
 		public static final String MT_WELCOME_MESSAGE="MT_WELCOME";
+		public static final String MT_UNSUB_MESSAGE="MT_UNSUBSCRIBE";
 		public static final String MT_RENEWAL="HOT";
 		public static final String MT_CHARGE_SUBSCRIPTION="1";
 		public static final String MT_CHARGE_RENEWAL="3";
@@ -179,8 +180,8 @@ public interface MKHongkongConstant {
 	
 	public static String encode(String msg) {
 		try {
-			return UriUtils.encode(msg.toUpperCase(),"UTf-8");
-//			return URLEncoder.encode( msg, "UTF-8" );
+//			return UriUtils.encode(msg.toUpperCase(),"UTf-8");
+			return URLEncoder.encode( msg, "UTF-8" );
 			
 		}catch(Exception ex) {
 			logger.error("Exception ",ex);

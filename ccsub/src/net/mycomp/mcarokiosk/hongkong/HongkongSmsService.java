@@ -40,12 +40,12 @@ public HTTPResponse sendMTSMS(String url,HongkongMTMessage hongkongMTMessage){
 			return null;
 		}
 	
-	url=url+"?User="+MUtility.urlEncoding(hongkongMTMessage.getUser())
+	url=url+"?User="+MUtility.urlEncoding(hongkongMTMessage.getUser())  
 			+"&Pass="+MUtility.urlEncoding(hongkongMTMessage.getPass())
 			+"&Type="+MUtility.urlEncoding(hongkongMTMessage.getType())
 			+"&To="+MUtility.urlEncoding(hongkongMTMessage.getMsisdn())
 			+"&From="+MUtility.urlEncoding(hongkongMTMessage.getFromStr())
-			+"&Text="+MUtility.urlEncoding(hongkongMTMessage.getTextMsg())
+			+"&Text="+hongkongMTMessage.getTextMsg()
 			+"&Telcoid="+MUtility.urlEncoding(""+hongkongMTMessage.getTelcoId())
 			+"&Platform="+MUtility.urlEncoding(hongkongMTMessage.getPlatform())
 			+"&Price="+MUtility.urlEncoding(""+hongkongMTMessage.getPrice().intValue())

@@ -31,7 +31,8 @@ public class HongkongSmatoneMacroKioskService implements IMacroKioskService{
 
 	@Override
 	public boolean handleSubscriptionMOMessage(HongkongMOMessage hongkongMOMessage) {
-		
+		HongkongMTMessage mtMessage =null;
+		HTTPResponse response=null;
 		logger.info("handleSubscriptionMOMessage::::::::: "+hongkongMOMessage);
 		MKHongkongConfig selectedMKHongkongConfig=null;
 		for(MKHongkongConfig mkHongkongConfig:MKHongkongConstant.listMKHongkongConfig){
@@ -42,17 +43,22 @@ public class HongkongSmatoneMacroKioskService implements IMacroKioskService{
 				selectedMKHongkongConfig=mkHongkongConfig;
 				break;
 			}  
-		}		
-		//MT Billing Messagge
-//		String text = (hongkongMOMessage.getIsFreeMt())?selectedMKHongkongConfig.getMtWelcomeMessageTemplate():selectedMKHongkongConfig.getMtBillingMessageTemplate()+hongkongMOMessage.getMsisdn()+"&idcmp="+hongkongMOMessage.getCampaignId();
-//		logger.info("text::::::   "+text+"handleSubscriptionhongkongMOMessage:: ::::::selectedMKHongkongConfig::  "+selectedMKHongkongConfig);
-//			String  msg=MKHongkongConstant.convertToHexString(text);		
-	   HongkongMTMessage mtMessage =(hongkongMOMessage.getIsFreeMt())?createMTWelcomeMessage(selectedMKHongkongConfig,hongkongMOMessage):createMTSignUpMessage(selectedMKHongkongConfig,hongkongMOMessage);
+		}
+		if(hongkongMOMessage.getKeyword() != null && hongkongMOMessage.getKeyword().equalsIgnoreCase("OFF")){
+			 mtMessage = createMTUnsubcribeMessage(selectedMKHongkongConfig, hongkongMOMessage);
+			 response=smsService.sendMTSMS(mtUrl, mtMessage);
+			 redisCacheService.putObjectCacheValueByEvictionMinute(MKHongkongConstant.MT_MESSAGE_CAHCHE_PREFIX
+					 +mtMessage.getMsgId(),  
+					 mtMessage.getId(), 10*60);
+			 daoService.updateObject(mtMessage);
+		}else {
+		
+	    mtMessage =(hongkongMOMessage.getIsFreeMt())?createMTWelcomeMessage(selectedMKHongkongConfig,hongkongMOMessage):createMTSignUpMessage(selectedMKHongkongConfig,hongkongMOMessage);
 		// mtMessage.setAction(MConstants.ACT);
 		 mtMessage.setServiceId(selectedMKHongkongConfig.getServiceId());
 		
 		 logger.info("handleSubscriptionhongkongMOMessage:: create MT message::::::mtMessage "+mtMessage);
-		 HTTPResponse response=smsService.sendMTSMS(mtUrl, mtMessage);
+		 response=smsService.sendMTSMS(mtUrl, mtMessage);
 		 redisCacheService.putObjectCacheValueByEvictionMinute(MKHongkongConstant.MT_MESSAGE_CAHCHE_PREFIX
 				 +mtMessage.getMsgId(),  
 				 mtMessage.getId(), 10*60);
@@ -66,6 +72,7 @@ public class HongkongSmatoneMacroKioskService implements IMacroKioskService{
 		logger.info("handleSubscriptionhongkongMOMessage:: sendMTSMS::::::response "+response);
 		daoService.updateObject(mtMessage);
 		 }
+		}
 		return true;
 	}  
 	 
@@ -120,7 +127,7 @@ createMTWelcomeMessage(MKHongkongConfig mkHongkongConfig,
 protected  HongkongMTMessage createMTWelcomeMessage(MKHongkongConfig mkHongkongConfig,
 		HongkongMOMessage hongkongMOMessage){
 	
-	String message = MKHongkongConstant.encode(mkHongkongConfig.getMtWelcomeMessageTemplate().toUpperCase());
+	String message = MKHongkongConstant.encode(mkHongkongConfig.getMtWelcomeMessageTemplate());
 	HongkongMTMessage mtMessage=new HongkongMTMessage(true);
 	mtMessage.setMessageType(MKHongkongConstant.MT_WELCOME_MESSAGE);
 	mtMessage.setMtActionType(MKHongkongConstant.MT_WELCOME_MESSAGE);
@@ -166,7 +173,7 @@ protected  HongkongMTMessage createMTBillableMessage(MKHongkongConfig mkHongkong
 	mtMessage.setMessageType(MKHongkongConstant.MT_BIILABLE_MESSAGE);
 	mtMessage.setMtActionType(MConstants.ACT);
 	mtMessage.setUser(mkHongkongConfig.getUser());
-	mtMessage.setPass(mkHongkongConfig.getPassword());	
+	mtMessage.setPass(mkHongkongConfig.getPassword());	 
 	mtMessage.setCat(HongkongMTCat.CONTENT_BRODCAST.getCatId());
 	mtMessage.setFromStr(mkHongkongConfig.getShortcode());
 	mtMessage.setMsisdn(hongkongMOMessage.getMsisdn());
@@ -222,4 +229,33 @@ protected  HongkongMTMessage createMTSignUpMessage(MKHongkongConfig mkHongkongCo
 	mtMessage.setPlatform(mkHongkongConfig.getPlatform());
 	return mtMessage;
 }
+
+protected  HongkongMTMessage createMTUnsubcribeMessage(MKHongkongConfig mkHongkongConfig,
+		HongkongMOMessage hongkongMOMessage){
+	
+	String message = MKHongkongConstant.encode(mkHongkongConfig.getMtUnsubMessageTemplate());
+	HongkongMTMessage mtMessage=new HongkongMTMessage(true);
+	mtMessage.setMessageType(MKHongkongConstant.MT_UNSUB_MESSAGE);
+	mtMessage.setMtActionType(MKHongkongConstant.MT_UNSUB_MESSAGE);
+	mtMessage.setUser(mkHongkongConfig.getUser());
+	mtMessage.setPass(mkHongkongConfig.getPassword());	
+	mtMessage.setCat(HongkongMTCat.CONTENT_BRODCAST.getCatId());
+	mtMessage.setFromStr(mkHongkongConfig.getShortcode());
+	mtMessage.setMsisdn(hongkongMOMessage.getMsisdn());
+	mtMessage.setKeyword(mkHongkongConfig.getKeyword());		
+	mtMessage.setMoMessageId(hongkongMOMessage.getId());		
+	mtMessage.setMoMessageIdStr(hongkongMOMessage.getMoid());	
+	mtMessage.setOpId(hongkongMOMessage.getOpId());
+	mtMessage.setPrice(0d);		
+	mtMessage.setTelcoId(hongkongMOMessage.getTelcoid());
+	mtMessage.setTextMsg(message);
+	mtMessage.setType(MKHongkongConstant.MT_TEXT);
+	mtMessage.setSenderid(hongkongMOMessage.getShortcode());
+	mtMessage.setTokenId(hongkongMOMessage.getTokenId());
+	mtMessage.setToken(hongkongMOMessage.getToken());
+	mtMessage.setCampaignId(hongkongMOMessage.getCampaignId());
+	mtMessage.setCharge(null);
+	mtMessage.setPlatform(mkHongkongConfig.getPlatform());
+	return mtMessage;
+ }
 }

@@ -22,16 +22,13 @@ $(document).ready(function() {
 	});
 	function check(){
 			if(document.getElementById("telcoid").value=='4'){
-				//window.location.href="http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid=284&token="+${clickId}+"&msisdn="+document.getElementById("msisdn").value	
-				window.location.href="http://localhost:8080/ccsub/cnt/cmp?adid=1&cmpid=284&token="+${clickId}+"&msisdn="+document.getElementById("msisdn").value	
-				
-						//alert("true ::"+document.getElementById("opid").value);
+				window.location.href="http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid=284&token="+${clickId}+"&msisdn="+document.getElementById("msisdn").value	
+			//alert("true ::"+document.getElementById("opid").value);
 			//	document.getElementById("frm").submit();
 
 			}else{
-				//window.location.href="http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid=285&token="+${clickId}+"&msisdn="+document.getElementById("msisdn").value
-				window.location.href="http://localhost:8080/ccsub/cnt/cmp?adid=1&cmpid=285&token="+${clickId}+"&msisdn="+document.getElementById("msisdn").value
-						//	document.getElementById("frm").submit();
+				window.location.href="http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid=285&token="+${clickId}+"&msisdn="+document.getElementById("msisdn").value
+			//	document.getElementById("frm").submit();
 		}
 	}
 </script>

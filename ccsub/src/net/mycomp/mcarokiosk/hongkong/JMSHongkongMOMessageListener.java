@@ -112,6 +112,9 @@ public class JMSHongkongMOMessageListener implements MessageListener {
 	    		logger.info("onMessage::666:::::: "+hongkongMOMessage);
 				liveReport.setAction(MConstants.DCT);	
 				liveReport.setDctCount(1);
+				boolean response=  macroKioskHongkongFactoryService
+						.handleSubscriptionMOMessage(hongkongMOMessage);
+					
 			}else{
 				  logger.info("onMessage::777:::::: "+hongkongMOMessage);
 				  liveReport.setNoOfDays(mkHongkongConfig.getValidityForCharge());

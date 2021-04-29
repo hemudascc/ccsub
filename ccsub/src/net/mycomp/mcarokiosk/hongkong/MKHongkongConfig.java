@@ -56,7 +56,9 @@ public class MKHongkongConfig {
 	private String mtWelcomeMessageTemplate;
 	@Column(name = "mt_renewal_message_template")
 	private String mtRenewalMessageTemplate;
-
+	@Column(name = "mt_unsub_message_template")
+	private String mtUnsubMessageTemplate;
+	
 	private Integer telcoId;
 	private Integer cat;
 	private String senderId;
@@ -303,6 +305,14 @@ public class MKHongkongConfig {
 
 	public void setMtRenewalMessageTemplate(String mtRenewalMessageTemplate) {
 		this.mtRenewalMessageTemplate = mtRenewalMessageTemplate;
+	}
+
+	public String getMtUnsubMessageTemplate() {
+		return mtUnsubMessageTemplate;
+	}
+
+	public void setMtUnsubMessageTemplate(String mtUnsubMessageTemplate) {
+		this.mtUnsubMessageTemplate = mtUnsubMessageTemplate;
 	}
 
 	public Integer getValidityForCharge() {
