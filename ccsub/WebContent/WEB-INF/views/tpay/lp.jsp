@@ -37,8 +37,7 @@
 	<input id="catalogName" value="${TpayServiceConfig.catalogName}" type="hidden">
 	<input id="paymentProductId" value="${TpayServiceConfig.paymentProductId}" type="hidden">
 	<input id="protalUrl" value="${TpayServiceConfig.protalUrl}" type="hidden">
-	<input id="countryCode" value="${TpayServiceConfig.countryCode}" type="hidden">
-	
+	<input id="countryCode" value="${TpayServiceConfig.countryCode}" type="hidden">	
 
 	<c:choose>
 		<c:when test="${lang==0}">
@@ -133,7 +132,8 @@
 			<div>
 			You will subscribe in ${TpayServiceConfig.serviceName} for ${TpayServiceConfig.price} ${TpayServiceConfig.currency} per ${TpayServiceConfig.billingSequence}
 . To cancel your subscription, for ${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} subscribers please send ${TpayServiceConfig.unsubKeyword}
- to ${TpayServiceConfig.shortCode} for free. For any inquires please contact us on tech.d2c@collectcent.com.
+ to ${TpayServiceConfig.shortCode} for free. Service is auto-renewed. Internet usage is deducted from your Internet bundle for any inquires please contact us on tech.d2c@collectcent.com.
+			
 			</div>	<%-- <ol>
 					<li>You will subscribe in GamesHub for
 						${TpayServiceConfig.price}
@@ -153,21 +153,29 @@
 		 </div> --%>
 		 
 		 <div dir="rtl"> 
-		  <c:choose>
-					<c:when test="${TpayServiceConfig.countryCode == 201}">
-					 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنيه في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
-					 </c:when>
-					<c:otherwise>
-					 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} ريال سعودي في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
-			
-					</c:otherwise>
-			</c:choose>
-		 
-		 </div>
+		<c:choose>
+    <c:when test="${TpayServiceConfig.countryCode == 201}">
+<!--  سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنية مصري في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
+	-->
+		 ستشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنية مصري لكل ${TpayServiceConfig.billingSequence}
+. لإلغاء اشتراكك ، لمشتركي ${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} ، يرجى إرسال ${TpayServiceConfig.unsubKeyword}
+ إلى ${TpayServiceConfig.shortCode} مجانًا. يتم تجديد الخدمة تلقائيًا. يتم خصم استخدام الإنترنت من حزمة الإنترنت الخاصة بك لأي استفسارات ، يرجى الاتصال بنا على على
+tech.d2c@collectcent.com
+    </c:when>
+    <c:otherwise>
+    <!-- 
+ سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} ريال سعودي في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
+		-->
+		 ستشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price}  ريال سعودي مصري لكل ${TpayServiceConfig.billingSequence}
+. لإلغاء اشتراكك ، لمشتركي ${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} ، يرجى إرسال ${TpayServiceConfig.unsubKeyword}
+ إلى ${TpayServiceConfig.shortCode} مجانًا. يتم تجديد الخدمة تلقائيًا. يتم خصم استخدام الإنترنت من حزمة الإنترنت الخاصة بك لأي استفسارات ، يرجى الاتصال بنا على 
+tech.d2c@collectcent.com		
+    </c:otherwise>
+</c:choose>  	 </div>
 		 
 		<%-- 		<ol>
 					<li dir="rtl">سوف تشترك في GamesHub مقابل 2 جنيه / يوم.</li>
-					<li dir="rtl">لإلغاء اشتراكك ، بالنسبة ل  مشتركي
+					<li dir="rtl">لإلغاء اشتراكك ، بالنسبة لمشتركي
 						${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} ،
 						يرجى إرسال ${TpayServiceConfig.unsubKeyword} إلى 4041.</li>
 					<li dir="rtl">لأية استفسارات يرجى الاتصال بنا على
@@ -228,9 +236,10 @@
 					<div  class="text-content">
 						<c:choose>
 							<c:when test="${lang==0}">
-							<div>You will subscribe in ${TpayServiceConfig.serviceName} for ${TpayServiceConfig.price} ${TpayServiceConfig.currency} per ${TpayServiceConfig.billingSequence}
+							<div>
+			You will subscribe in ${TpayServiceConfig.serviceName} for ${TpayServiceConfig.price} ${TpayServiceConfig.currency} per ${TpayServiceConfig.billingSequence}
 . To cancel your subscription, for ${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} subscribers please send ${TpayServiceConfig.unsubKeyword}
- to ${TpayServiceConfig.shortCode} for free. For any inquires please contact us on tech.d2c@collectcent.com.
+ to ${TpayServiceConfig.shortCode} for free. Service is auto-renewed. Internet usage is deducted from your Internet bundle for any inquires please contact us on tech.d2c@collectcent.com.
  </div>
 								<%-- <ol>
 									<li>You will subscribe in GamePad for
@@ -247,15 +256,25 @@
 							</c:when>
 							<c:otherwise>
 			 <div dir="rtl"> 
-			 <c:choose>
-					<c:when test="${TpayServiceConfig.countryCode == 201}">
-					 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنيه في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
-					 </c:when>
-					<c:otherwise>
-					 سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} ريال سعودي في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
-				
-					</c:otherwise>
-			</c:choose>
+		<c:choose>
+    <c:when test="${TpayServiceConfig.countryCode == 201}">
+<!--  سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنية مصري في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
+	-->
+		 ستشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} جنية مصري لكل ${TpayServiceConfig.billingSequence}
+. لإلغاء اشتراكك ، لمشتركي ${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} ، يرجى إرسال ${TpayServiceConfig.unsubKeyword}
+ إلى ${TpayServiceConfig.shortCode} مجانًا. يتم تجديد الخدمة تلقائيًا. يتم خصم استخدام الإنترنت من حزمة الإنترنت الخاصة بك لأي استفسارات ، يرجى الاتصال بنا على على
+tech.d2c@collectcent.com
+    </c:when>
+    <c:otherwise>
+    <!-- 
+ سوف تشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price} ريال سعودي في اليوم. لإلغاء الاشتراك لعملاء ${TpayServiceConfig.operatorName} ، أرسل ${TpayServiceConfig.unsubKeyword} إلى ${TpayServiceConfig.shortCode} مجانًا. لأية استفسارات ، يرجى الاتصال بنا على tech.d2c@collectcent.com
+		-->
+		 ستشترك في ${TpayServiceConfig.serviceName} مقابل ${TpayServiceConfig.price}  ريال سعودي مصري لكل ${TpayServiceConfig.billingSequence}
+. لإلغاء اشتراكك ، لمشتركي ${TpayServiceConfig.operatorName} ${TpayServiceConfig.country} ، يرجى إرسال ${TpayServiceConfig.unsubKeyword}
+ إلى ${TpayServiceConfig.shortCode} مجانًا. يتم تجديد الخدمة تلقائيًا. يتم خصم استخدام الإنترنت من حزمة الإنترنت الخاصة بك لأي استفسارات ، يرجى الاتصال بنا على 
+tech.d2c@collectcent.com		
+    </c:otherwise>
+</c:choose>  
 		 </div>
 								<%-- <ol>
 									<li dir="rtl">سوف تشترك في GamePad مقابل 2 جنيه / يوم.</li>
