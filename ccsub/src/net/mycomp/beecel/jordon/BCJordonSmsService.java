@@ -55,7 +55,7 @@ public HTTPResponse sendMTSMS(BCJordonConfig bcJordonConfig,String msisdn){
 		bcOrangeMTMessage.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		
 	String msg = MUtility.urlEncoding(BCJordonConstant.CONTENT_MESSAGE
-			.replaceAll("<portalurl>", bcJordonConfig.getPortalUrl()+"&msisdn="+msisdn
+			.replaceAll("<portalurl>", bcJordonConfig.getPortalUrl()
 					));	
 		
 	 String url=BCJordonConstant.MT_URL

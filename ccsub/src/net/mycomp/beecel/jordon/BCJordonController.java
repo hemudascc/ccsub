@@ -90,7 +90,7 @@ public class BCJordonController {
 			if(bcJordonServiceConfig!=null){
 				request.getSession().setAttribute("msisdn", request.getParameter("msisdn"));	
 				request.getSession().setMaxInactiveInterval(12000);	
-				portalUrl=bcJordonServiceConfig.getPortalUrl()+"&msisdn="+request.getParameter("msisdn");
+				portalUrl=bcJordonServiceConfig.getPortalUrl();
 			}
 			logger.info("cgCallback::::::::: "+request.getQueryString());
 			}catch(Exception ex){
