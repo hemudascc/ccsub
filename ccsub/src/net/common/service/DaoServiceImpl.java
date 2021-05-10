@@ -559,4 +559,13 @@ public class DaoServiceImpl implements IDaoService {
 		}
 		return null;
 	}
+	@Override
+	public long findVWCallbackDumpCount(AggReport aggReport) {
+		try {
+			return commonDao.findVWCallbackDumpCount(aggReport);
+		} catch (Exception ex) {
+			logger.error("findVWCallbackDump:: exception : " , ex);
+		}
+		return 0;
+	}
 }

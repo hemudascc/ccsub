@@ -111,9 +111,10 @@ public interface MConstants {
 	    public static final int TPAY_EGYPT_ORANGE_OPERATOR_ID= 118;
 	    public static final int MK_HONGKONG_SMARTONE_OPERATOR_ID=119;
 	    public static final int MK_HONGKONG_HUTCHISON_OPERATOR_ID=120;
-	    public static final int BC_JORDON_JORDON_ORANGE_OPERATOR_ID=121;
-	    public static final int BC_JORDON_JORDON_UMNIAH_OPERATOR_ID=122;
+	    public static final int BC_JORDON_ORANGE_OPERATOR_ID=121;
+	    public static final int BC_JORDON_UMNIAH_OPERATOR_ID=122;
 	    public static final int TPAY_KSA_ZAIN_OPERATOR_ID=123;
+	    public static final int CORNET_SUDAN_ZAIN_OPERATOR_ID=124;
 	    
 	public static final String CMPID="cmpid";
 	public static final String ACTIVE="ACTIVE";
@@ -223,6 +224,7 @@ public interface MConstants {
 	
 	public static final String DAILY_REPORT_TYPE="DAILY";
 	public static final String MONTHLY_REPORT_TYPE="MONTHLY";
+    public static final int PAGE_SIZE = 200; // Number of rows to contain per page
 
 }
 
