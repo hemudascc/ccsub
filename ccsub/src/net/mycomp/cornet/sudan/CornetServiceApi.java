@@ -52,6 +52,85 @@ public class CornetServiceApi {
 
 	}
 
+	public String saveCallback(String token,String accessToken, String msisdn,String channel) {
+		Map<String,String> headerMap=new HashMap<>();
+		Map<String, Integer> requestMap = new HashMap<>();
+		CGToken cgToken = new CGToken(token);
+		CornetTrans cornetTrans = new CornetTrans(true);
+		
+//		String accessToken = Objects.toString(redisCacheService.getObjectCacheValue(CornetConstant.CORNET_UNIQUE_TOKEN_PREFIX+msisdn));
+		VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+		CornetConfig cornetConfig = CornetConstant.mapServiceIdToCornetConfig.get(vwServiceCampaignDetail.getServiceId());
+		headerMap.put("Content-Type", "application/json");
+		headerMap.put("Authorization", "Bearer "+accessToken);
+		LiveReport liveReport=null;
+		try {
+			liveReport = new LiveReport(MConstants.CORNET_SUDAN_ZAIN_OPERATOR_ID, new Timestamp(System.currentTimeMillis()),
+					cgToken.getCampaignId(), cornetConfig.getServiceId(), 4);
+			cornetTrans.setMsisdn(msisdn);
+			cornetTrans.setRequestType(CornetConstant.PIN_VERIFY);
+			cornetTrans.setToken(token);
+			cornetTrans.setTokenId(cgToken.getTokenId());
+			requestMap.put("subscribe_request_id", (int)(redisCacheService.getObjectCacheValue(CornetConstant.CORNET_SUBSCRIPTION_ID_PREFIX+msisdn)));
+			
+			String requestJson = JsonMapper.getObjectToJson(requestMap);
+			cornetTrans.setRequest("request url: "+CornetConstant.PAYMENT_PROCESS_API_URL+" requestMap: "+requestJson+"headers"+headerMap);
+			//HTTPResponse  httpResponse = httpURLConnectionUtil.makeHTTPPOSTRequest(CornetConstant.PAYMENT_PROCESS_API_URL,requestJson,headerMap);
+//			cornetTrans.setResponseCode(httpResponse.getResponseCode());
+//			cornetTrans.setResposne(httpResponse.getResponseStr());	
+//			if(Objects.nonNull(httpResponse.getResponseStr())) {
+//				Map map=JsonMapper.getJsonToObject(httpResponse.getResponseStr(), Map.class);
+//				boolean status = (boolean)map.get("success");				
+//				if(status) {
+						subscriberRegService.findOrCreateSubscriberByAct(msisdn,null, liveReport);
+			
+//						Map sub = (Map)map.get("subscription_data");
+//						int isActive = (int)sub.get("is_active");
+//						long subDateUnix = (long)sub.get("subdate_unix");
+//						long unSubDateUnix = (long)sub.get("unsubdate_unix");
+//						long retryDateUnix = (long)sub.get("retry_unix");
+//						double price = (double)sub.get("price");  
+						liveReport.setMsisdn(msisdn);
+						liveReport.setTokenId(cgToken.getTokenId());
+						liveReport.setToken(token);
+						liveReport.setAction(MConstants.ACT);
+						liveReport.setAdnetworkCampaignId(cgToken.getCampaignId());
+						liveReport.setToken(token);
+						liveReport.setTokenId(cgToken.getTokenId());
+						liveReport.setProductId(cornetConfig.getProductId());
+						liveReport.setConversionCount(1);
+						liveReport.setAmount(cornetConfig.getPrice());	
+						liveReport.setAddToCapping(true);
+//						cornetTrans.setIsActive(isActive);
+//						cornetTrans.setSubDateUnix(subDateUnix);
+//						cornetTrans.setUnSubDateUnix(unSubDateUnix);
+//						cornetTrans.setRetryDateUnix(retryDateUnix);
+//						cornetTrans.setPrice(price);
+					return "0";
+//				}else{  
+//					return map.get("error_code").toString();
+////					return "1";
+//				}
+//			}
+		} catch (Exception e) {
+			logger.error("error while verifying pin to msisdn="+msisdn+" token="+token+",  "+e);
+		}finally{
+			try{				
+				if (liveReport!=null&&liveReport.getAction() != null) {
+					liveReport = liveReportFactoryService.process(liveReport);					
+				}
+			}catch(Exception ex){
+				logger.error("onMessage:::::::::::::::::"  +cornetTrans+ " , Exception  " , ex);
+			}finally{
+				daoService.saveObject(cornetTrans);
+			}
+		}
+			
+		return "0";
+	}
+
+	
+	
 	public String pinSend(String token,String accessToken, String msisdn,String channel) {
 		Map<String,String> headerMap=new HashMap<>();
 		Map<String, String> requestMap = new HashMap<>();
@@ -182,14 +261,17 @@ public class CornetServiceApi {
 			cornetTrans.setMsisdn(msisdn);
 			cornetTrans.setRequestType(CornetConstant.UNSUBSCRIBE);
 //			String accessToken  ="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjgiLCJmdWxsX25hbWUiOiJDb3JlTmV0IENsaWVudCIsInVzZXJuYW1lIjoiY29yZW5ldF9hcGkiLCJ2ZW5kb3JfaWQiOiI1IiwiaXNfYWRtaW4iOiIwIiwiaWF0IjoxNjE5MTYzMzg3LCJleHAiOjE2MjE3NTUzODd9.xZpEojl6jRSGLqBajKEmdJVAKbVgVZiL1pMHLbxdclY";
-			String accessToken = Objects.toString(redisCacheService.getObjectCacheValue(CornetConstant.CORNET_UNIQUE_TOKEN_PREFIX+msisdn));
+			String token =(String)redisCacheService.getObjectCacheValue(CornetConstant.CORNET_UNIQUE_TOKEN_PREFIX+msisdn);
 			SubscriberReg subscriberReg = jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(msisdn, productId);
 			if(Objects.nonNull(subscriberReg) && subscriberReg.getStatus()==1) {
-				cgToken = new CGToken(subscriberReg.getToken());
+//				cgToken = new CGToken(subscriberReg.getToken());
 			}else {
 				cornetTrans.setResposne("Not Subscribed User");
 				return "2";
 			}
+			cgToken = new CGToken(token);
+			String accessToken = Objects.toString(redisCacheService.getObjectCacheValue(CornetConstant.CORNET_UNIQUE_ACCESS_TOKEN_PREFIX+msisdn));
+			logger.info("accessToken :  "+accessToken);
 			VWServiceCampaignDetail vwServiceCampaignDetail = MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
 			CornetConfig cornetConfig = CornetConstant.mapServiceIdToCornetConfig.get(vwServiceCampaignDetail.getServiceId());
 			headerMap.put("Content-Type", "application/json");
@@ -235,7 +317,7 @@ public class CornetServiceApi {
 			}
 		}catch (Exception e) {
 			logger.error(" fianlly liveReport:: " + liveReport
-					+ ", : altruistCallback:: "
+					+ ", : cornetCallback:: "
 					+ cornetTrans);
 			logger.error("onMessage::::::::::finally " ,e);
 		}finally {

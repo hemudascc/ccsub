@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import net.common.service.RedisCacheService;
 //import net.common.service.RedisCacheService;
@@ -64,16 +65,16 @@ public class CornetService extends AbstractOperatorService {
 //			logger.info("accessToken:  "+accessToken);
 //			if(accessToken == null) {  
 //				logger.info("accessToken:  "+accessToken);
-				accessToken = new CornetUtils().GenerateToken(cornetConfig.getUserName(),cornetConfig.getPassword());
+//				accessToken = new CornetUtils().GenerateToken(cornetConfig.getUserName(),cornetConfig.getPassword());
 //			}
 //			logger.info("accessToken:  "+accessToken+"  cornetConfig process billing : "+cornetConfig);
-//			redisCacheService.putObjectCacheValueByEvictionDay(CornetConstant.CORNET_UNIQUE_ACCESS_TOKEN_PREFIX, accessToken, (CornetConstant.REMEMBER_ME)?30:1);
-			modelAndView.addObject("cornetConfig", cornetConfig);
-			modelAndView.addObject("token", adNetworkRequestBean.adnetworkToken.getTokenToCg());
-			modelAndView.addObject("accessToken", accessToken);
-			modelAndView.addObject("status", 0);
-			modelAndView.setViewName("cornetsudan/lp");
-
+//			redisCacheService.putObjectCacheValueByEvictionDay(CornetConstant.CORNET_UNIQUE_ACCESS_TOKEN_PREFIX+adNetworkRequestBean.adnetworkToken.getTokenToCg(), accessToken, (CornetConstant.REMEMBER_ME)?30:1);
+//			modelAndView.addObject("cornetConfig", cornetConfig);
+//			modelAndView.addObject("token", adNetworkRequestBean.adnetworkToken.getTokenToCg());
+//			modelAndView.addObject("accessToken", accessToken);
+//			modelAndView.addObject("status", 0);
+//			modelAndView.setViewName("cornetsudan/lp");
+			modelAndView.setView(new RedirectView(CornetConstant.CG_URL.replaceAll("<cid>", adNetworkRequestBean.adnetworkToken.getTokenToCg())));
 		} catch (Exception e) {
 			logger.info("exception: " + e);
 		}

@@ -1,12 +1,16 @@
 package net.mycomp.cornet.sudan;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.activemq.command.IntegerResponse;
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -24,6 +29,7 @@ import net.jpa.repository.JPASubscriberReg;
 import net.persist.bean.SubscriberReg;
 import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.CGToken;
+import net.util.JsonMapper;
 import net.util.MData;
 import net.util.MUtility;
 
@@ -46,12 +52,13 @@ public class CornetController {
 	@Autowired
 	private RedisCacheService redisCacheService;
 	
-	@RequestMapping("test")
+	
+	@RequestMapping("callback")
 	@ResponseBody
-	public String toCG(ModelAndView modelAndView,HttpServletRequest  request){
+	public String callback(ModelAndView modelAndView,HttpServletRequest  request){
 		
-		
-		return "working";	
+		logger.info("cornet callback query String:  "+ request.getQueryString());
+		return "Ok";	
 	}
 	
 	
@@ -139,19 +146,48 @@ public class CornetController {
 		return modelAndView;
 	}
 	  
-	@RequestMapping(value="callback",method=RequestMethod.POST)
+	@RequestMapping(value="notification",method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<?> callback(@RequestBody CornetNotification cornetCallback) {
-		try {
-			String token =(String)redisCacheService.getObjectCacheValue(CornetConstant.CORNET_UNIQUE_TOKEN_PREFIX+cornetCallback.getMsisdn());
-			cornetCallback.setToken(token);	
-			cornetCallback.setCreateTime(new Timestamp(System.currentTimeMillis()));
-			cornetJMSService.saveCornetCallback(cornetCallback);
+	public String callback(@RequestBody CornetNotification cornetnotification) {
+			Map<String,Boolean> response = new HashMap<String,Boolean>();
+			logger.info("cornet notification query String:  "+ cornetnotification);
+			try {
+//			String token =(String)redisCacheService.getObjectCacheValue(CornetConstant.CORNET_UNIQUE_TOKEN_PREFIX+cornetnotification.getMsisdn());
+//			cornetnotification.setToken(token);	
+			cornetnotification.setCreateTime(new Timestamp(System.currentTimeMillis()));
+			boolean status = cornetJMSService.saveCornetnotification(cornetnotification);
+			if(status) {
+				response.put("success", true);
+				response.put("response_status", true);
+				response.put("ResponseStatus", true);
+				response.put("fail", false);
+			}else {
+				response.put("success", false);
+				response.put("response_status", false);
+				response.put("ResponseStatus", false);
+				response.put("fail", true);
+			}
 		} catch (Exception e) {
-			logger.error("error while saving callback altruist "+cornetCallback);
+			logger.error("error while saving callback cornet "+cornetnotification);
 		}  
-		return new ResponseEntity<>(HttpStatus.OK);
+		return JsonMapper.getObjectToJson(response);
 	}
+	
+	@RequestMapping(value="change-lang")
+	public ModelAndView changeLang(@RequestParam Integer lang,
+			@RequestParam String token, ModelAndView modelAndView) throws UnsupportedEncodingException {
+		CGToken cgToken = new CGToken(token);
+		VWServiceCampaignDetail vwserviceCampaignDetail= MData.mapCamapignIdToVWServiceCampaignDetail.get(cgToken.getCampaignId());
+		CornetConfig cornetConfig = CornetConstant.mapServiceIdToCornetConfig
+				  .get(vwserviceCampaignDetail.getServiceId());
+		modelAndView.addObject("cornetConfig", cornetConfig);
+		modelAndView.addObject("lang",lang);
+		modelAndView.addObject("status",0);
+		modelAndView.addObject("token",token);
+		modelAndView.setViewName("cornet/lp");
+		return modelAndView;
+	}
+	
 	@RequestMapping("tc")
 	public ModelAndView tc(ModelAndView modelAndView) {
 		modelAndView.setViewName("cornetsudan/tc");

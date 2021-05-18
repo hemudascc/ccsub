@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
 
 @Entity
 @Table(name = "tb_cornet_notification")
@@ -28,6 +29,8 @@ public class CornetNotification implements Serializable{
 	private String unsub_date;
 	@Column(name="token")
 	private String token;
+	@Column(name="transaction_type")
+	private String transactionType;
 	@Column(name="create_time")
 	private Timestamp createTime;
 	@Column(name="status")
@@ -75,6 +78,13 @@ public class CornetNotification implements Serializable{
 	public void setToken(String token) {
 		this.token = token;
 	}
+	
+	public String getTransactionType() {
+		return transactionType;
+	}
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
+	}
 	public Timestamp getCreateTime() {
 		return createTime;
 	}
@@ -91,7 +101,7 @@ public class CornetNotification implements Serializable{
 	public String toString() {
 		return "CornetNotification [id=" + id + ", msisdn=" + msisdn + ", price=" + price + ", product_code="
 				+ product_code + ", sub_date=" + sub_date + ", unsub_date=" + unsub_date + ", token=" + token
-				+ ", createTime=" + createTime + ", status=" + status + "]";
+				+ ", transactionType=" + transactionType + ", createTime=" + createTime + ", status=" + status + "]";
 	}
 
 

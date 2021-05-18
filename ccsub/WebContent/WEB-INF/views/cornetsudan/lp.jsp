@@ -25,8 +25,16 @@ body {
 	color: blue;
 }
 </style>
+<script type="text/javascript">
+function sendToCG(){
+	
+	var cid = document.getElementById("token").value; 
+	window.location.href ="http://test.zaindsp.com:3033/?p=6826526825&cid="+cid
+}
+</script>
 <body>
-	<form action="${pageContext.request.contextPath}/cnt/cornet/send-pin" method="POST">
+	<%-- <form action="${pageContext.request.contextPath}/cnt/cornet/send-pin" method="POST"> --%>
+	<!-- <form action="http://test.zaindsp.com:3033/?p=787899799" method="GET"> -->
 		
 		<!-- Hidden Parameters Start -->
 		<input id="token" name="token" value="${token}" type="hidden">
@@ -40,7 +48,7 @@ body {
 		</div>
 		 <h3>${cornetConfig.serviceName}</h3> 
 		
-			<c:if test="${status==0}">
+		<%-- 	<c:if test="${status==0}">
 				<p>Enter your ${cornetConfig.operatorName} Mobile number to receive OTP</p>
 			</c:if>
 			<c:if test="${status==102}">
@@ -53,12 +61,12 @@ body {
 				<p>Could not send pin please try again</p>
 			</c:if>
 		<input type="text" name="msisdn" id="msisdn" placeholder="249XXXXXXXX"
-			style="width: 200px; height: 30px; margin: 0px 0px 5px 0px; color: black;">
+			style="width: 200px; height: 30px; margin: 0px 0px 5px 0px; color: black;"> --%>
 		<br>
-			<button id="subscribe" type="submit" class="btn btn-success">Subscribe</button>
+			<button id="subscribe" type="submit" class="btn btn-success" onclick="sendToCG();">Subscribe</button>
 			<!-- <button id="exit" type="button" onclick="exit();"
 				class="btn btn-danger">Exit</button> -->
-	</form>
+	<!-- </form> -->
 	<div class="terms-condition">
 		<p>
 					<b>Terms and Conditions:</b>

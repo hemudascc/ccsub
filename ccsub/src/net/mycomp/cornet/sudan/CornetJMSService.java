@@ -25,7 +25,7 @@ public class CornetJMSService {
 		@Qualifier("cornetCallbackJMSTemplate")
 		private JmsTemplate cornetCallbackJMSTemplate;
 		
-		public boolean saveCornetCallback(CornetNotification cornetNotification) {
+		public boolean saveCornetnotification(CornetNotification cornetNotification) {
 			long time=System.currentTimeMillis();
 			logger.debug("saving:::::CornetNotification:: "+cornetNotification);
 			try {
