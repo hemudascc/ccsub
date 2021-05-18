@@ -60,8 +60,10 @@ public class MKHongkongController {
 		try{
 		logger.info("mo:::::::::::::::::::::::::::::::: "+request.getQueryString());		
 //		redisCacheService.getValueString(msisdn)
+		String from  =request.getParameter("from");
+		String msisdn=(from.startsWith(countryCode))?from:countryCode+from;
 		hongkongMOMessage=new HongkongMOMessage(true);		
-		hongkongMOMessage.setMsisdn(request.getParameter("from"));		
+		hongkongMOMessage.setMsisdn(msisdn);		
 		hongkongMOMessage.setTime(request.getParameter("time"));
 		hongkongMOMessage.setReqTime(MKHongkongConstant.convertStringToTimestamp(hongkongMOMessage.getTime()));
 		hongkongMOMessage.setShortcode(request.getParameter("shortcode"));
@@ -102,7 +104,7 @@ public class MKHongkongController {
 		}finally{
 			jmsHongkongService.saveMOMessage(hongkongMOMessage);	
 		}
-		return "OK";		
+		return "-1";		
 	}
 	
 	@RequestMapping("dn")

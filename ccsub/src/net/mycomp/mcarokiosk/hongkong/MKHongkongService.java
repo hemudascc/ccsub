@@ -134,7 +134,7 @@ public class MKHongkongService  extends AbstractOperatorService {
 		adNetworkRequestBean.vwserviceCampaignDetail.getCampaignId());
 		String adNetworkId = String.valueOf(adNetworkRequestBean.getAdNetworkId());
 		int opid=adNetworkRequestBean.getOpId();  
-		String msisdn=adNetworkRequestBean.getMsisdn();
+		String msisdn=(adNetworkRequestBean.getMsisdn().startsWith(countryCode))?adNetworkRequestBean.getMsisdn():countryCode+adNetworkRequestBean.getMsisdn();
 		String token = mkHongkongCGToken.getCGToken();
 		int telcoid = mkHongkongConfig.getTelcoId();
 		redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.MO_MESSAGE_CAHCHE_PREFIX+msisdn,
@@ -147,17 +147,17 @@ public class MKHongkongService  extends AbstractOperatorService {
 		String tokenStr[] = token.split(MConstants.TOKEN_SEPERATOR);
 		hongkongMOMessage.setTokenId(Integer.parseInt(tokenStr[0]));
 		hongkongMOMessage.setCampaignId(adNetworkRequestBean.vwserviceCampaignDetail.getCampaignId());
-		hongkongMOMessage.setMsisdn((msisdn.startsWith(countryCode))?msisdn:countryCode+msisdn);
+		hongkongMOMessage.setMsisdn(msisdn);
 		hongkongMOMessage.setToken(token);
 		hongkongMOMessage.setTelcoid(telcoid);
 		hongkongMOMessage.setText(welcomeText);
 		hongkongMOMessage.setOpId(opid);   
 		hongkongMOMessage.setIsFreeMt(true);
 		}catch(Exception ex){
-			logger.error("exception",ex);
+			logger.error("exception"+ex);
 		}finally {
 			boolean response=  macroKioskHongkongFactoryService.handleSubscriptionMOMessage(hongkongMOMessage);
-			logger.info("response: "+response + "  msisdn: "+ hongkongMOMessage.getMsisdn());
+			logger.info("   msisdn: "+ hongkongMOMessage.getMsisdn());
 			modelAndView.setViewName("mkhongkong/lp2");
 			
 		}

@@ -200,7 +200,7 @@ protected  HongkongMTMessage createMTSignUpMessage(MKHongkongConfig mkHongkongCo
 		mkHongkongConfig.setSignUpPricePoint(0d);
 	}
 	String msg = mkHongkongConfig.getMtSignUpMessageTemplate()
-			.replaceAll("<price>", String.valueOf(mkHongkongConfig.getSignUpPricePoint()))
+			.replaceAll("<price>", String.valueOf(mkHongkongConfig.getSignUpPrice()))
 			.replaceAll("<keyword>", mkHongkongConfig.getKeyword())
 			.replaceAll("<shortcode>", mkHongkongConfig.getShortcode())
 			.replaceAll("<serviceName>", mkHongkongConfig.getOpServiceName());

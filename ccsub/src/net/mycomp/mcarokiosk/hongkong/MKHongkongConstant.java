@@ -58,8 +58,8 @@ public interface MKHongkongConstant {
 	 public final String HONGKONG_RETRY_BILLING_PREFIX="HONGKONG_RETRY_BILLING_PREFIX";
 	 public final String HONGKONG_AD_NETWORK_CAHCHE_PREFIX="HONGKONG_AD_NETWORK_CAHCHE_PREFIX";	
 	 
-	 public static final String TEST_NUMBER_1="85298685648";
-	 public static final String TEST_NUMBER_2="85259789813";
+	 public static final String TEST_NUMBER_1="85298685648_Test";
+	 public static final String TEST_NUMBER_2="85259789813_Test";  
 	 public static final String TEST_NUMBER_3="";  
 	 
 		
