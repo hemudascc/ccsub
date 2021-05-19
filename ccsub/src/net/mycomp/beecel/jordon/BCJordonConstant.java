@@ -36,6 +36,7 @@ public interface BCJordonConstant {
 	  public static final int UMNIAHSERVICEID = 123;
 	  public static final String CONTENT_MESSAGE = "Thanks for subscribing to KidoKingdom to access the content please click this <portalurl>";
 	  public static final String CG_URL = "http://mobibees.com/index.php?r=view&t=<t>&cid=<cid>&pub=<pub>"; 
+	  public static final String CG_URL_MOBILY = "http://a1mobi.com/index.php?r=view&t=<t>&cid=<cid>&pub=<pub>"; 
 	  public static final String MT_URL = "http://api.beecell.com/index.php?r=api/SendMsg&msisdn=<msisdn>&shortCode=<shortcode>&msg=<msg>&opCode=<opcode>&countryCode=<countrycode>&lang=1&service=<service>"; 
 	  public static Map<Integer,BCJordonConfig> mapIdToBCJordonConfig=new HashMap<Integer,BCJordonConfig>();
 		 

@@ -333,6 +333,7 @@ public class OperatorRequestService implements IOperatorService{
 			break;
 		}	 
 		case MConstants.BC_JORDON_ORANGE_OPERATOR_ID:
+		case MConstants.BC_JORDON_MOBILY_OPERATOR_ID:
 		case MConstants.BC_JORDON_UMNIAH_OPERATOR_ID:{
 			ioperatorService=bcJordonService;
 			break;
