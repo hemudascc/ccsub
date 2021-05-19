@@ -112,12 +112,15 @@ public class JMSHongkongMOMessageListener implements MessageListener {
 	    		logger.info("onMessage::666:::::: "+hongkongMOMessage);
 				liveReport.setAction(MConstants.DCT);	
 				liveReport.setDctCount(1);
+				boolean response=  macroKioskHongkongFactoryService
+						.handleSubscriptionMOMessage(hongkongMOMessage);
+					
 			}else{
 				  logger.info("onMessage::777:::::: "+hongkongMOMessage);
 				  liveReport.setNoOfDays(mkHongkongConfig.getValidityForCharge());
 				  liveReport.setAction(MConstants.ACT);
 				  liveReport.setConversionCount(1);
-				  liveReport.setAmount(0d);	
+				  liveReport.setAmount(mkHongkongConfig.getSignUpPrice());	
 				  liveReport.setAddToCapping(true);
 				  SubscriberReg subscriberReg = subscriberRegService.findOrCreateSubscriberByAct(
 						  liveReport.getMsisdn(),null, liveReport);					  
@@ -130,7 +133,7 @@ public class JMSHongkongMOMessageListener implements MessageListener {
 			  }
 			
 		} catch (Exception e) {
-			logger.error("onMessage:::::::::::::::::"  +hongkongMOMessage+ " , Exception  " , e);
+			logger.error("onMessage:::::::::::::::::"  +hongkongMOMessage+ " , Exception  " + e);
 		}finally{
 			try{				
 				if (liveReport!=null&&liveReport.getAction() != null) {
@@ -138,7 +141,7 @@ public class JMSHongkongMOMessageListener implements MessageListener {
 				}
 		    	hongkongMOMessage.setAction(liveReport.getAction());		    	
 			}catch(Exception ex){
-				logger.error("onMessage:::::::::::::::::"  +hongkongMOMessage+ " , Exception  " , ex);
+				logger.error("onMessage:::::::::::::::::"  +hongkongMOMessage+ " , Exception  " + ex);
 			}finally{
 			update=daoService.updateObject(hongkongMOMessage);
 			}

@@ -64,7 +64,7 @@ public class JMSDUChargingCallbackListener implements MessageListener{
 			liveReport.setMsisdn(duChargingNotification.getCallingParty());		
 			liveReport.setCircleId(0);
 			
-		
+			liveReport.setResponse(duChargingNotification.toString());
 		if(duChargingNotification.getAction().equalsIgnoreCase(MConstants.ACT)){
 			
 //			DUCGCallback duCgCallback= daoService

@@ -32,15 +32,7 @@ public String getToken(MKHongkongConfig mkhongkongConfig,String token){
 		
 		try{
 			
-//		String dateTime=MKMalaysiaConstant.yyyyMMddHHmmssAccessToken.
-//		format(MKMalaysiaConstant.getFormatUTC8Date());
 		String dateTime=MKHongkongConstant.getFormatUTC8TokenTime();
-		
-//		String accessToken=ThiaConstant.md5(mkmalaysiaConfig.getUser().toUpperCase()
-//				+mkmalaysiaConfig.getKeyword().toUpperCase()+mkmalaysiaConfig.getShortcode()
-//				+dateTime+ThiaConstant.md5(mkmalaysiaConfig.getPassword()).toUpperCase());
-		
-
 		String accessToken=MKHongkongConstant.md5(mkhongkongConfig.getUser().toUpperCase()
 				+mkhongkongConfig.getKeyword().toUpperCase()
 				+mkhongkongConfig.getShortcode().toUpperCase()

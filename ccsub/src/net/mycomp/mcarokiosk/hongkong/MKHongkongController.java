@@ -60,8 +60,10 @@ public class MKHongkongController {
 		try{
 		logger.info("mo:::::::::::::::::::::::::::::::: "+request.getQueryString());		
 //		redisCacheService.getValueString(msisdn)
+		String from  =request.getParameter("from");
+		String msisdn=(from.startsWith(countryCode))?from:countryCode+from;
 		hongkongMOMessage=new HongkongMOMessage(true);		
-		hongkongMOMessage.setMsisdn(request.getParameter("from"));		
+		hongkongMOMessage.setMsisdn(msisdn);		
 		hongkongMOMessage.setTime(request.getParameter("time"));
 		hongkongMOMessage.setReqTime(MKHongkongConstant.convertStringToTimestamp(hongkongMOMessage.getTime()));
 		hongkongMOMessage.setShortcode(request.getParameter("shortcode"));
@@ -70,7 +72,7 @@ public class MKHongkongController {
 		hongkongMOMessage.setTelcoid(MUtility.toInt(request.getParameter("telcoid"),0));
 		hongkongMOMessage.setPlatform(request.getParameter("platform"));
 		String refId =(String)redisCacheService.getObjectCacheValue(MKHongkongConstant.MO_MESSAGE_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn());
-		String adNetworkId =(String)redisCacheService.getObjectCacheValue(MKHongkongConstant.HONGKONG_AD_NETWORK_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn());
+		String adNetworkId = (String)redisCacheService.getObjectCacheValue(MKHongkongConstant.HONGKONG_AD_NETWORK_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn());
 		
 		hongkongMOMessage.setRefId(refId);
 		
@@ -102,7 +104,7 @@ public class MKHongkongController {
 		}finally{
 			jmsHongkongService.saveMOMessage(hongkongMOMessage);	
 		}
-		return "OK";		
+		return "-1";		
 	}
 	
 	@RequestMapping("dn")
@@ -124,11 +126,11 @@ public class MKHongkongController {
 		hongkongDeliveryNotification.setShortcode(request.getParameter("shortcode"));	
 		hongkongDeliveryNotification.setTelcoId(MUtility.toInt(request.getParameter("telcoid"),0));
 		hongkongDeliveryNotification.setCountryId(MUtility.toInt(request.getParameter("countryid"),0));		
-		hongkongDeliveryNotification.setQueryStr(request.getQueryString());
+		hongkongDeliveryNotification.setQueryStr(request.getQueryString());    
 		hongkongDeliveryNotification.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		hongkongDeliveryNotification.setStatus(request.getParameter("status"));		
-		hongkongDeliveryNotification
-		.setOpId(HongkongOperatorTelcoidMap.getOperatorId(hongkongDeliveryNotification.getTelcoId()));
+//Yash		hongkongDeliveryNotification
+//		.setOpId(HongkongOperatorTelcoidMap.getOperatorId(hongkongDeliveryNotification.getTelcoId()));
 		
 		}catch(Exception ex){
 			logger.error("exception",ex);
@@ -139,6 +141,17 @@ public class MKHongkongController {
 	}
 	
 
+	@RequestMapping("lp")
+	public ModelAndView lp(ModelAndView modelAndView,HttpServletRequest  request){
+		
+		String token=request.getParameter("token");
+		logger.info("toMo:: url: "+lp2Url);
+		modelAndView.addObject("clickId",request.getParameter("cid"));
+		modelAndView.setViewName("mkhongkong/lp");
+		return modelAndView;	
+	}  
+
+	
 	@RequestMapping("tocg")
 	public ModelAndView toCG(ModelAndView modelAndView,HttpServletRequest  request){
 		
@@ -149,38 +162,38 @@ public class MKHongkongController {
 	}
 	
 
-	@RequestMapping("lp-2")
-	public ModelAndView freeMt(ModelAndView modelAndView,HttpServletRequest  request){		
-		String opid=request.getParameter("opid");
-		String msisdn=request.getParameter("msisdn");
-		String token = request.getParameter("token");
-		String telcoid = request.getParameter("telcoid");
-		String adNetworkId = request.getParameter("adNetworkId");
-		redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.MO_MESSAGE_CAHCHE_PREFIX+msisdn,
-				token, 1);
-		redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.HONGKONG_AD_NETWORK_CAHCHE_PREFIX+msisdn,
-				adNetworkId, 1);
-		logger.info("opid: "+opid+"  telcoid : "+telcoid+"  msisdn: "+msisdn+"  token: "+token+"  adNetworkId: "+adNetworkId);
-		HongkongMOMessage hongkongMOMessage = new HongkongMOMessage();
-		try {	
-		String tokenStr[] = token.split(MConstants.TOKEN_SEPERATOR);
-		hongkongMOMessage.setTokenId(Integer.parseInt(tokenStr[0]));
-		hongkongMOMessage.setCampaignId(Integer.parseInt(tokenStr[1]));
-		hongkongMOMessage.setMsisdn((msisdn.startsWith(countryCode))?msisdn:countryCode+msisdn);
-		hongkongMOMessage.setToken(token);
-		hongkongMOMessage.setTelcoid(MUtility.toInt(telcoid,0));
-		hongkongMOMessage.setText(welcomeText);
-		hongkongMOMessage.setOpId(Integer.parseInt(opid));
-		hongkongMOMessage.setIsFreeMt(true);
-		}catch(Exception ex){
-			logger.error("exception",ex);
-		}finally {
-			boolean response=  macroKioskHongkongFactoryService.handleSubscriptionMOMessage(hongkongMOMessage);
-			logger.info("response: "+response + "  msisdn: "+ hongkongMOMessage.getMsisdn());
-			modelAndView.setViewName("mkhongkong/lp2");
-		}
-		
-		return modelAndView;	
-	}  
+//	@RequestMapping("lp-2")
+//	public ModelAndView freeMt(ModelAndView modelAndView,HttpServletRequest  request){		
+//		String opid=request.getParameter("opid");
+//		String msisdn=request.getParameter("msisdn");
+//		String token = request.getParameter("token");
+//		String telcoid = request.getParameter("telcoid");
+//		String adNetworkId = request.getParameter("adNetworkId");
+//		redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.MO_MESSAGE_CAHCHE_PREFIX+msisdn,
+//				token, 1);
+//		redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.HONGKONG_AD_NETWORK_CAHCHE_PREFIX+msisdn,
+//				adNetworkId, 1);
+//		logger.info("opid: "+opid+"  telcoid : "+telcoid+"  msisdn: "+msisdn+"  token: "+token+"  adNetworkId: "+adNetworkId);
+//		HongkongMOMessage hongkongMOMessage = new HongkongMOMessage();
+//		try {	
+//		String tokenStr[] = token.split(MConstants.TOKEN_SEPERATOR);
+//		hongkongMOMessage.setTokenId(Integer.parseInt(tokenStr[0]));
+//		hongkongMOMessage.setCampaignId(Integer.parseInt(tokenStr[1]));
+//		hongkongMOMessage.setMsisdn((msisdn.startsWith(countryCode))?msisdn:countryCode+msisdn);
+//		hongkongMOMessage.setToken(token);
+//		hongkongMOMessage.setTelcoid(MUtility.toInt(telcoid,0));
+//		hongkongMOMessage.setText(welcomeText);
+//		hongkongMOMessage.setOpId(Integer.parseInt(opid));
+//		hongkongMOMessage.setIsFreeMt(true);
+//		}catch(Exception ex){
+//			logger.error("exception",ex);
+//		}finally {
+//			boolean response=  macroKioskHongkongFactoryService.handleSubscriptionMOMessage(hongkongMOMessage);
+//			logger.info("response: "+response + "  msisdn: "+ hongkongMOMessage.getMsisdn());
+//			modelAndView.setViewName("mkhongkong/lp2");
+//		}
+//		
+//		return modelAndView;	
+//	}  
 
 }

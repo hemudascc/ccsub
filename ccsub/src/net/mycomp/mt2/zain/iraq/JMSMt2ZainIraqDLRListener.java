@@ -84,6 +84,7 @@ public class JMSMt2ZainIraqDLRListener implements MessageListener {
 				liveReport.setMsisdn(mt2ZainIraqDeliveryNotification.getMsisdn());
 				liveReport.setCircleId(0);
 				liveReport.setMode("");
+				liveReport.setResponse(mt2ZainIraqDeliveryNotification.toString());
 				String status = Objects.toString(redisCacheService.getCacheValue(Mt2ZainIraqConstant.MT2_ZAIN_IRAQ_ACT_CACHE_PREFIX+mt2ZainIraqDeliveryNotification.getMsisdn())); 
 			string = "Success";
 			if(mt2ZainIraqDeliveryNotification.getStatus().equals(string) 

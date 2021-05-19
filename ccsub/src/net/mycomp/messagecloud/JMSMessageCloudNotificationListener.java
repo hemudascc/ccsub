@@ -91,7 +91,7 @@ public class JMSMessageCloudNotificationListener implements MessageListener{
 		     }	     
 		    
 		    }
-		    
+		    liveReport.setResponse(messagecloudNotification.toString());
 		    //////////////////////End Patch
 		    action= MessageCloudConstant.getAction(messagecloudNotification,subscriberReg);
 		    messagecloudNotification.setAction(action);

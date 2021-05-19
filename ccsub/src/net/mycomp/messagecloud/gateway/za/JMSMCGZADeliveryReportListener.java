@@ -81,6 +81,7 @@ public class JMSMCGZADeliveryReportListener implements MessageListener {
 			MCGZADeliveryReportEnum mcgDeliveryReportEnum=
 					MCGZADeliveryReportEnum.getMCGDeliveryStatusEnum(mcgZADeliveryReport.getReport());
 			
+			liveReport.setResponse(mcgZADeliveryReport.toString());
 		
 			if(mcgDeliveryReportEnum.report.equalsIgnoreCase(MCGZADeliveryReportEnum.DELIVERED.report)){
 				

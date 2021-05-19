@@ -96,7 +96,7 @@ public class JMSHongkongDNListener implements MessageListener {
 	    	if(subscriberReg!=null){
 	    		liveReport.setMode(subscriberReg.getMode());
 	    	}
-	    		
+	    	liveReport.setResponse(hongkongDeliveryNotification.toString());
 		     if(hongkongDeliveryNotification.isCharged()){	
 		    	
 		    if(hongkongMTMessage.getMtActionType().equalsIgnoreCase(MConstants.ACT)){

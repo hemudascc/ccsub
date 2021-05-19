@@ -86,6 +86,7 @@ public class JMSMobivateSMSDlrListener implements MessageListener {
 							,mobivateServiceConfig.getServiceId());//product id==service id
 					
 					liveReport.setMsisdn(mobivateSMSDlr.getMsisdn());
+					liveReport.setResponse(mobivateSMSDlr.toString());
 					
 					if(mobivateSMSDlr.getDlrResult().
 							equalsIgnoreCase(MobivateConstant.CG_STTAUS_SUCCESS)

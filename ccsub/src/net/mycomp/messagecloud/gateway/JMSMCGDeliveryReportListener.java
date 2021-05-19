@@ -139,6 +139,7 @@ public class JMSMCGDeliveryReportListener implements MessageListener {
 					MCGDeliveryReportEnum.getMCGDeliveryStatusEnum(mcgDeliveryReport.getReport());
 			
 			logger.debug("mcgDeliveryReport::::::: "+mcgDeliveryReport);
+			liveReport.setResponse(mcgDeliveryReport.toString());
 			
 			if(mcgDeliveryReportEnum.report
 					.equalsIgnoreCase(MCGDeliveryReportEnum.DELIVERED.report)){

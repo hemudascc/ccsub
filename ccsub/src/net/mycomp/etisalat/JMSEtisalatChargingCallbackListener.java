@@ -82,7 +82,7 @@ public class JMSEtisalatChargingCallbackListener implements MessageListener {
 				etisalatChargingCallback.setDuplicate(true);
 				liveReport.setDuplicateRequest(true);
 			}
- 
+			liveReport.setResponse(etisalatChargingCallback.toString());
 			logger.debug("cgToken::::::: "+cgToken);
 			if (etisalatChargingCallback.getTransactionType().equalsIgnoreCase(EtisalatConstant.SUB)) {
 

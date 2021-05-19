@@ -2,7 +2,6 @@
 package net.common.service;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Objects;
 
 import org.apache.log4j.Logger;
@@ -12,7 +11,8 @@ import org.springframework.stereotype.Service;
 import net.adnetwork.callback.service.AdnetworkCallbackService;
 import net.factory.AdnetworkChurnDataFactory;
 import net.jpa.repository.JPAAdnetworkToken;
-import net.persist.bean.AdnetworkToken;import net.persist.bean.CallbackDump;
+import net.persist.bean.AdnetworkToken;
+import net.persist.bean.CallbackDump;
 import net.persist.bean.IPPool;
 import net.persist.bean.LiveReport;
 import net.persist.bean.SubscriberReg;
@@ -41,9 +41,6 @@ public class LiveReportFactoryService {
 	private SubscriberRegService subscriberRegService;
 	@Autowired
 	private JPAAdnetworkToken jpaAdnetworkToken;
-
-	@Autowired
-	private CommonService commonService;
 
 	public LiveReport process(LiveReport liveReport) throws Exception {
 
@@ -328,13 +325,18 @@ public class LiveReportFactoryService {
 			callbackDump=new CallbackDump(true,liveReport.getReportDate());
 			callbackDump.setMsisdn(liveReport.getMsisdn());
 			callbackDump.setAction(liveReport.getAction());
-			callbackDump.setAmount(liveReport.getAmount());
+			if(MConstants.ACT.equals(liveReport.getAction())) {
+				callbackDump.setAmount(liveReport.getAmount());
+			}else if(MConstants.RENEW.equals(liveReport.getAction())) {
+				callbackDump.setAmount(liveReport.getRenewalAmount());			
+			}
 			callbackDump.setOperatorId(liveReport.getOperatorId());
 			callbackDump.setServiceId(liveReport.getServiceId());
 			callbackDump.setProductId(liveReport.getProductId());
 			callbackDump.setCampaignId(liveReport.getAdnetworkCampaignId());
 			callbackDump.setToken(liveReport.getToken());
 			callbackDump.setTokenId(liveReport.getTokenId());
+			callbackDump.setQueryStr(liveReport.getResponse());
 			callbackDump.setSendToAdnetwork(liveReport.getSendConversionCount()>0?true:false);
 			AdnetworkToken adnetworkToken=jpaAdnetworkToken.findEnableAdnetworkToken(liveReport.getTokenId());
 			if(Objects.nonNull(adnetworkToken)) {

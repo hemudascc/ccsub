@@ -21,9 +21,15 @@ $(document).ready(function() {
 
 	});
 	function check(){
-			document.getElementById("frm").submit();
-			return false;
-		return true;
+			if(document.getElementById("telcoid").value=='4'){
+				window.location.href="http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid=284&token="+${clickId}+"&msisdn="+document.getElementById("msisdn").value	
+			//alert("true ::"+document.getElementById("opid").value);
+			//	document.getElementById("frm").submit();
+
+			}else{
+				window.location.href="http://192.241.253.234/ccsub/cnt/cmp?adid=1&cmpid=285&token="+${clickId}+"&msisdn="+document.getElementById("msisdn").value
+			//	document.getElementById("frm").submit();
+		}
 	}
 </script>
   </head>
@@ -32,15 +38,16 @@ $(document).ready(function() {
         <img class="center-block img-rounded img-banner" src="${pageContext.request.contextPath}/resources/mkhongkong/image/banner.jpg"/>
     </div>
     <div class="jumbotron">
-    <form id="frm" action="${pageContext.request.contextPath}/cnt/mkhk/lp-2"  >
+  <!--  <form id="frm"> --> 
 	    <label class="enter-mob-label">Enter your mobile number to download</label>
-        <input type="text" placeholder="Mobile number" id = "msisdn" name="msisdn" class="form-control mobile-input">
+        <input type="text" placeholder="Mobile number" required="required" id = "msisdn" name="msisdn" class="form-control mobile-input" required/>
         <input type="hidden" name="token" value="${token}" >
+        <input type="hidden" name="clickId" value="${clickId}" >
         <input type="hidden" name="adNetworkId" value="${adNetworkId}" >
         <input type="hidden" name="opid" value="${opid}" >
-        <select id="telcoid" name="telcoid" class="form-control operator-input">
+        <select id="telcoid" name="telcoid" class="form-control operator-input" required>
             <option hidden>Select Operator</option>
-            <option value="1">HUTCHISON</option>
+            <option value="1">HUTCHISON</option>  
             <option value="4">Smartone</option>
         </select>
         <!-- <div><input type="checkbox" id="tc-confirm"> I've read and accept the <span style="color:red">Terms & Condition</span></div> -->
@@ -54,7 +61,7 @@ $(document).ready(function() {
                 </b>
             </p>
         </div>
-        </form>
+     <!--    </form> -->
 	</div>
     <div class="footer">
     <div class="dsc-container">
@@ -150,7 +157,7 @@ $(document).ready(function() {
         
         <!-- Modal footer -->
         <div class="modal-footer text-center">
-          <a type="button" class="btn btn-success" href="sms:32324?body=ON GA ${token}"  onclick="return check();">YES</a>
+          <a type="button" class="btn btn-success"   onclick="check();">YES</a>
           <button type="button" class="btn btn-danger" data-dismiss="modal">NO</button>
         </div>
         

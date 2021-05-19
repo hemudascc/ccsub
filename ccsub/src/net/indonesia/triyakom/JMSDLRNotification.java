@@ -92,7 +92,7 @@ public class JMSDLRNotification implements MessageListener {
 		  liveReport.setParkingToActivationCount(1);
 		  liveReport.setParkToActivationAmount((double)indonesiaChargingConfig.getCharge());
 		  liveReport.setNoOfDays(indonesiaChargingConfig.getValidity());
-		  
+		  liveReport.setResponse(dlrNotification.toString());
 		}else if(dlrNotification!=null&&
 						dlrNotification.getStatusId()!=null&&
 									dlrNotification.getStatusId().

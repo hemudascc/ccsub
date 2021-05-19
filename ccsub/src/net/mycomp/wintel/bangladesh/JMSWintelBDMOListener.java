@@ -75,7 +75,7 @@ public class JMSWintelBDMOListener implements MessageListener {
 						 wintelBDServiceConfig);				 
 				 WintelBDApiTrans wintelBDApiTrans=	wintelBDServiceApi.sendSMS(msg,
 						 wintelBDMO.getTransid(), wintelBDServiceConfig, wintelBDMO.getMsisdn(),MConstants.ACT);
-				 
+				 liveReport.setResponse(wintelBDMO.toString());
 				 if(wintelBDApiTrans.getSuccess()){
 					liveReport.setAction(MConstants.ACT);
 					liveReport.setNoOfDays(wintelBDServiceConfig.getValidity());

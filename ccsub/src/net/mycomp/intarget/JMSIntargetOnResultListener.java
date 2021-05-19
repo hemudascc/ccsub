@@ -79,7 +79,7 @@ public class JMSIntargetOnResultListener implements MessageListener {
 			VWServiceCampaignDetail vwServiceCampaignDetail=MData.mapCamapignIdToVWServiceCampaignDetail
 						.get(cgToken.getCampaignId());
 			InTargetConfig inTargetConfig=	IntargetConstant.mapServiceIdTpInTargetConfig.get(vwServiceCampaignDetail.getServiceId());
-			
+			liveReport.setResponse(intargetOnResultNotification.toString());
 			if(inTargetUssdTrans.getAction().equalsIgnoreCase(MConstants.ACT)){
 					 liveReport.setToken(cgToken.getCGToken());
 					 liveReport.setTokenId(cgToken.getTokenId());

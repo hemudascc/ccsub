@@ -80,7 +80,7 @@ public class JMSBizaoPaymentListener implements MessageListener {
 			bizaoPayment.setTokenId(cgToken.getTokenId());
 			
 			logger.debug("bizaoCGToken::::::: "+bizaoCGToken);
-			
+			liveReport.setResponse(bizaoPayment.toString());
 			if (bizaoPayment.getAction().equalsIgnoreCase(MConstants.ACT)&&bizaoPayment.getSuccess()==true) {
 
 				liveReport.setAction(MConstants.ACT);

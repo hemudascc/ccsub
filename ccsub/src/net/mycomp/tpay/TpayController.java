@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.persistence.Column;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import net.common.service.IDaoService;
 import net.common.service.RedisCacheService;
@@ -70,6 +73,12 @@ public class TpayController {
 			tpayNotification.setPaymentTransactionStatusCode(request.getParameter("paymentTransactionStatusCode"));
 			tpayNotification.setQueryStr(request.getQueryString());
 			tpayNotification.setSubscriptionContractId(request.getParameter("subscriptionContractId"));
+			tpayNotification.setShortCode(request.getParameter("shortCode"));
+			tpayNotification.setMessageBody(request.getParameter("messagebody"));
+			tpayNotification.setMcc(request.getParameter("mcc"));
+			tpayNotification.setMnc(request.getParameter("mnc"));
+			tpayNotification.setSmsGwMtId(request.getParameter("smsgwmtid"));
+			tpayNotification.setMoId(request.getParameter("mo_id"));
 		} catch (Exception e) {
 			logger.error("notification:: ", e);
 		} finally {

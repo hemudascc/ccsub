@@ -106,7 +106,7 @@ public class JMSOoredooOmanNotificationListener implements MessageListener{
 			 liveReport.setMsisdn(ooredooOmanNotification.getMsisdn());
 			 logger.info(msisdn+", action:: "+action);
 			 liveReport.setMode(OredooKuwaitSubcriptionMode.getMode(ooredooOmanNotification.getBearerId()));
-			 
+			 liveReport.setResponse(ooredooOmanNotification.toString());
 			if(action.equalsIgnoreCase(MConstants.ACT)){
 				
 				liveReport.setAmount(ooredooOmanNotification.getChargeAmount());

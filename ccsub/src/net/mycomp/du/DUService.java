@@ -258,7 +258,7 @@ public class DUService extends AbstractOperatorService {
 //							getWapMdataImgs().size()))))
 					;
 			logger.info("requestParam:: "+requestParam);			 
-			String url=cgUrl+"?"+requestParam;			
+			String url=cgUrl+"&"+requestParam;			
 			logger.info("processBilling::: redirect to url::  "+url);   
 			modelAndView.setView(new RedirectView(url));
 			adNetworkRequestBean.adnetworkToken.setAction(MConstants.REDIRECT_TO_CG);

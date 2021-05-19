@@ -91,7 +91,7 @@ public class JMSVeooDeliveryReciptListener implements MessageListener {
 			String action=VeooConstant.findAction(
 					veooDeliveryReceipt,veooMtMessage);
 			
-			
+			liveReport.setResponse(veooMtMessage.toString());
 			if(action.equalsIgnoreCase(MConstants.ACT)){
               
 				liveReport.setAction(MConstants.ACT);

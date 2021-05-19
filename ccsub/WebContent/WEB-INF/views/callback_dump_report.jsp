@@ -139,6 +139,15 @@ $('.formselect').change(function(){
 	$("#reportform").submit();
 })});
 </script>
+<script type="text/javascript">
+function getData(i){
+	document.getElementById("pageNo").value = i;
+	console.log("aggregatorId:  "+aggregatorId);
+	console.log("PageNo:  "+i);
+	$("#reportform").submit();
+}
+</script>
+
 </head>
 <body>
 
@@ -266,6 +275,7 @@ $('.formselect').change(function(){
 		<th>Token</th>
 		<th>Click Id</th>
 		<th>Send To Adnetwork</th>
+		<th>Response</th>
 	</tr>
 			<c:forEach var="vwCallbackDump" items="${reportList}" varStatus="loop">
 				<tr bgcolor="">
@@ -276,15 +286,26 @@ $('.formselect').change(function(){
 					<td>${vwCallbackDump.operatorName}</td>					
 					<td>${vwCallbackDump.serviceName}</td>
 					<td>${vwCallbackDump.productName}</td>
-					<td>${vwCallbackDump.createTime}</td>					
+					<td>${vwCallbackDump.queryStr}</td>					
 					<td>${vwCallbackDump.amount}</td>
 					<td>${vwCallbackDump.token}</td>
 					<td>${vwCallbackDump.clickId}</td>
 					<td>${vwCallbackDump.sendToAdnetwork}</td>
+					<td>${vwCallbackDump.queryStr}</td>
 					
 				</tr>
 			</c:forEach>
 			</table>
+			<br><br>
+	<center>
+	<input type="hidden" path="pageNo" name="pageNo" id="pageNo">
+	<c:if test="${lastPageNo>0}">
+	<c:forEach var="i" begin="0" end="${lastPageNo-1 }" >
+	
+		<a style="color:blue;text-decoration: underline;"  onclick="getData(${i});" >${i+1 }</a>    	<!-- Displaying Page No -->
+	</c:forEach>
+	</c:if>
+	</center>	
 	</form:form>
 	<br><br>
 	<br><br>

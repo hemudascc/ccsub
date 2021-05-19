@@ -14,6 +14,7 @@ import net.mycom.nxt.vas.NxtVasService;
 import net.mycomp.actel.ActelService;
 import net.mycomp.beecel.jordon.BCJordonService;
 import net.mycomp.comviva.ooredo.oman.OoredooOmanService;
+import net.mycomp.cornet.sudan.CornetService;
 import net.mycomp.du.DUService;
 import net.mycomp.etisalat.EtisalatService;
 import net.mycomp.intarget.IntargetService;
@@ -156,6 +157,10 @@ public class OperatorRequestService implements IOperatorService{
 	@Autowired
 	@Qualifier("bcJordonService")
 	private BCJordonService bcJordonService;
+	
+	@Autowired
+	@Qualifier("cornetService")
+	private CornetService cornetService;
 	 
 	private IOperatorService findProcessRequest(int opId){
 		
@@ -327,11 +332,15 @@ public class OperatorRequestService implements IOperatorService{
 			ioperatorService=mkHongkongService;
 			break;
 		}	 
-		case MConstants.BC_JORDON_JORDON_ORANGE_OPERATOR_ID:
-		case MConstants.BC_JORDON_JORDON_UMNIAH_OPERATOR_ID:{
+		case MConstants.BC_JORDON_ORANGE_OPERATOR_ID:
+		case MConstants.BC_JORDON_UMNIAH_OPERATOR_ID:{
 			ioperatorService=bcJordonService;
 			break;
-		}	
+		}
+		case MConstants.CORNET_SUDAN_ZAIN_OPERATOR_ID:{
+			ioperatorService = cornetService;
+			break;
+		}
 		default:	{
 			ioperatorService=defaultOperatorService	;
 		}

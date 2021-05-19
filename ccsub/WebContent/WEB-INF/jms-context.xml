@@ -1289,6 +1289,24 @@
 	<bean id="bcJordonNotificationListener"
 		class="net.mycomp.beecel.jordon.JMSJordonNotificationListener" />	
 		<!-- bc Joron End -->
+   	<!-- Cornet Sudan Start -->
+				
+	<bean id="cornetCallbackJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/cornetNotificationQueue" />
+		<qualifier value="cornetCallbackJMSTemplate" />
+	</bean>
+	<bean id="cornetNotificationDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/cornetNotificationQueue?consumer.prefetchSize=10" />
+	</bean>
+	<bean id="cornetNotificationListener"
+		class="net.mycomp.cornet.sudan.CornetJMSNotificationListener" />	
+		<!-- Cornet Sudan End -->
    
 	<jms:listener-container container-type="default"
 		connection-factory="cachedConnectionFactory" acknowledge="auto"
@@ -1535,6 +1553,11 @@
 			ref="bcJordonNotificationListener" method="onMessage" />
 
 	<!-- bc Joron end-->	
+		<!-- Cornet Sudan Start -->
+		<jms:listener destination="cc/cornetNotificationQueue"
+			ref="cornetNotificationListener" method="onMessage" />
+
+		<!-- Cornet Sudan End -->
 	</jms:listener-container>
 
 </beans>

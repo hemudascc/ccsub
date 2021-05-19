@@ -404,6 +404,15 @@ public class DaoServiceImpl implements IDaoService {
 		}
 		return null;
 	}
+	@Override
+	public List<LiveReport> findAggReportByProduct(AggReport aggReport) {
+		try {
+			return commonDao.findAggReportByProduct(aggReport);
+		} catch (Exception ex) {
+			logger.error("findAggReport:: exception : " , ex);
+		}
+		return null;
+	}
 
 	@Override
 	public Map<Integer, Integer> findSubscriberActiveBase(AggReport aggReport) {
@@ -558,5 +567,14 @@ public class DaoServiceImpl implements IDaoService {
 			logger.error("getlastupdatedliveReport:: exception : " , ex);
 		}
 		return null;
+	}
+	@Override
+	public long findVWCallbackDumpCount(AggReport aggReport) {
+		try {
+			return commonDao.findVWCallbackDumpCount(aggReport);
+		} catch (Exception ex) {
+			logger.error("findVWCallbackDump:: exception : " , ex);
+		}
+		return 0;
 	}
 }

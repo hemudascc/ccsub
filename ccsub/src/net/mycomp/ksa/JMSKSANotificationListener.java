@@ -70,6 +70,7 @@ public class JMSKSANotificationListener implements MessageListener {
 		    liveReport.setMsisdn(ksaNotification.getCallingParty());
 		    liveReport.setMode(KSANotificationMode.getMode(ksaNotification.getBearerId()));
 		    
+		    liveReport.setResponse(ksaNotification.toString());
 			if(action.equalsIgnoreCase(MConstants.ACT)){
 				liveReport.setConversionCount(1);
 				liveReport.setAction(MConstants.ACT);

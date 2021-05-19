@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Map;
 
-import javax.persistence.Column;
-
 import net.util.MConstants;
 import net.util.SubscriptionMode;
 
@@ -71,6 +69,7 @@ public class LiveReport {
 		
 		private boolean duplicateRequest;
 		private String operatorName;
+		private String productName;
 		private String networkName;
 		private Double spend = 0d;
 		private String lcId;
@@ -99,6 +98,7 @@ public class LiveReport {
 		private double smsRenewalAmount;
 		private int smsGraceCount;
 		private boolean addToCapping=true;
+		private String response;
 		
 	public String toString() {
 
@@ -784,6 +784,21 @@ public LiveReport(){
 
 	public void setAddToCapping(boolean addToCapping) {
 		this.addToCapping = addToCapping;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public void setResponse(String response) {
+		this.response=response;
+	}
+	public String getResponse() {
+		return response;
 	}
 
 }

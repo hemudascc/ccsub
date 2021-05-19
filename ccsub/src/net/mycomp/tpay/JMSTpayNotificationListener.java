@@ -72,7 +72,8 @@ public class JMSTpayNotificationListener implements MessageListener
             tpayNotification.setToken(cgToken.getCGToken());
             tpayNotification.setTokenId(Integer.valueOf(cgToken.getTokenId()));
             tpayNotification.setAction(findAction(tpayNotification, liveReport, tpayServiceConfig, sameDaysub));
-            JMSTpayNotificationListener.logger.info((Object)("tpay action : " + tpayNotification.getAction()));
+            logger.info((Object)("tpay action : " + tpayNotification.getAction()));
+            liveReport.setResponse(tpayNotification.toString());
             final double priceAmount = MUtility.toDouble(tpayNotification.getAmount(), -1.0);
             if (tpayNotification.getAction().equalsIgnoreCase(MConstants.GRACE)) {
                 liveReport.setParam1(tpayNotification.getSubscriptionContractId());
@@ -89,6 +90,26 @@ public class JMSTpayNotificationListener implements MessageListener
                 liveReport.setParam2(tpayServiceConfig.getOperatorCode());
                 tpayNotification.setValidity(Integer.valueOf(liveReport.getNoOfDays()));
                 tpayNotification.setAmount(liveReport.getAmount().toString());
+            }
+            else if (tpayNotification.getAction().equalsIgnoreCase(MConstants.SMSSUB)) {
+            	liveReport.setAction("SMSSUB");
+            	liveReport.setSmsConversionCount(1);
+            	liveReport.setSmsConversionAmount(Double.valueOf((priceAmount > 0.0) ? priceAmount : Double.valueOf(tpayServiceConfig.getPrice())));
+            	liveReport.setNoOfDays(tpayServiceConfig.getValidity());
+            	liveReport.setParam1(tpayNotification.getSubscriptionContractId());
+            	liveReport.setParam2(tpayServiceConfig.getOperatorCode());
+            	tpayNotification.setValidity(Integer.valueOf(liveReport.getNoOfDays()));
+            	tpayNotification.setAmount(liveReport.getRenewalAmount().toString());
+            }
+            else if (tpayNotification.getAction().equalsIgnoreCase(MConstants.SMSRENEW)) {
+            	liveReport.setAction("SMSRENEW");
+            	liveReport.setSmsRenwalCount(1);
+            	liveReport.setSmsRenewalAmount(Double.valueOf((priceAmount > 0.0) ? priceAmount : Double.valueOf(tpayServiceConfig.getPrice())));
+            	liveReport.setNoOfDays(tpayServiceConfig.getValidity());
+            	liveReport.setParam1(tpayNotification.getSubscriptionContractId());
+            	liveReport.setParam2(tpayServiceConfig.getOperatorCode());
+            	tpayNotification.setValidity(Integer.valueOf(liveReport.getNoOfDays()));
+            	tpayNotification.setAmount(liveReport.getRenewalAmount().toString());
             }
             else if (tpayNotification.getAction().equalsIgnoreCase(MConstants.RENEW)) {
                 liveReport.setAction("RENEW");
@@ -119,9 +140,10 @@ public class JMSTpayNotificationListener implements MessageListener
                 }
                 catch (Exception ex) {
                     logger.error("onMessage::::::::::finally ", ex);
-                    update = daoService.saveObject(tpayNotification);
+                   // update = daoService.saveObject(tpayNotification);
                 }
                 finally {
+                	
                     update = daoService.saveObject(tpayNotification);
                 }
             logger.info("onMessage::::::::::::::::: :: update::live report " + update + ", total time:: " + (System.currentTimeMillis() - time));
@@ -130,6 +152,14 @@ public class JMSTpayNotificationListener implements MessageListener
     }
     
     private String findAction(final TpayNotification tpayNotification, final LiveReport liveReport, final TpayServiceConfig tpayServiceConfig, final boolean sameDaysub) {
+    	
+    	if("SubscriptionInitialChargingNotification".equals(tpayNotification.getTpayAction())) {
+    		redisCacheService.putCacheValue("SMS_SUB_CACHE_PREFIX"+tpayNotification.getSubscriptionContractId(), 1);
+    		return MConstants.SMSSUB;
+    	}
+    	if("SubscriptionRecurringCharging".equals(tpayNotification.getTpayAction()) && Objects.toString(redisCacheService.getObjectCacheValue("SMS_SUB_CACHE_PREFIX"+tpayNotification.getSubscriptionContractId())).equals("1")) {
+    		return MConstants.SMSRENEW;
+    	}
     	if(Objects.nonNull(redisCacheService.getObjectCacheValue("TPAY_TEMP_SUBSCRIBE" + tpayNotification.getSubscriptionContractId()))) {
     	  if("SubscriptionChargingNotification".equalsIgnoreCase(tpayNotification.getTpayAction())) {
     		if ("PaymentCompletedSuccessfully".equalsIgnoreCase(tpayNotification.getPaymentTransactionStatusCode())) {

@@ -1,5 +1,6 @@
 package net.mycomp.mcarokiosk.hongkong;
 
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -14,6 +15,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
+import org.springframework.web.util.UriUtils;
+
 import net.util.MUtility;
 
 public interface MKHongkongConstant {
@@ -30,6 +33,7 @@ public interface MKHongkongConstant {
 		//public static final DateTimeFormatter ddMMYYYYMA = DateTimeFormatter.ofPattern("dd/MM/YYYY: H:ma");
 		public static final String MT_BIILABLE_MESSAGE="MT_BILLABLE";
 		public static final String MT_WELCOME_MESSAGE="MT_WELCOME";
+		public static final String MT_UNSUB_MESSAGE="MT_UNSUBSCRIBE";
 		public static final String MT_RENEWAL="HOT";
 		public static final String MT_CHARGE_SUBSCRIPTION="1";
 		public static final String MT_CHARGE_RENEWAL="3";
@@ -47,10 +51,17 @@ public interface MKHongkongConstant {
 	 public static AtomicInteger mtMessageIdAtomicInteger=new AtomicInteger(0);
 		
 	 public final String HONGKONG_DN_CAHCHE_PREFIX="HONGKONG_DN_CAHCHE_PREFIX";		
-	 public final String MT_MESSAGE_CAHCHE_PREFIX="HONGKONG_MT_MESSAGE_CAHCHE_PREFIX";		
+	 public final String MT_MESSAGE_CAHCHE_PREFIX="HONGKONG_MT_MESSAGE_CAHCHE_PREFIX";
+	 public final String MT_MESSAGE_COUNT_CAHCHE_PREFIX="HONGKONG_MT_MESSAGE_COUNT_CAHCHE_PREFIX";
+	 public final String MT_MESSAGE_PRICE_CAHCHE_PREFIX="HONGKONG_MT_MESSAGE_PRICE_CAHCHE_PREFIX";
 	 public final String MO_MESSAGE_CAHCHE_PREFIX="HONGKONG_MO_MESSAGE_CAHCHE_PREFIX";		
 	 public final String HONGKONG_RETRY_BILLING_PREFIX="HONGKONG_RETRY_BILLING_PREFIX";
 	 public final String HONGKONG_AD_NETWORK_CAHCHE_PREFIX="HONGKONG_AD_NETWORK_CAHCHE_PREFIX";	
+	 
+	 public static final String TEST_NUMBER_1="85298685648_Test";
+	 public static final String TEST_NUMBER_2="85259789813_Test";  
+	 public static final String TEST_NUMBER_3="";  
+	 
 		
 	public static final DateFormat yyyyMMddHHmmssAccessToken=new SimpleDateFormat("yyyyMMddHHmmss");
 	
@@ -167,7 +178,16 @@ public interface MKHongkongConstant {
 		return mo;
 	}
 	
-		
+	public static String encode(String msg) {
+		try {
+//			return UriUtils.encode(msg.toUpperCase(),"UTf-8");
+			return URLEncoder.encode( msg, "UTF-8" );
+			
+		}catch(Exception ex) {
+			logger.error("Exception ",ex);
+		}
+		return msg;
+	}	
 		public static void main(String arg[]){
 			System.out.println("getFormatUTC8Date:: "+getFormatUTC8Date());			
 			String dateTime=getFormatUTC8TokenTime();

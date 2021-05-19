@@ -131,7 +131,7 @@ public class JMSOredooKuwaitCGNotificationListener implements MessageListener{
 		 liveReport.setMsisdn(oredooKuwaitCGNotification.getMsisdn());
 		 logger.info(msisdn+", action:: "+action);
 		 liveReport.setMode(OredooKuwaitSubcriptionMode.getMode(oredooKuwaitCGNotification.getBearerId()));
-		 
+		 liveReport.setResponse(oredooKuwaitCGNotification.toString());
 		if(action.equalsIgnoreCase(MConstants.ACT)){
 			
 			liveReport.setAmount(oredooKuwaitCGNotification.getChargeAmount());

@@ -89,6 +89,7 @@ public class JMSWorlplayNotificationListener implements MessageListener {
 //						,worldplayNotification.getCreateTime());
 //			}
 			
+			 liveReport.setResponse(worldplayNotification.toString());
 			if(worldplayNotification.getMt().equalsIgnoreCase("sdResult")
 					&&worldplayNotification.getStatusId().equals("0")
 					&&liveReport.getTokenId()>0

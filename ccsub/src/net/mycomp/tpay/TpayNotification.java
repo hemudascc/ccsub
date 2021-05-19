@@ -53,8 +53,21 @@ public class TpayNotification implements Serializable{
 	private Timestamp createTime;
 	@Column(name="subscription_contract_id")
 	private String subscriptionContractId;
+	@Column(name="short_code")
+	private String shortCode;
+	@Column(name="message_body")
+	private String messageBody;
+	@Column(name="mcc")
+	private String mcc;
+	@Column(name="mnc")
+	private String mnc;
+	@Column(name="sms_gw_mt_id")
+	private String smsGwMtId;
+	@Column(name="mo_id")
+	private String moId;
+	@Column(name="status")
 	private Boolean status;
-	
+
 	public TpayNotification() {}
 	public TpayNotification(Boolean status) {
 		this.createTime=new Timestamp(System.currentTimeMillis());
@@ -72,6 +85,12 @@ public class TpayNotification implements Serializable{
 	}
 	public void setAction(String action) {
 		this.action = action;
+	}
+	public String getTpayAction() {
+		return tpayAction;
+	}
+	public void setTpayAction(String tpayAction) {
+		this.tpayAction = tpayAction;
 	}
 	public String getTransactionId() {
 		return transactionId;
@@ -114,13 +133,6 @@ public class TpayNotification implements Serializable{
 	}
 	public void setDigest(String digest) {
 		this.digest = digest;
-	}
-	
-	public String getTpayAction() {
-		return tpayAction;
-	}
-	public void setTpayAction(String tpayAction) {
-		this.tpayAction = tpayAction;
 	}
 	public String getNotificationStatus() {
 		return notificationStatus;
@@ -176,12 +188,47 @@ public class TpayNotification implements Serializable{
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
-	
 	public String getSubscriptionContractId() {
 		return subscriptionContractId;
 	}
 	public void setSubscriptionContractId(String subscriptionContractId) {
 		this.subscriptionContractId = subscriptionContractId;
+	}
+	public String getShortCode() {
+		return shortCode;
+	}
+	public void setShortCode(String shortCode) {
+		this.shortCode = shortCode;
+	}
+	public String getMessageBody() {
+		return messageBody;
+	}
+	public void setMessageBody(String messageBody) {
+		this.messageBody = messageBody;
+	}
+	public String getMcc() {
+		return mcc;
+	}
+	public void setMcc(String mcc) {
+		this.mcc = mcc;
+	}
+	public String getMnc() {
+		return mnc;
+	}
+	public void setMnc(String mnc) {
+		this.mnc = mnc;
+	}
+	public String getSmsGwMtId() {
+		return smsGwMtId;
+	}
+	public void setSmsGwMtId(String smsGwMtId) {
+		this.smsGwMtId = smsGwMtId;
+	}
+	public String getMoId() {
+		return moId;
+	}
+	public void setMoId(String moId) {
+		this.moId = moId;
 	}
 	public Boolean getStatus() {
 		return status;
@@ -191,13 +238,14 @@ public class TpayNotification implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "TpayNotification [id=" + id + ", action=" + action + ", transactionId=" + transactionId
-				+ ", errorMessage=" + errorMessage + ", billingAction=" + billingAction + ", billingNumber="
-				+ billingNumber + ", productId=" + productId + ", msisdn=" + msisdn + ", digest=" + digest
-				+ ", notificationStatus=" + notificationStatus + ", paymentTransactionStatusCode="
+		return "TpayNotification [id=" + id + ", action=" + action + ", tpayAction=" + tpayAction + ", transactionId="
+				+ transactionId + ", errorMessage=" + errorMessage + ", billingAction=" + billingAction
+				+ ", billingNumber=" + billingNumber + ", productId=" + productId + ", msisdn=" + msisdn + ", digest="
+				+ digest + ", notificationStatus=" + notificationStatus + ", paymentTransactionStatusCode="
 				+ paymentTransactionStatusCode + ", tokenId=" + tokenId + ", token=" + token + ", sendToAdnetwork="
 				+ sendToAdnetwork + ", validity=" + validity + ", amount=" + amount + ", queryStr=" + queryStr
-				+ ", createTime=" + createTime + ", status=" + status + "]";
+				+ ", createTime=" + createTime + ", subscriptionContractId=" + subscriptionContractId + ", shortCode="
+				+ shortCode + ", messageBody=" + messageBody + ", mcc=" + mcc + ", mnc=" + mnc + ", smsGwMtId="
+				+ smsGwMtId + ", moId=" + moId + ", status=" + status + "]";
 	}
-
 }

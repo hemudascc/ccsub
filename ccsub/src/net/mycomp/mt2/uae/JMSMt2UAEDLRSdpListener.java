@@ -68,6 +68,7 @@ public class JMSMt2UAEDLRSdpListener implements MessageListener {
 			liveReport.setMsisdn(mt2uaeDeliveryNotification.getMsisdn());
 			liveReport.setCircleId(0);
 			liveReport.setMode("");
+			liveReport.setResponse(mt2uaeDeliveryNotification.toString());
 			if(mt2uaeDeliveryNotification.getSdpStatus().equals("Success") && cgToken.getCampaignId()>0) {
 				//act
 				liveReport.setAction(MConstants.ACT);

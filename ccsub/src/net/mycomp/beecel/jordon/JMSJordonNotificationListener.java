@@ -75,6 +75,7 @@ public class JMSJordonNotificationListener  implements MessageListener{
 			liveReport.setToken(cgToken.getCGToken());
 			liveReport.setMsisdn(bcJordonNotification.getMsisdn());
 			liveReport.setCircleId(0);
+			liveReport.setResponse(bcJordonNotification.toString());
 			if(bcJordonNotification.getNotificationtype().equalsIgnoreCase(BCJordonConstant.ACTIVATE) || bcJordonNotification.getNotificationtype().equalsIgnoreCase(BCJordonConstant.SUBSCRIBE)) {
 				liveReport.setAction(MConstants.ACT);					
 				liveReport.setConversionCount(1);

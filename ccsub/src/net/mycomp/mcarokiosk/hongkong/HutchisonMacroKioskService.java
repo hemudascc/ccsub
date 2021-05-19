@@ -2,6 +2,7 @@ package net.mycomp.mcarokiosk.hongkong;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import net.common.service.IDaoService;
@@ -11,7 +12,7 @@ import net.util.HTTPResponse;
 import net.util.MConstants;
 
 @Service("hutchisonMacroKioskService")
-public class HutchisonMacroKioskService  extends  AbstractMacroKioskMTMessage{
+public class HutchisonMacroKioskService  implements IMacroKioskService{
 
 	private static final Logger logger = Logger.getLogger(HutchisonMacroKioskService.class);
 
@@ -19,7 +20,11 @@ public class HutchisonMacroKioskService  extends  AbstractMacroKioskMTMessage{
 	@Autowired
 	private IDaoService daoService;
 	
-	
+	@Autowired
+	protected HongkongSmsService smsService;
+
+	@Value("${macrokiosk.hongkong.mt.url}")
+	protected String mtUrl;
 	
 	@Autowired
 	private RedisCacheService redisCacheService; 
@@ -42,7 +47,7 @@ public class HutchisonMacroKioskService  extends  AbstractMacroKioskMTMessage{
 				logger.info("text::::::   "+text+"handleSubscriptionhongkongMOMessage:: ::::::selectedMKHongkongConfig::  "+selectedMKHongkongConfig);
 				String msg=MKHongkongConstant.convertToHexString(
 						MKHongkongConstant.convertToDateTimeFormat())+text;		
-			     HongkongMTMessage mtMessage =createMTBillableMessage(selectedMKHongkongConfig,hongkongMOMessage,msg);
+			    HongkongMTMessage mtMessage =(hongkongMOMessage.getIsFreeMt())?createMTWelcomeMessage(selectedMKHongkongConfig,hongkongMOMessage,msg):createMTBillableMessage(selectedMKHongkongConfig,hongkongMOMessage,msg);
 				 mtMessage.setServiceId(selectedMKHongkongConfig.getServiceId());
 				 
 				 logger.info("handleSubscriptionhongkongMOMessage:: create MT message::::::mtMessage "+mtMessage);
@@ -74,7 +79,7 @@ public class HutchisonMacroKioskService  extends  AbstractMacroKioskMTMessage{
 			
 		
 			if(hongkongDeliveryNotification!=null&&hongkongDeliveryNotification.getStatus()!=null){
-				hongkongDeliveryNotification.setRetry(HongkongSmartoneStatusEnum.isRetry(hongkongDeliveryNotification.getStatus()));			
+//Yash				hongkongDeliveryNotification.setRetry(HongkongSmartoneStatusEnum.isRetry(hongkongDeliveryNotification.getStatus()));			
 			}
 		}
 		}catch(Exception ex){
@@ -109,43 +114,19 @@ protected  HongkongMTMessage createMTWelcomeMessage(MKHongkongConfig mkHongkongC
 
 protected  HongkongMTMessage createMTWelcomeMessage(MKHongkongConfig mkHongkongConfig,HongkongMOMessage hongkongMOMessage,String msg){
 	
-	HongkongMTMessage hongkongMTMessage=new HongkongMTMessage(true);
-	hongkongMTMessage.setMessageType(MKHongkongConstant.MT_WELCOME_MESSAGE);
-	hongkongMTMessage.setMtActionType(MKHongkongConstant.MT_WELCOME_MESSAGE);
-	hongkongMTMessage.setUser(mkHongkongConfig.getUser());
-	hongkongMTMessage.setPass(mkHongkongConfig.getPassword());	
-	hongkongMTMessage.setCat(HongkongMTCat.SUBCRIBE_TYPE.getCatId());
-	hongkongMTMessage.setFromStr(hongkongMOMessage.getShortcode());
-	hongkongMTMessage.setMsisdn(hongkongMOMessage.getMsisdn());
-	hongkongMTMessage.setKeyword(mkHongkongConfig.getKeyword());		
-	hongkongMTMessage.setMoMessageId(hongkongMOMessage.getId());		
-	hongkongMTMessage.setOpId(hongkongMOMessage.getOpId());
-	hongkongMTMessage.setPrice(0d);		
-	hongkongMTMessage.setTelcoId(hongkongMOMessage.getTelcoid());
-	hongkongMTMessage.setTextMsg(msg);
-	hongkongMTMessage.setType(MKHongkongConstant.MT_TEXT);
-	hongkongMTMessage.setSenderid(hongkongMOMessage.getShortcode());
-	hongkongMTMessage.setLinkId(hongkongMOMessage.getMoid());
-	return hongkongMTMessage;
- }
-
-
-protected  HongkongMTMessage createMTBillableMessage(MKHongkongConfig mkHongkongConfig,
-		HongkongMOMessage hongkongMOMessage,String msg){
-	
 	HongkongMTMessage mtMessage=new HongkongMTMessage(true);
-	mtMessage.setMessageType(MKHongkongConstant.MT_BIILABLE_MESSAGE);
-	mtMessage.setMtActionType(MConstants.ACT);
+	mtMessage.setMessageType(MKHongkongConstant.MT_WELCOME_MESSAGE);
+	mtMessage.setMtActionType(MKHongkongConstant.MT_WELCOME_MESSAGE);
 	mtMessage.setUser(mkHongkongConfig.getUser());
 	mtMessage.setPass(mkHongkongConfig.getPassword());	
 	mtMessage.setCat(HongkongMTCat.SUBCRIBE_TYPE.getCatId());
-	mtMessage.setFromStr(mkHongkongConfig.getShortcode());
+	mtMessage.setFromStr(mkHongkongConfig.getShortcode()); 
 	mtMessage.setMsisdn(hongkongMOMessage.getMsisdn());
 	mtMessage.setKeyword(mkHongkongConfig.getKeyword());		
 	mtMessage.setMoMessageId(hongkongMOMessage.getId());		
 	mtMessage.setMoMessageIdStr(hongkongMOMessage.getMoid());  
 	mtMessage.setOpId(hongkongMOMessage.getOpId());
-	mtMessage.setPrice(mkHongkongConfig.getPricePoint());		
+	mtMessage.setPrice(0d);		
 	mtMessage.setTelcoId(hongkongMOMessage.getTelcoid());
 	mtMessage.setTextMsg(msg);
 	mtMessage.setType(MKHongkongConstant.MT_TEXT);
@@ -154,7 +135,36 @@ protected  HongkongMTMessage createMTBillableMessage(MKHongkongConfig mkHongkong
 	mtMessage.setToken(hongkongMOMessage.getToken());
 	mtMessage.setCampaignId(hongkongMOMessage.getCampaignId());
 	mtMessage.setPlatform(mkHongkongConfig.getPlatform());
-	mtMessage.setCharge(MKHongkongConstant.MT_CHARGE_SUBSCRIPTION);
+	mtMessage.setCharge(null);
+	return mtMessage;
+ }
+
+
+protected  HongkongMTMessage createMTBillableMessage(MKHongkongConfig mkHongkongConfig,
+		HongkongMOMessage hongkongMOMessage,String msg){
+	
+	HongkongMTMessage mtMessage=new HongkongMTMessage(true);
+	mtMessage.setMessageType((hongkongMOMessage.getIsFreeMt())?MKHongkongConstant.MT_WELCOME_MESSAGE:MKHongkongConstant.MT_BIILABLE_MESSAGE);
+	mtMessage.setMtActionType((hongkongMOMessage.getIsFreeMt())?MKHongkongConstant.MT_WELCOME_MESSAGE:MConstants.ACT);
+	mtMessage.setUser(mkHongkongConfig.getUser());
+	mtMessage.setPass(mkHongkongConfig.getPassword());	
+	mtMessage.setCat(HongkongMTCat.SUBCRIBE_TYPE.getCatId());
+	mtMessage.setFromStr(mkHongkongConfig.getShortcode()); 
+	mtMessage.setMsisdn(hongkongMOMessage.getMsisdn());
+	mtMessage.setKeyword(mkHongkongConfig.getKeyword());		
+	mtMessage.setMoMessageId(hongkongMOMessage.getId());		
+	mtMessage.setMoMessageIdStr(hongkongMOMessage.getMoid());  
+	mtMessage.setOpId(hongkongMOMessage.getOpId());
+	mtMessage.setPrice((hongkongMOMessage.getIsFreeMt())?0d:mkHongkongConfig.getPricePoint());		
+	mtMessage.setTelcoId(hongkongMOMessage.getTelcoid());
+	mtMessage.setTextMsg(msg);
+	mtMessage.setType(MKHongkongConstant.MT_TEXT);
+	mtMessage.setSenderid(hongkongMOMessage.getShortcode());
+	mtMessage.setTokenId(hongkongMOMessage.getTokenId());
+	mtMessage.setToken(hongkongMOMessage.getToken());
+	mtMessage.setCampaignId(hongkongMOMessage.getCampaignId());
+	mtMessage.setPlatform(mkHongkongConfig.getPlatform());
+	mtMessage.setCharge((hongkongMOMessage.getIsFreeMt())?null:MKHongkongConstant.MT_CHARGE_SUBSCRIPTION);
 	return mtMessage;
    }	
 }

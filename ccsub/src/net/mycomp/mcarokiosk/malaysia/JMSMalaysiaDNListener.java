@@ -106,7 +106,7 @@ public class JMSMalaysiaDNListener implements MessageListener {
 	    	if(subscriberReg!=null){
 	    		liveReport.setMode(subscriberReg.getMode());
 	    	}
-	    		
+	    	liveReport.setResponse(malaysiaDeliveryNotification.toString());
 		     if(malaysiaDeliveryNotification.isCharged()){	
 		    	
 		    if(malasiyaMTMessage.getMtActionType().equalsIgnoreCase(MConstants.ACT)){

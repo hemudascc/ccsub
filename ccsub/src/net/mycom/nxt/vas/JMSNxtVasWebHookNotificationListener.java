@@ -89,6 +89,7 @@ public class JMSNxtVasWebHookNotificationListener implements MessageListener {
 			NxtVasSubscriberStatusEnum nxtVasSubscriberStatusEnum=NxtVasSubscriberStatusEnum
 					.getNxtVasSubscriberStatusEnum(MUtility.toInt(
 					nxtWebhookNotification.getSubscriberStatus(),0));
+			liveReport.setResponse(nxtWebhookNotification.toString());
 			if (nxtWebhookNotification.getAction().equals(NxtVasConstant.ACTIVE)) {
 
 				liveReport.setAction(MConstants.ACT);

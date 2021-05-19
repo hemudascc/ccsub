@@ -87,7 +87,7 @@ public class JMSOnMobileChargingNotificationListener implements MessageListener{
 				liveReport.setAdnetworkCampaignId(cgToken.getCampaignId());		 
 			 liveReport.setServiceId(onMobileServiceConfig.getServiceId());
 			// liveReport.setMode(OredooKuwaitSubcriptionMode.getMode(ooredooOmanNotification.getBearerId()));
-			 
+			 liveReport.setResponse(onMobileChargingNotification.toString());
 			if(onMobileChargingNotification.getAction().equalsIgnoreCase(MConstants.ACT)){
 				liveReport.setAction(MConstants.ACT);
 				liveReport.setAmount(onMobileServiceConfig.getPrice());
