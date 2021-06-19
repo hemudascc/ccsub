@@ -68,7 +68,7 @@ public boolean bcJordonNotificationJMSTemplate(final BCJordonNotification bcJord
 				@Override
 				public Message createMessage(Session session) throws JMSException {
 					Message message = session.createObjectMessage(bcJordonNotification);
-					message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 12*1000L);
+					message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 2*60*1000L);
 					return message;
 				}
 			});

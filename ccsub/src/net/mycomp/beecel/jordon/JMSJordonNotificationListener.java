@@ -52,7 +52,7 @@ public class JMSJordonNotificationListener  implements MessageListener{
 		String token = null;
 		BCJordonConfig bcJordonConfig=null;
 		try {
-			Thread.sleep(120000);
+//			Thread.sleep(120000);
 			
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			bcJordonNotification = (BCJordonNotification)objectMessage.getObject();
@@ -122,10 +122,12 @@ public class JMSJordonNotificationListener  implements MessageListener{
 //		Thread.sleep(120000);
 		token =(String)redisCacheService.getObjectCacheValue(BCJordonConstant.CG_CALLBACK_CAHCHE_PREFIX+bcJordonNotification.getMsisdn());		
 		if(token==null) {
-		if(bcJordonNotification.getSid().equals("9557")) {
-			return"161c123c286";
-		}else {
-			return"161c123c287";
+		if(bcJordonNotification.getSid().equals("9536")) {
+			return"-1c1c286";
+		}else if(bcJordonNotification.getSid().equals("9557")) {
+			return"-1c1c287";
+		} else {
+			return"-1c1c291";
 		}
 		}
 		}catch(Exception e) {

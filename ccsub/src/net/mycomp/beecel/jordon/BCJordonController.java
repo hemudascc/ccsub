@@ -1,27 +1,22 @@
 package net.mycomp.beecel.jordon;
 
 import java.sql.Timestamp;
-import java.util.Timer;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import net.common.jms.JMSService;
 import net.common.service.RedisCacheService;
-import net.common.service.SubscriberRegService;
-import net.mycomp.mcarokiosk.hongkong.MKHongkongConstant;
-import net.persist.bean.LiveReport;
+import net.jpa.repository.JPASubscriberReg;
+import net.persist.bean.SubscriberReg;
 import net.persist.bean.VWServiceCampaignDetail;
 import net.process.bean.CGToken;
-import net.util.MConstants;
 import net.util.MData;
 import net.util.MUtility;
 
@@ -35,9 +30,6 @@ public class BCJordonController {
 	
 
 	@Autowired
-	private SubscriberRegService subscriberRegService;
-	
-	@Autowired
 	private JMSService jmsService;
 	
 	@Autowired
@@ -45,6 +37,9 @@ public class BCJordonController {
 	
 	@Autowired
 	private RedisCacheService redisCacheService;
+	
+	@Autowired
+	private JPASubscriberReg jpaSubscriberReg;
 	
 	@RequestMapping("tocg")
 	public ModelAndView toCG(ModelAndView modelAndView,HttpServletRequest  request){
@@ -158,4 +153,34 @@ public class BCJordonController {
 		
 		return "Ok";	  
 	}
+	
+	@RequestMapping("unsub")
+	public ModelAndView unsubscribe(ModelAndView modelAndView,HttpServletRequest  request){
+		String msisdn = request.getParameter("msisdn");
+		String lang = request.getParameter("lang");
+		int productId = Integer.parseInt(request.getParameter("productid"));
+		if(msisdn!=null) {
+			msisdn = msisdn.startsWith(BCJordonConstant.JORDON_COUNTRY_CODE)?msisdn:BCJordonConstant.JORDON_COUNTRY_CODE+msisdn;
+		}
+		SubscriberReg subscriberReg = jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(msisdn,productId );
+		modelAndView.setViewName("bcjordon/unsubscribe");
+		modelAndView.addObject("msisdn", msisdn);
+		if(subscriberReg!=null && subscriberReg.getStatus()==1) {  
+			BCJordonConfig bcJordonConfig = BCJordonConstant.mapServiceIdToBCJordonConfig
+					.get(subscriberReg.getServiceId());
+			logger.info("bcJordonConfig:  "+bcJordonConfig);
+			modelAndView.addObject("lpImageUrl", bcJordonConfig.getLpImages());
+			modelAndView.addObject("portalUrl", bcJordonConfig.getPortalUrl());	
+			modelAndView.addObject("shortCode",bcJordonConfig.getShortCode());
+			modelAndView.addObject("unsubKeyword",bcJordonConfig.getUnsubKeyword());
+			CGToken cgToken = new CGToken(subscriberReg.getParam3());
+	
+			modelAndView.addObject("campId", cgToken.getCampaignId());	
+			modelAndView.addObject("token", subscriberReg.getParam3());
+			modelAndView.addObject("productId", subscriberReg.getProductId());
+		}
+		modelAndView.addObject("lang", lang);
+		return modelAndView;
+	}
+
 }

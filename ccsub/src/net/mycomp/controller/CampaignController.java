@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -203,9 +204,13 @@ public class CampaignController {
 			SubscriberReg subscriberReg=null;
 			if(subId==0){
 				 subscriberReg= jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(msisdn, productId);
+				 if(Objects.isNull(subscriberReg)) {
+						return  operatorRequestService.checkSub(productId,opId,msisdn)?MConstants.ACTIVE:MConstants.INACTIVE;
+					}else {
 				 productId=subscriberReg.getProductId();
 				 opId=subscriberReg.getOperatorId();
 				 msisdn=subscriberReg.getMsisdn();
+					}
 				 
 			}else{
 			 subscriberReg= jpaSubscriberReg.findSubscriberRegById(subId);

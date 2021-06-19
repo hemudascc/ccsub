@@ -41,7 +41,7 @@ public interface BCJordonConstant {
 		 
 	  public static final List<BCJordonConfig> listBCJordonConfig=new ArrayList<BCJordonConfig>();
 	  public static Map<Integer,BCJordonConfig> mapServiceIdToBCJordonConfig=new HashMap<Integer,BCJordonConfig>();
-	  
+	  public static final String JORDON_COUNTRY_CODE = "962";
 	  public static Timestamp getFormatUTC8Date(){			
 			ZonedDateTime now = ZonedDateTime.now(ZoneOffset.of("+08:00"));		
 			return Timestamp.valueOf(now.toLocalDateTime());

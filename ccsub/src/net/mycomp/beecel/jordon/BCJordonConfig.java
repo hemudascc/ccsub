@@ -55,10 +55,12 @@ public class BCJordonConfig {
 	@Column(name="lp_pages")
 	private String lpPages;	
 	@Column(name="lp_images")
-	@Convert(converter=JpaConverterJson.class)
-	private List<String> lpImages;
+	private String lpImages;
+	@Column(name="unsub_keyword")
+	private String unsubKeyword;
 	@Column(name="status")
 	private Boolean  status=true;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -179,11 +181,18 @@ public class BCJordonConfig {
 	public void setLpPages(String lpPages) {
 		this.lpPages = lpPages;
 	}
-	public List<String> getLpImages() {
+	public String getLpImages() {
 		return lpImages;
 	}
-	public void setLpImages(List<String> lpImages) {
+	public void setLpImages(String lpImages) {
 		this.lpImages = lpImages;
+	}
+	
+	public String getUnsubKeyword() {
+		return unsubKeyword;
+	}
+	public void setUnsubKeyword(String unsubKeyword) {
+		this.unsubKeyword = unsubKeyword;
 	}
 	public Boolean getStatus() {
 		return status;
@@ -195,11 +204,12 @@ public class BCJordonConfig {
 	public String toString() {
 		return "BCJordonConfig [id=" + id + ", t=" + t + ", shortCode=" + shortCode + ", bcServiceId=" + bcServiceId
 				+ ", serviceId=" + serviceId + ", countryCode=" + countryCode + ", senderName=" + senderName
-				+ ", opCode=" + opCode + ", operatorName=" + operatorName + ", pub=" + pub + ", opServiceName="
-				+ opServiceName + ", portalUrl=" + portalUrl + ", price=" + price + ", pricePoint=" + pricePoint
-				+ ", productId=" + productId + ", lpPages=" + lpPages + ", lpImages=" + lpImages + ", status=" + status
-				+ "]";
+				+ ", opCode=" + opCode + ", operatorId=" + operatorId + ", operatorName=" + operatorName + ", pub="
+				+ pub + ", opServiceName=" + opServiceName + ", portalUrl=" + portalUrl + ", price=" + price
+				+ ", pricePoint=" + pricePoint + ", productId=" + productId + ", lpPages=" + lpPages + ", lpImages="
+				+ lpImages + ", unsubKeyword=" + unsubKeyword + ", status=" + status + "]";
 	}
 
+	
 	
 }

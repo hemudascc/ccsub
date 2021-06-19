@@ -167,6 +167,13 @@ public class BCJordonService extends AbstractOperatorService {
 	
 	@Override
 	public boolean checkSub(Integer productId,Integer opid,String msisdn) {
+		logger.error("bcJordon Service msisdn: "+msisdn);
+		if(msisdn!=null) {
+			
+			msisdn = msisdn.startsWith("0")?msisdn.replaceFirst("0",BCJordonConstant.JORDON_COUNTRY_CODE):msisdn;
+			msisdn = msisdn.startsWith(BCJordonConstant.JORDON_COUNTRY_CODE)?msisdn:BCJordonConstant.JORDON_COUNTRY_CODE+msisdn;
+		}
+		logger.error("bcJordon Service msisdn: "+msisdn);
 		SubscriberReg subscriberReg=jpaSubscriberReg.findSubscriberRegByMsisdnAndProductId(msisdn,productId);
 		logger.info("checkSub:::::::::: subscriberReg: "+subscriberReg);
 		if(subscriberReg!=null&&subscriberReg.getStatus()==MConstants.SUBSCRIBED){
