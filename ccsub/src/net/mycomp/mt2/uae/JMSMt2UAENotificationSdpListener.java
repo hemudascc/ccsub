@@ -114,6 +114,10 @@ public class JMSMt2UAENotificationSdpListener implements MessageListener {
 				if(mt2UAENotification.getAction().equals(MConstants.DCT)) {
 					liveReport.setAction(MConstants.DCT);			
 					liveReport.setDctCount(1);
+				}else if(mt2UAENotification.getAction().equals(MConstants.ACT)) {
+					liveReport.setAction(MConstants.ACT);			
+					liveReport.setConversionCount(1);
+					liveReport.setNoOfDays(mt2UAEServiceConfig.getValidity());
 				}
 			}
 		} catch (Exception ex) {

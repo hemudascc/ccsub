@@ -53,24 +53,40 @@ public class HongkongSmatoneMacroKioskService implements IMacroKioskService{
 			 daoService.updateObject(mtMessage);
 		}else {
 		
-	    mtMessage =(hongkongMOMessage.getIsFreeMt())?createMTWelcomeMessage(selectedMKHongkongConfig,hongkongMOMessage):createMTSignUpMessage(selectedMKHongkongConfig,hongkongMOMessage);
-		// mtMessage.setAction(MConstants.ACT);
-		 mtMessage.setServiceId(selectedMKHongkongConfig.getServiceId());
+		 if(hongkongMOMessage.getIsFreeMt()) {
+			 mtMessage = createMTWelcomeMessage(selectedMKHongkongConfig,hongkongMOMessage);
+			 mtMessage.setServiceId(selectedMKHongkongConfig.getServiceId());
+//			 response=smsService.sendMTSMS(mtUrl, mtMessage);
+			 redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.IS_WELCOME_MESSAGE_SENT_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn(),
+					 hongkongMOMessage.getToken(), 1);
+			 logger.info("Welcome MT Sent token: "+hongkongMOMessage.getToken());
+			 redisCacheService.putObjectCacheValueByEvictionMinute(MKHongkongConstant.MT_MESSAGE_CAHCHE_PREFIX
+					 +mtMessage.getMsgId(),  
+					 mtMessage.getId(), 10*60);
+			 daoService.saveObject(mtMessage);
+		 }
 		
-		 logger.info("handleSubscriptionhongkongMOMessage:: create MT message::::::mtMessage "+mtMessage);
+		 String sentWelcomeRefId =(String)redisCacheService.getObjectCacheValue(MKHongkongConstant.IS_WELCOME_MESSAGE_SENT_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn());
+		 if(!hongkongMOMessage.getIsFreeMt() && sentWelcomeRefId.equalsIgnoreCase(hongkongMOMessage.getRefId())) {
+		 mtMessage = createMTSignUpMessage(selectedMKHongkongConfig,hongkongMOMessage);	 
+		 mtMessage.setServiceId(selectedMKHongkongConfig.getServiceId());
 		 response=smsService.sendMTSMS(mtUrl, mtMessage);
-		 redisCacheService.putObjectCacheValueByEvictionMinute(MKHongkongConstant.MT_MESSAGE_CAHCHE_PREFIX
-				 +mtMessage.getMsgId(),  
-				 mtMessage.getId(), 10*60);
-		 daoService.updateObject(mtMessage);
-		if(!hongkongMOMessage.getIsFreeMt()) {
+		 daoService.saveObject(mtMessage);
+		 try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		 mtMessage = createMTBillableMessage(selectedMKHongkongConfig, hongkongMOMessage);
+		 mtMessage.setServiceId(selectedMKHongkongConfig.getServiceId());
 		 response=smsService.sendMTSMS(mtUrl, mtMessage);
 		 int price = (int)(selectedMKHongkongConfig.getPrice()+0);
+		 redisCacheService.putObjectCacheValueByEvictionDay(MKHongkongConstant.IS_WELCOME_MESSAGE_SENT_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn(),"xyz", 1);
 		 redisCacheService.putIntValue(MKHongkongConstant.MT_MESSAGE_PRICE_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn(),price );
 		 redisCacheService.putIntValue(MKHongkongConstant.MT_MESSAGE_COUNT_CAHCHE_PREFIX+hongkongMOMessage.getMsisdn(), 1);
 		logger.info("handleSubscriptionhongkongMOMessage:: sendMTSMS::::::response "+response);
-		daoService.updateObject(mtMessage);
+		daoService.saveObject(mtMessage);
 		 }
 		}
 		return true;
