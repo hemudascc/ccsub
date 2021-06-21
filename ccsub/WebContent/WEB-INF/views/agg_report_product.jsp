@@ -327,7 +327,7 @@ $('.formselect').change(function(){
 					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${entry.value.stream().map(v->v.renewalAmount).sum()/3.67}"/></td>
 					<td>${entry.value.stream().map(v->v.graceConversionCount).sum()}</td>
 					<td>${entry.value.stream().map(v->v.amount).sum()+entry.value.stream().map(v->v.renewalAmount).sum()}</td>
-					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${entry.value.stream().map(v->v.amount).sum()+entry.value.stream().map(v->v.renewalAmount).sum())/3.67}"/></td>
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${(entry.value.stream().map(v->v.amount).sum()+entry.value.stream().map(v->v.renewalAmount).sum())/3.67}"/></td>
 					<td>${entry.value.stream().map(v->v.sendConversionCount).sum()}</td>
 					<td>${entry.value.stream().map(v->v.dctCount).sum()}</td>
 					

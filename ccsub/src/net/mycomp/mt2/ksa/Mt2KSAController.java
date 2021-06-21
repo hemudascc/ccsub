@@ -326,8 +326,9 @@ public class Mt2KSAController {
 		response.put("Message", "Subscription info shared successfully");
 		try{
 			logger.info("dlrs="+dlrs);
-		}catch(Exception  ex){logger.error("Exception" ,ex);}finally{
-			jmsMt2KSAService.saveMt2KSADlrSdp(dlrs);
+		}catch(Exception  ex){logger.error("Exception" ,ex);
+		}finally{
+			dlrs.parallelStream().forEach(dlr->jmsMt2KSAService.saveMt2KSADlrSdp(dlr));			
 		}
 		return response;
 	}

@@ -306,7 +306,7 @@ public class CommonService {
 		
 	
 	public  AdnetworkCompaignReportWrapper generateAdnetworkCampaignReport(
-			List<LiveReport> tmpReportList,int opId,int noOfPrevDay){
+			List<LiveReport> tmpReportList,int opId,int noOfPrevDay, Integer productId){
 		
 		List<LiveReport> reportList=tmpReportList.stream().filter(liveReport->
 		ChronoUnit.DAYS.between(LocalDate.now(),liveReport.getReportDate().toLocalDateTime())==noOfPrevDay)
@@ -323,6 +323,8 @@ public class CommonService {
 		adnetworkCompaignReportWrapper.setMapDeactivation(mapDeactivation);
 		
 		for(LiveReport liveReport:reportList){
+			
+			
 		
 			if(mapRenewal.get(liveReport.getActionHours())==null){
 				LiveReport l=new LiveReport();
@@ -340,10 +342,12 @@ public class CommonService {
 			}
 			mapDeactivation.get(liveReport.getActionHours()).addDeactivation(liveReport.getDctCount());	
 			adnetworkCompaignReportWrapper.addTotalDeactivationCount(liveReport.getDctCount());
+			
 		}
 		
 		Map<Integer,AdnetworkCampaignReport> mapAdnetworkCampaignReport=new HashMap<Integer,AdnetworkCampaignReport>(); 
 		adnetworkCompaignReportWrapper.setMapAdnetworkCampaignReport(mapAdnetworkCampaignReport);
+		
 		Map<Integer,Map<Integer,List<LiveReport>>> map=reportList.stream().filter(liveReport->
 		ChronoUnit.DAYS.between(LocalDate.now(),liveReport.getReportDate().toLocalDateTime())==noOfPrevDay
 		).collect(Collectors.groupingBy(LiveReport::getAdnetworkCampaignId,
@@ -354,11 +358,14 @@ public class CommonService {
 		while(itr.hasNext()){
 			AdnetworkCampaignReport report=new AdnetworkCampaignReport();
 			Integer key=itr.next();		
+			if(MData.mapCamapignIdToVWServiceCampaignDetail.get(key)!=null && MData.mapCamapignIdToVWServiceCampaignDetail.get(key).getProductId()!=productId) {
+				continue;
+			}
+			
+			report.setCampaignName(MData.mapCamapignIdToVWServiceCampaignDetail.get(key)!=null?
+			  MData.mapCamapignIdToVWServiceCampaignDetail.get(key).getCampaignName():"DEFAULT");
+			 
 			mapAdnetworkCampaignReport.put(key, report);
-			
-			 report.setCampaignName(MData.mapCamapignIdToVWServiceCampaignDetail.get(key)!=null?
-					 MData.mapCamapignIdToVWServiceCampaignDetail.get(key).getCampaignName():"DEFAULT");
-			
 			
 			report.setMapReport(map.get(key));
 			report.setTotalActivationCount(reportList.stream().filter(liveReport->

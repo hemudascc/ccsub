@@ -205,7 +205,7 @@ public class MisController {
 		
 	
 		Map<String,List<LiveReport>> reportMap=new HashMap<String,List<LiveReport>>();
-		
+		logger.debug("op id "+aggReport.getOpid());
 		if(aggReport.getOpid()!=null){
 		  reportMap=daoService.findHourlyReport(aggReport.getOpid(),aggReport.getProductId());
 		}
@@ -354,9 +354,9 @@ public class MisController {
 		
 		List<AdnetworkCompaignReportWrapper> listadnetworkCompaignReportWrapper=new ArrayList<AdnetworkCompaignReportWrapper>();
 		listadnetworkCompaignReportWrapper.add(commonService.generateAdnetworkCampaignReport(
-				reportMap.get("report"),aggReport.getOpid(),0));
+				reportMap.get("report"),aggReport.getOpid(),0, aggReport.getProductId()));
 		listadnetworkCompaignReportWrapper.add(commonService.generateAdnetworkCampaignReport(reportMap.get("report")
-				,aggReport.getOpid(),-1));
+				,aggReport.getOpid(),-1, aggReport.getProductId()));
 		
 		modelAndView.addObject("listadnetworkCompaignReportWrapper",listadnetworkCompaignReportWrapper);
 	

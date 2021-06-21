@@ -78,6 +78,17 @@ function changeLang(lang){
 			</header>
 			<section>
 			<div class="col-md-12 col-sm-12 col-lg-12" style="text-align:center;">
+			<p>
+			<c:if test="${l==0}">
+			Free for 24 hours, then ${actelServiceConfig.price}/${actelServiceConfig.validityDesc} for Etisalat users 
+			</c:if>
+			<c:if test="${l==1}">
+				<span dir="rtl">
+				مجانًا لمدة 24 ساعة ، ثم ${actelServiceConfig.price} /<c:if test="${actelServiceConfig.validityDesc=='daily'}">يوم</c:if>
+				<c:if test="${actelServiceConfig.validityDesc=='Weekly'}">أسبوع</c:if> لمستخدمي اتصالات
+				</span>
+			</c:if>
+		</p>
 			<form id="otpform" method="post" action="${pageContext.request.contextPath}/cnt/actel/web/send/otp/validation">
 			<p style="text-align:center;">
 			<img src="${pageContext.request.contextPath}/resources/actel/play_it_banner.png" class="img-responsive" height="200" width="300"></img></p>
@@ -120,12 +131,12 @@ function changeLang(lang){
 		<p>
 			<b>-</b>
 			<c:if test="${l==0}">
-			After 1 day free trial, you will be charged AED 
+			Free for 24 hours then, you will be charged AED 
 			${actelServiceConfig.price}/${actelServiceConfig.validityDesc} automatically.
 			</c:if>
 			<c:if test="${l==1}">
 				<span dir="rtl">
-				بعد يوم واحد من الإصدار التجريبي المجاني ، ستتم محاسبتك تلقائيًا على ${actelServiceConfig.price} / 
+				مجانًا لمدة 24 ساعة بعد ذلك ، سيتم تحصيل رسوم منك تلقائيًا ${actelServiceConfig.price} / 
 				<c:if test="${actelServiceConfig.validityDesc=='daily'}">يوم</c:if>
 				<c:if test="${actelServiceConfig.validityDesc=='Weekly'}">أسبوع</c:if> درهم إماراتي.
 				</span>
@@ -134,7 +145,7 @@ function changeLang(lang){
 			<p>
 			<b>-</b>
 			<c:if test="${l==0}">
-				<span>No commitment you can cancel anytime by sending
+				<span>No commitment, you can cancel any time by sending
 					${actelServiceConfig.unsubKey} to
 					${actelServiceConfig.shortCode}</span>
 			</c:if>
@@ -170,11 +181,11 @@ function changeLang(lang){
 		<p>
 			<b>-</b>
 			<c:if test="${l==0}">
-				<span>Enjoy your Free trial until today 23:59 hours</span>
+				<span>Enjoy your Free trial for 24 hours</span>
 			</c:if>
 			<c:if test="${l==1}">
 			<span dir="rtl">
-			استمتع بتجربتك المجانية حتى اليوم الساعة 23:59
+			استمتع بالإصدار التجريبي المجاني لمدة 24 ساعة
 			</span>
 			</c:if>
 		</p>

@@ -286,7 +286,7 @@ function getData(i){
 					<td>${vwCallbackDump.operatorName}</td>					
 					<td>${vwCallbackDump.serviceName}</td>
 					<td>${vwCallbackDump.productName}</td>
-					<td>${vwCallbackDump.queryStr}</td>					
+					<td>${vwCallbackDump.createTime}</td>					
 					<td>${vwCallbackDump.amount}</td>
 					<td>${vwCallbackDump.token}</td>
 					<td>${vwCallbackDump.clickId}</td>

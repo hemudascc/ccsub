@@ -50,6 +50,7 @@
 		classpath:properties/mt2_ksa.properties,
 		classpath:properties/mt2_zainiraq.properties,
 		classpath:properties/mobivate.properties,
+		classpath:properties/mobipay.properties,
 		classpath:properties/db.properties,
 		classpath:properties/mk_hongkong.properties" />
 	

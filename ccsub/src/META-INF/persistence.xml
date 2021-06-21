@@ -188,6 +188,12 @@
 		<class>net.mycomp.cornet.sudan.CornetTrans</class>
 		<class>net.mycomp.cornet.sudan.CornetNotification</class>
 		<!-- Cornet Sudan end -->
+		<!-- MobiPay start -->
+		<class>net.mycomp.mobipay.MobiPayServiceConfig</class>
+		<class>net.mycomp.mobipay.MobiPayTrans</class>
+		<class>net.mycomp.mobipay.MobiPayDlr</class>
+		<class>net.mycomp.mobipay.MobiPayCGCallback</class>
+		<!-- MobiPay end -->
 		    <exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<validation-mode>NONE</validation-mode>
 		<properties>

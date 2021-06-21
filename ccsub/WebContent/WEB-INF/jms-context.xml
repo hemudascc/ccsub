@@ -75,8 +75,8 @@
 		class="net.mycom.nxt.vas.JMSNxtVasWebHookNotificationListener" />
 
 	<!-- -END NXT VAS Operator -->
-	
-		<!-- tpay start -->
+
+	<!-- tpay start -->
 	<bean id="tpayNotificationJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
 		<constructor-arg name="connectionFactory"
@@ -85,7 +85,7 @@
 			value="cc/tpayNotificationQueue" />
 		<qualifier value="tpayNotificationJMSTemplate" />
 	</bean>
-	
+
 	<bean id="tpayNotificationDestination"
 		class="org.apache.activemq.command.ActiveMQQueue">
 		<constructor-arg index="0"
@@ -794,7 +794,7 @@
 	<bean id="mt2ZainIraqCGCallbackListener"
 		class="net.mycomp.mt2.zain.iraq.JMSMt2ZainIraqCGCallbackListener" />
 
-<bean id="mt2ZainIraqDLRJMSTemplate"
+	<bean id="mt2ZainIraqDLRJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
 		<constructor-arg name="connectionFactory"
 			ref="cachedConnectionFactory" />
@@ -802,7 +802,7 @@
 			value="cc/mt2ZainIraqDLRQueue" />
 		<qualifier value="mt2ZainIraqDLRJMSTemplate" />
 	</bean>
-	
+
 	<bean id="mt2ZainIraqDLRDestination"
 		class="org.apache.activemq.command.ActiveMQQueue">
 		<constructor-arg index="0"
@@ -813,77 +813,113 @@
 	<!-- MT2 Zain Iraq End -->
 
 	<!-- MT2 UAE Start -->
-	<bean id="mt2UAENotificationJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2UAENotificationQueue" />
+	<bean id="mt2UAENotificationJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2UAENotificationQueue" />
 		<qualifier value="mt2UAENotificationJMSTemplate" />
 	</bean>
-	
-	<bean id="mt2UAECGCallbackJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2UAECGCallbackQueue" />
+
+	<bean id="mt2UAECGCallbackJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2UAECGCallbackQueue" />
 		<qualifier value="mt2UAECGCallbackJMSTemplate" />
 	</bean>
-	
-	<bean id="mt2UAENotificationSdpJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2UAENotificationSdpQueue" />
+
+	<bean id="mt2UAENotificationSdpJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2UAENotificationSdpQueue" />
 		<qualifier value="mt2UAENotificationSdpJMSTemplate" />
 	</bean>
-	
-	<bean id="mt2UAECGCallbackSdpJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2UAECGCallbackSdpQueue" />
+
+	<bean id="mt2UAECGCallbackSdpJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2UAECGCallbackSdpQueue" />
 		<qualifier value="mt2UAECGCallbackSdpJMSTemplate" />
 	</bean>
-	
-	<bean id="mt2UAEDLRSdpJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2UAEDLRSdpQueue" />
+
+	<bean id="mt2UAEDLRSdpJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2UAEDLRSdpQueue" />
 		<qualifier value="mt2UAEDLRSdpJMSTemplate" />
 	</bean>
-	
-	<bean id="mt2UAETrackingJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2UAETrackingQueue" />
+
+	<bean id="mt2UAETrackingJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2UAETrackingQueue" />
 		<qualifier value="mt2UAETrackingJMSTemplate" />
 	</bean>
-	
-	<bean id="mt2UAENotificationDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2UAENotificationQueue?consumer.prefetchSize=3" />
-	</bean>
-	
-	<bean id="mt2UAECGCallbackDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2UAECGCallbackQueue?consumer.prefetchSize=3" />
-	</bean>
-	
-	<bean id="mt2UAENotificationSdpDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2UAENotificationSdpQueue?consumer.prefetchSize=3" />
-	</bean>
-	
-	<bean id="mt2UAECGCallbackSdpDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2UAECGCallbackSdpQueue?consumer.prefetchSize=3" />
-	</bean>
-	
-	<bean id="mt2UAEDLRSdpDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2UAEDLRSdpQueue?consumer.prefetchSize=3" />
-	</bean>
-	
-	<bean id="mt2UAETrackingDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2UAETrackingQueue?consumer.prefetchSize=3" />
-	</bean>
-	
-	<bean id="mt2UAENotificationListener" class="net.mycomp.mt2.uae.JMSMt2UAENotificationListener" />
 
-	<bean id="mt2UAECGCallbackListener" class="net.mycomp.mt2.uae.JMSMt2UAECGCallbackListener" />
-	
-	<bean id="mt2UAENotificationSdpListener" class="net.mycomp.mt2.uae.JMSMt2UAENotificationSdpListener" />
+	<bean id="mt2UAENotificationDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2UAENotificationQueue?consumer.prefetchSize=3" />
+	</bean>
 
-	<bean id="mt2UAECGCallbackSdpListener" class="net.mycomp.mt2.uae.JMSMt2UAECGCallbackSdpListener" />
-	
-	<bean id="mt2UAEDLRSdpListener" class="net.mycomp.mt2.uae.JMSMt2UAEDLRSdpListener" />
-	
-	<bean id="mt2UAETrackingListener" class="net.mycomp.mt2.uae.JMSMt2UAETrackingListener" />
+	<bean id="mt2UAECGCallbackDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2UAECGCallbackQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mt2UAENotificationSdpDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2UAENotificationSdpQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mt2UAECGCallbackSdpDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2UAECGCallbackSdpQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mt2UAEDLRSdpDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2UAEDLRSdpQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mt2UAETrackingDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2UAETrackingQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mt2UAENotificationListener"
+		class="net.mycomp.mt2.uae.JMSMt2UAENotificationListener" />
+
+	<bean id="mt2UAECGCallbackListener"
+		class="net.mycomp.mt2.uae.JMSMt2UAECGCallbackListener" />
+
+	<bean id="mt2UAENotificationSdpListener"
+		class="net.mycomp.mt2.uae.JMSMt2UAENotificationSdpListener" />
+
+	<bean id="mt2UAECGCallbackSdpListener"
+		class="net.mycomp.mt2.uae.JMSMt2UAECGCallbackSdpListener" />
+
+	<bean id="mt2UAEDLRSdpListener"
+		class="net.mycomp.mt2.uae.JMSMt2UAEDLRSdpListener" />
+
+	<bean id="mt2UAETrackingListener"
+		class="net.mycomp.mt2.uae.JMSMt2UAETrackingListener" />
 
 	<!-- MT2 UAE END -->
 	<!-- MT2 KSA START -->
@@ -936,57 +972,81 @@
 	</bean>
 	<bean id="mt2KSANotificationListener"
 		class="net.mycomp.mt2.ksa.JMSMt2KSANotificationListener" />
-		
-		
-		
-	<bean id="mt2KSANotificationSdpJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2KSANotificationSdpQueue" />
+
+
+
+	<bean id="mt2KSANotificationSdpJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2KSANotificationSdpQueue" />
 		<qualifier value="mt2KSANotificationSdpJMSTemplate" />
 	</bean>
-	
-	<bean id="mt2KSACallbackSdpJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2KSACGCallbackSdpQueue" />
+
+	<bean id="mt2KSACallbackSdpJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2KSACGCallbackSdpQueue" />
 		<qualifier value="mt2KSACallbackSdpJMSTemplate" />
 	</bean>
-	
-	<bean id="mt2KSADlrJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2KSADLRSdpQueue" />
+
+	<bean id="mt2KSADlrJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2KSADLRSdpQueue" />
 		<qualifier value="mt2KSADlrJMSTemplate" />
 	</bean>
-	
-	<bean id="mt2KSATrakingSdpJMSTemplate" class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName" value="cc/mt2KSATrackingQueue" />
+
+	<bean id="mt2KSATrakingSdpJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mt2KSATrackingQueue" />
 		<qualifier value="mt2KSATrakingSdpJMSTemplate" />
 	</bean>
-		
-			
-	<bean id="mt2KSANotificationSdpDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2KSANotificationSdpQueue?consumer.prefetchSize=3" />
-	</bean>
-	
-	<bean id="mt2KSACGCallbackSdpDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2KSACGCallbackSdpQueue?consumer.prefetchSize=3" />
-	</bean>
-	
-	<bean id="mt2KSADLRSdpDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2KSADLRSdpQueue?consumer.prefetchSize=3" />
-	</bean>
-	
-	<bean id="mt2KSATrackingDestination" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0" value="cc/mt2KSATrackingQueue?consumer.prefetchSize=3" />
-	</bean>
-		
-	<bean id="mt2KSANotificationSdpListener" class="net.mycomp.mt2.ksa.JMSMt2KSANotificationSdpListener" />
 
-	<bean id="mt2KSACGCallbackSdpListener" class="net.mycomp.mt2.ksa.JMSMt2KSACGCallbackSdpListener" />
-	
-	<bean id="mt2KSADLRSdpListener" class="net.mycomp.mt2.ksa.JMSMt2KSADLRSdpListener" />
-	
-	<bean id="mt2KSATrackingListener" class="net.mycomp.mt2.ksa.JMSMt2KSATrackingListener" />
+
+	<bean id="mt2KSANotificationSdpDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2KSANotificationSdpQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mt2KSACGCallbackSdpDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2KSACGCallbackSdpQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mt2KSADLRSdpDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2KSADLRSdpQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mt2KSATrackingDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mt2KSATrackingQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mt2KSANotificationSdpListener"
+		class="net.mycomp.mt2.ksa.JMSMt2KSANotificationSdpListener" />
+
+	<bean id="mt2KSACGCallbackSdpListener"
+		class="net.mycomp.mt2.ksa.JMSMt2KSACGCallbackSdpListener" />
+
+	<bean id="mt2KSADLRSdpListener"
+		class="net.mycomp.mt2.ksa.JMSMt2KSADLRSdpListener" />
+
+	<bean id="mt2KSATrackingListener"
+		class="net.mycomp.mt2.ksa.JMSMt2KSATrackingListener" />
 
 	<!-- MT2 KSA END -->
 
@@ -1068,7 +1128,7 @@
 	<bean id="ooredooOmanNotificationListener"
 		class="net.mycomp.comviva.ooredo.oman.JMSOoredooOmanNotificationListener" />
 
-<bean id="ooredoOmanInappJMSTemplate"
+	<bean id="ooredoOmanInappJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
 		<constructor-arg name="connectionFactory"
 			ref="cachedConnectionFactory" />
@@ -1155,26 +1215,16 @@
 	<!-- malaysia End -->
 
 
-	<!-- tpay start 
-	<bean id="tpayNotificationJMSTemplate"
-		class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory"
-			ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName"
-			value="cc/tpayNotificationQueue" />
-		<qualifier value="tpayNotificationJMSTemplate" />
-	</bean>
-	
-	<bean id="tpayNotificationDestination"
-		class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0"
-			value="cc/tpayNotificationQueue?consumer.prefetchSize=3" />
-	</bean>
-	<bean id="tpayNotificationListener"
-		class="net.mycomp.tpay.JMSTpayNotificationListener" />
-	 tpay end -->
-   <!-- OnMobile Start -->
-   <!-- mk_hongkong Start -->
+	<!-- tpay start <bean id="tpayNotificationJMSTemplate" class="org.springframework.jms.core.JmsTemplate"> 
+		<constructor-arg name="connectionFactory" ref="cachedConnectionFactory" /> 
+		<property name="defaultDestinationName" value="cc/tpayNotificationQueue" 
+		/> <qualifier value="tpayNotificationJMSTemplate" /> </bean> <bean id="tpayNotificationDestination" 
+		class="org.apache.activemq.command.ActiveMQQueue"> <constructor-arg index="0" 
+		value="cc/tpayNotificationQueue?consumer.prefetchSize=3" /> </bean> <bean 
+		id="tpayNotificationListener" class="net.mycomp.tpay.JMSTpayNotificationListener" 
+		/> tpay end -->
+	<!-- OnMobile Start -->
+	<!-- mk_hongkong Start -->
 	<bean id="hongkongMOMessageJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
 		<constructor-arg name="connectionFactory"
@@ -1226,36 +1276,42 @@
 
 	<!-- mk_hongkong End -->
 
-   
-   <bean id="onMobileCGCallbackJMSTemplate"
+
+	<bean id="onMobileCGCallbackJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory"	ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName"	value="cc/onMobileCGCallbackQueue" />
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/onMobileCGCallbackQueue" />
 		<qualifier value="onMobileCGCallbackJMSTemplate" />
 	</bean>
 	<bean id="onMobileCGCallbackDestination"
 		class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0"	value="cc/onMobileCGCallbackQueue?consumer.prefetchSize=10" />
+		<constructor-arg index="0"
+			value="cc/onMobileCGCallbackQueue?consumer.prefetchSize=10" />
 	</bean>
 	<bean id="onMobileCGCallbackListener"
 		class="net.mycomp.onmobile.JMSOnMobileCGCallbackListener" />
-		
-			
-   <bean id="onMobileChargingNotificationJMSTemplate"
+
+
+	<bean id="onMobileChargingNotificationJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
-		<constructor-arg name="connectionFactory"	ref="cachedConnectionFactory" />
-		<property name="defaultDestinationName"	value="cc/onMobileChargingNotificationQueue" />
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/onMobileChargingNotificationQueue" />
 		<qualifier value="onMobileChargingNotificationJMSTemplate" />
 	</bean>
 	<bean id="onMobileChargingNotificationDestination"
 		class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg index="0"	value="cc/onMobileChargingNotificationQueue?consumer.prefetchSize=10" />
+		<constructor-arg index="0"
+			value="cc/onMobileChargingNotificationQueue?consumer.prefetchSize=10" />
 	</bean>
 	<bean id="onMobileChargingNotificationListener"
 		class="net.mycomp.onmobile.JMSOnMobileChargingNotificationListener" />
-   <!-- OnMobile End -->
-   
-   <!-- bc Joron Start -->
+	<!-- OnMobile End -->
+
+	<!-- bc Joron Start -->
 	<bean id="bcJordonMtJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
 		<constructor-arg name="connectionFactory"
@@ -1271,8 +1327,8 @@
 	</bean>
 	<bean id="bcJordonMTMessageListener"
 		class="net.mycomp.beecel.jordon.JMSJordonMTListener" />
-		
-				
+
+
 	<bean id="bcJordonNotificationJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
 		<constructor-arg name="connectionFactory"
@@ -1287,10 +1343,11 @@
 			value="cc/bcjordonNotificationQueue?consumer.prefetchSize=10" />
 	</bean>
 	<bean id="bcJordonNotificationListener"
-		class="net.mycomp.beecel.jordon.JMSJordonNotificationListener" />	
-		<!-- bc Joron End -->
-   	<!-- Cornet Sudan Start -->
-				
+		class="net.mycomp.beecel.jordon.JMSJordonNotificationListener" />
+	<!-- bc Joron End -->
+	<!-- Cornet Sudan Start -->
+
+
 	<bean id="cornetCallbackJMSTemplate"
 		class="org.springframework.jms.core.JmsTemplate">
 		<constructor-arg name="connectionFactory"
@@ -1305,9 +1362,48 @@
 			value="cc/cornetNotificationQueue?consumer.prefetchSize=10" />
 	</bean>
 	<bean id="cornetNotificationListener"
-		class="net.mycomp.cornet.sudan.CornetJMSNotificationListener" />	
-		<!-- Cornet Sudan End -->
-   
+		class="net.mycomp.cornet.sudan.CornetJMSNotificationListener" />
+	<!-- Cornet Sudan End -->
+	<!-- MobiPay START -->
+	<bean id="mobiPayCGCallbackJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mobiPayCGCallbackQueue" />
+		<qualifier value="mobiPayCGCallbackJMSTemplate" />
+	</bean>
+
+	<bean id="mobiPayDlrJMSTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory"
+			ref="cachedConnectionFactory" />
+		<property name="defaultDestinationName"
+			value="cc/mobiPayDLRQueue" />
+		<qualifier value="mobiPayDlrJMSTemplate" />
+	</bean>
+
+
+	<bean id="mobiPayCallbackDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mobiPayCGCallbackQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mobiPayDlrDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0"
+			value="cc/mobiPayDLRQueue?consumer.prefetchSize=3" />
+	</bean>
+
+	<bean id="mobiPayCGCallbackListener"
+		class="net.mycomp.mobipay.JMSCGCallbackListener" />
+
+	<bean id="mobiPayDLRListener"
+		class="net.mycomp.mobipay.JMSDLRListener" />
+
+	<!-- MobiPay END -->
+
 	<jms:listener-container container-type="default"
 		connection-factory="cachedConnectionFactory" acknowledge="auto"
 		concurrency="5-340">
@@ -1349,7 +1445,7 @@
 
 
 
-	
+
 
 
 
@@ -1373,9 +1469,9 @@
 
 		<jms:listener destination="cc/mobimindNotificationQueue"
 			ref="mobimindNotificationListener" method="onMessage" />
-			
-		<!-- <jms:listener destination="cc/tpayNotificationQueue"
-			ref="tpayNotificationListener" method="onMessage" /> -->
+
+		<!-- <jms:listener destination="cc/tpayNotificationQueue" ref="tpayNotificationListener" 
+			method="onMessage" /> -->
 
 		<jms:listener destination="cc/acteldlrQueue"
 			ref="actelDlrListener" method="onMessage" />
@@ -1427,18 +1523,24 @@
 
 		<jms:listener destination="cc/mt2ZainIraqCGCallbackQueue"
 			ref="mt2ZainIraqCGCallbackListener" method="onMessage" />
-			
-			<jms:listener destination="cc/mt2ZainIraqDLRQueue"
+
+		<jms:listener destination="cc/mt2ZainIraqDLRQueue"
 			ref="mt2ZainIraqDLRListener" method="onMessage" />
 
-		<jms:listener destination="cc/mt2UAENotificationQueue" ref="mt2UAENotificationListener" method="onMessage" />
-		<jms:listener destination="cc/mt2UAECGCallbackQueue" ref="mt2UAECGCallbackListener" method="onMessage" />
-		
-		<jms:listener destination="cc/mt2UAENotificationSdpQueue" ref="mt2UAENotificationSdpListener" method="onMessage" />
-		<jms:listener destination="cc/mt2UAECGCallbackSdpQueue" ref="mt2UAECGCallbackSdpListener" method="onMessage" />
-		
-		<jms:listener destination="cc/mt2UAEDLRSdpQueue" ref="mt2UAEDLRSdpListener" method="onMessage" />
-		<jms:listener destination="cc/mt2UAETrackingQueue" ref="mt2UAETrackingListener" method="onMessage" />
+		<jms:listener destination="cc/mt2UAENotificationQueue"
+			ref="mt2UAENotificationListener" method="onMessage" />
+		<jms:listener destination="cc/mt2UAECGCallbackQueue"
+			ref="mt2UAECGCallbackListener" method="onMessage" />
+
+		<jms:listener destination="cc/mt2UAENotificationSdpQueue"
+			ref="mt2UAENotificationSdpListener" method="onMessage" />
+		<jms:listener destination="cc/mt2UAECGCallbackSdpQueue"
+			ref="mt2UAECGCallbackSdpListener" method="onMessage" />
+
+		<jms:listener destination="cc/mt2UAEDLRSdpQueue"
+			ref="mt2UAEDLRSdpListener" method="onMessage" />
+		<jms:listener destination="cc/mt2UAETrackingQueue"
+			ref="mt2UAETrackingListener" method="onMessage" />
 
 		<jms:listener destination="cc/mt2KSASMSAlertQueue"
 			ref="mt2KSASMSAlertListener" method="onMessage" />
@@ -1448,13 +1550,17 @@
 
 		<jms:listener destination="cc/mt2KSANotificationQueue"
 			ref="mt2KSANotificationListener" method="onMessage" />
-			
-			<jms:listener destination="cc/mt2KSANotificationSdpQueue" ref="mt2KSANotificationSdpListener" method="onMessage" />
-		<jms:listener destination="cc/mt2KSACGCallbackSdpQueue" ref="mt2KSACGCallbackSdpListener" method="onMessage" />
-		
-		<jms:listener destination="cc/mt2KSADLRSdpQueue" ref="mt2KSADLRSdpListener" method="onMessage" />
-		<jms:listener destination="cc/mt2KSATrackingQueue" ref="mt2KSATrackingListener" method="onMessage" />
-			
+
+		<jms:listener destination="cc/mt2KSANotificationSdpQueue"
+			ref="mt2KSANotificationSdpListener" method="onMessage" />
+		<jms:listener destination="cc/mt2KSACGCallbackSdpQueue"
+			ref="mt2KSACGCallbackSdpListener" method="onMessage" />
+
+		<jms:listener destination="cc/mt2KSADLRSdpQueue"
+			ref="mt2KSADLRSdpListener" method="onMessage" />
+		<jms:listener destination="cc/mt2KSATrackingQueue"
+			ref="mt2KSATrackingListener" method="onMessage" />
+
 		<jms:listener
 			destination="cc/mobivateCGCallbackListenerQueue"
 			ref="jmsMobivateCGCallbackListener" method="onMessage" />
@@ -1468,9 +1574,8 @@
 		<jms:listener
 			destination="cc/ooredooOmanNotificationQueue"
 			ref="ooredooOmanNotificationListener" method="onMessage" />
-	
-	<jms:listener
-			destination="cc/ooredoOmanInappQueue"
+
+		<jms:listener destination="cc/ooredoOmanInappQueue"
 			ref="ooredoOmanInappListener" method="onMessage" />
 
 		<jms:listener destination="cc/malaysiaMOMessageQueue"
@@ -1482,17 +1587,16 @@
 
 		<jms:listener destination="cc/malaysiaMTMessageQueue"
 			ref="malaysiaMTMessageListener" method="onMessage" />
-			<jms:listener destination="cc/tpayNotificationQueue"
+		<jms:listener destination="cc/tpayNotificationQueue"
 			ref="tpayNotificationListener" method="onMessage" />
 
 		<jms:listener
 			destination="cc/mkMalayisiaRenewalMessageQueue"
 			ref="mkMalayisiaRenewalMessageListener" method="onMessage" />
-			
-		<jms:listener
-			destination="cc/onMobileCGCallbackQueue"
+
+		<jms:listener destination="cc/onMobileCGCallbackQueue"
 			ref="onMobileCGCallbackListener" method="onMessage" />
-			
+
 		<jms:listener
 			destination="cc/onMobileChargingNotificationQueue"
 			ref="onMobileChargingNotificationListener" method="onMessage" />
@@ -1533,8 +1637,8 @@
 			ref="mcgRenewalMessageListener" method="onMessage" />
 		<jms:listener destination="cc/mcgMOMessageQueue"
 			ref="mcgMOMessageListener" method="onMessage" />
-			<!-- mk_hongkong start -->
-	 	<jms:listener destination="cc/hongkongMOMessageQueue"
+		<!-- mk_hongkong start -->
+		<jms:listener destination="cc/hongkongMOMessageQueue"
 			ref="hongkongMOMessageListener" method="onMessage" />
 
 		<jms:listener destination="cc/hongkongDNQueue"
@@ -1544,20 +1648,28 @@
 		<jms:listener destination="cc/hongkongMTMessageQueue"
 			ref="hongkongMTMessageListener" method="onMessage" />
 
-	<!-- mk_hongkong end-->	
-	<!-- bc Joron Start -->
-	 	<jms:listener destination="cc/bcjordonMTMessageQueue"
+		<!-- mk_hongkong end -->
+		<!-- bc Joron Start -->
+		<jms:listener destination="cc/bcjordonMTMessageQueue"
 			ref="bcJordonMTMessageListener" method="onMessage" />
 
 		<jms:listener destination="cc/bcjordonNotificationQueue"
 			ref="bcJordonNotificationListener" method="onMessage" />
 
-	<!-- bc Joron end-->	
+		<!-- bc Joron end -->
 		<!-- Cornet Sudan Start -->
 		<jms:listener destination="cc/cornetNotificationQueue"
 			ref="cornetNotificationListener" method="onMessage" />
 
 		<!-- Cornet Sudan End -->
+
+		<!-- MobiPay Start -->
+		<jms:listener destination="cc/mobiPayCGCallbackQueue"
+			ref="mobiPayCGCallbackListener" method="onMessage" />
+		<jms:listener destination="cc/mobiPayDLRQueue"
+			ref="mobiPayDLRListener" method="onMessage" />
+		<!-- MobiPay End -->
+
 	</jms:listener-container>
 
 </beans>

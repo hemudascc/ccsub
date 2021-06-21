@@ -25,6 +25,7 @@ import net.mycomp.messagecloud.MessageCloudService;
 import net.mycomp.messagecloud.gateway.MCGService;
 import net.mycomp.messagecloud.gateway.za.MCGZAService;
 import net.mycomp.mobimind.MobimindService;
+import net.mycomp.mobipay.MobiPayService;
 import net.mycomp.mobivate.MobivateService;
 import net.mycomp.mt2.ksa.Mt2KSAService;
 import net.mycomp.mt2.uae.Mt2UAEService;
@@ -161,6 +162,9 @@ public class OperatorRequestService implements IOperatorService{
 	@Autowired
 	@Qualifier("cornetService")
 	private CornetService cornetService;
+	@Autowired
+	@Qualifier("mobiPayService")
+	private MobiPayService mobiPayService;
 	 
 	private IOperatorService findProcessRequest(int opId){
 		
@@ -340,6 +344,11 @@ public class OperatorRequestService implements IOperatorService{
 		}
 		case MConstants.CORNET_SUDAN_ZAIN_OPERATOR_ID:{
 			ioperatorService = cornetService;
+			break;
+		}
+		case MConstants.MOBIPAY_CELLC_OPERATOR_ID:
+		case MConstants.MOBIPAY_VODACOM_OPERATOR_ID:{
+			ioperatorService = mobiPayService;
 			break;
 		}
 		default:	{

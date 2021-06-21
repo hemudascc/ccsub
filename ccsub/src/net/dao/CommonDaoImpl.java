@@ -548,7 +548,8 @@ public class CommonDaoImpl extends NamedParameterJdbcTemplate implements ICommon
 			}			
 			queryStr+= " GROUP BY 1,2,3,4 ORDER BY 1,2,3 DESC";
 
-		logger.info("findHourlyReport:: queryStr:: "+queryStr+" , opId: "+opId+" ,productId: "+productId );
+			logger.error("findHourlyReport:: queryStr:: "+queryStr+" , opId: "+opId+" ,productId: "+productId );
+		System.out.println("findHourlyReport:: queryStr:: "+queryStr+" , opId: "+opId+" ,productId: "+productId );
 		 List<LiveReport> report = query(queryStr, parameters,
 					new BeanPropertyRowMapper<LiveReport>(LiveReport.class));
 		 map.put("report",report);		 

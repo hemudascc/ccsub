@@ -56,6 +56,7 @@ public class Mt2KSANotificationSdp implements Serializable {
 	private String queryStr;
 	@Column(name="status")
 	private Boolean status;
+	
 	public Integer getId() {
 		return id;
 	}

@@ -1,7 +1,5 @@
 package net.mycomp.mt2.ksa;
 
-import java.util.List;
-
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
@@ -147,7 +145,7 @@ public class JMSMt2KSAService {
 			mt2KSATrakingSdpJMSTemplate.send(new MessageCreator() {
 				@Override
 				public Message createMessage(Session session) throws JMSException {
-					Message message=session.createObjectMessage();
+					Message message=session.createObjectMessage(mt2ksaTracking);
 					message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 5*60*1000);
 					return message;
 				}
@@ -167,7 +165,7 @@ public class JMSMt2KSAService {
 			mt2KSANotificationSdpJMSTemplate.send(new MessageCreator() {
 				@Override
 				public Message createMessage(Session session) throws JMSException {
-					Message message=session.createObjectMessage();
+					Message message=session.createObjectMessage(mt2ksaNotification);
 					message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 5*60*1000);
 					return message;
 				}
@@ -180,14 +178,14 @@ public class JMSMt2KSAService {
 		return true;
 	}
 
-	public boolean saveMt2KSADlrSdp(List<Mt2KSADeliveryNotificationSdp> dlrs) {
+	public boolean saveMt2KSADlrSdp(Mt2KSADeliveryNotificationSdp dlr) {
 		long time=System.currentTimeMillis();
 		try{
 			logger.debug("");
 			mt2KSADlrJMSTemplate.send(new MessageCreator() {
 				@Override
 				public Message createMessage(Session session) throws JMSException {
-					Message message=session.createObjectMessage();
+					Message message=session.createObjectMessage(dlr);
 					message.setLongProperty(ScheduledMessage.AMQ_SCHEDULED_DELAY, 5*60*1000);
 					return message;
 				}

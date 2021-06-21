@@ -222,7 +222,7 @@ $('.formselect').change(function(){
 			<th colspan="4">Total</th>
 			<c:forEach var="hour" items="${adnetworkCompaignReportWrapper.getReportHour()}"
 				>
-				<th bgcolor="#dddddd" colspan="4">${hour}<sup>th</sup> Hour
+				<th bgcolor="#dddddd" colspan="4">${hour-1}<sup>th</sup> Hour
 				</th>
 			</c:forEach>
 		</tr>
